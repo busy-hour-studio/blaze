@@ -1,4 +1,4 @@
-import type { Service } from '@busyhour/blaze';
+import type { Service } from '@/types/blaze';
 
 export function hasOwnProperty<
   Z extends NonNullable<unknown>,

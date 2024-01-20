@@ -1,6 +1,6 @@
 import { Context as HonoCtx, Hono, Next } from 'hono';
-import type { Context, Method, RestParam } from '@busyhour/blaze';
-import { BlazeEvent } from './event/BlazeEvent';
+import type { Context, Method, RestParam } from '@/types/blaze';
+import { BlazeEvent } from '@/event/BlazeEvent';
 
 export function restHandler(router: Hono, rest: RestParam) {
   const restPath = rest?.path;
@@ -9,10 +9,12 @@ export function restHandler(router: Hono, rest: RestParam) {
   // eslint-disable-next-line @typescript-eslint/no-shadow
   async function restHandler(ctx: HonoCtx, next: Next) {
     const context = {
-      ctx: BlazeEvent,
+      blaze: BlazeEvent,
       ...ctx,
       next,
     } as Context;
+
+    await rest.authorization?.(context);
 
     return rest.handler(context);
   }
