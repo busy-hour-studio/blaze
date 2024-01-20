@@ -1,0 +1,44 @@
+{
+  "name": "@busyhour/blaze",
+  "module": "src/index.ts",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "cross-env NODE_ENV=production node dist/index.js",
+    "build": "rimraf dist && tsc --project tsconfig.build.json && resolve-tspaths",
+    "dev": "tsx --watch src src/index.ts",
+    "types": "tsc --project tsconfig.json",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^17.8.1",
+    "@commitlint/config-conventional": "^17.8.1",
+    "@hono/node-server": "^1.4.0",
+    "@types/node": "^20.11.5",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "eslint": "^8.56.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-import-resolver-custom-alias": "^1.3.2",
+    "eslint-import-resolver-typescript": "^3.6.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.2.4",
+    "resolve-tspaths": "^0.8.17",
+    "rimraf": "^5.0.5",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.3.3"
+  },
+  "dependencies": {
+    "eventemitter2": "^6.4.9",
+    "hono": "^3.12.6"
+  },
+  "lint-staged": {
+    "src/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  }
+}
