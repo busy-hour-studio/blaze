@@ -1,4 +1,4 @@
-import BaseBlazeEvent from './BaseBlazeEvent';
+import { BaseBlazeEvent } from './BaseBlazeEvent';
 
 class EventStore {
   // eslint-disable-next-line no-use-before-define
@@ -18,4 +18,4 @@ class EventStore {
 
 const BlazeEvent = EventStore.instance;
 
-export default BlazeEvent;
+export { BlazeEvent };

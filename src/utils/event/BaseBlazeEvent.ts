@@ -16,4 +16,4 @@ class BaseBlazeEvent extends EventEmitter {
   }
 }
 
-export default BaseBlazeEvent;
+export { BaseBlazeEvent };
