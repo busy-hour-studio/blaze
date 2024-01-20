@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import fs from 'node:fs';
 import path from 'node:path';
+import { BlazeEvent } from '@/event/BlazeEvent';
 import { createRestPath, createServiceName, loadService } from './common';
-import { BlazeEvent } from './event/BlazeEvent';
 import { setupAction } from './actions';
 
 export function loadServices(options: {

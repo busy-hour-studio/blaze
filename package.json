@@ -1,7 +1,18 @@
 {
-  "name": "@busyhour/blaze",
-  "module": "src/index.ts",
+  "name": "@busy-hour/blaze",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "version": "1.0.0",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./types": {
+      "types": "./dist/types/blaze.d.ts",
+      "default": "./dist/types/blaze.js"
+    }
+  },
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "build": "rimraf dist && tsc --project tsconfig.build.json && resolve-tspaths",
