@@ -2,9 +2,14 @@ import EventEmitter, { type ConstructorOptions } from 'eventemitter2';
 
 type EventName = string | symbol | (string | symbol)[];
 
-class BaseBlazeEvent extends EventEmitter {
+export class BaseBlazeEvent extends EventEmitter {
   constructor(options: ConstructorOptions) {
     super(options);
+  }
+
+  // eslint-disable-next-line no-use-before-define, @typescript-eslint/no-shadow, @typescript-eslint/no-explicit-any
+  public emit(event: EventName, ...values: any[]): boolean {
+    return super.emit(event, ...values);
   }
 
   // eslint-disable-next-line no-use-before-define, @typescript-eslint/no-shadow
@@ -15,5 +20,3 @@ class BaseBlazeEvent extends EventEmitter {
     return super.emitAsync(event, ...values);
   }
 }
-
-export { BaseBlazeEvent };

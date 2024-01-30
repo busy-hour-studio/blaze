@@ -16,6 +16,4 @@ class EventStore {
   }
 }
 
-const BlazeEvent = EventStore.instance;
-
-export { BlazeEvent };
+export const BlazeEvent = EventStore.instance;
