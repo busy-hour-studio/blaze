@@ -1,7 +1,6 @@
-import { Action, EventHandler, Service } from '@/types/blaze';
+import { Service } from '@/types/blaze';
 import { Hono } from 'hono';
-import { BlazeEvent } from '@/event/BlazeEvent';
-import { restHandler } from './handler';
+import { assignAction } from './helper/action';
 
 export function setupAction(service: Service) {
   if (
@@ -17,33 +16,9 @@ export function setupAction(service: Service) {
     router: service.router,
   });
 
-  const handlers: EventHandler[] = [];
-
-  Object.entries<Action>(service.actions).forEach(([name, action]) => {
-    const actionName = `${service.name}.${name}`;
-
-    if (!action.rest && !action.handler) {
-      throw new Error('Action must have at least a rest or handler properties');
-    }
-
-    if (action.rest) {
-      restHandler(router, action.rest);
-    }
-
-    if (action.handler) {
-      const eventHandler = async (...values: unknown[]) => {
-        await action.authorization?.(BlazeEvent, ...values);
-
-        return action.handler?.(BlazeEvent, ...values);
-      };
-
-      BlazeEvent.on(actionName, eventHandler);
-
-      handlers.push({
-        name: actionName,
-        handler: eventHandler,
-      });
-    }
+  const handlers = assignAction({
+    router,
+    service,
   });
 
   return {

@@ -40,3 +40,13 @@ export function createRestPath(service: Service) {
 export function createServiceName(service: Service) {
   return [service.prefix ?? '', service.name].filter(Boolean).join('.');
 }
+
+export async function resolvePromise<T>(promise: Promise<T> | T) {
+  try {
+    const res = await promise;
+
+    return [res, null] as const;
+  } catch (err) {
+    return [null, err] as const;
+  }
+}
