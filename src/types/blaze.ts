@@ -1,14 +1,12 @@
 import { BaseBlazeEvent } from '@/event/BaseBlazeEvent';
 
 import { type Router } from 'hono/router';
-import {
-  TypedResponse,
-  type Input as HonoInput,
-  type RouterRoute,
-} from 'hono/types';
-import { type Env as HonoEnv, type Context as HonoCtx, Next } from 'hono';
+import { type RouterRoute } from 'hono/types';
+import { BlazeContext } from '@/event/BlazeContext';
+import { Hono } from 'hono';
 
 export type Method =
+  | 'ALL'
   | 'POST'
   | 'GET'
   | 'PUT'
@@ -17,30 +15,23 @@ export type Method =
   | 'DELETE'
   | 'USE';
 
-export type Context<
-  Env extends HonoEnv = HonoEnv,
-  Input extends HonoInput = NonNullable<unknown>,
-> = HonoCtx<Env, string, Input> & {
-  next: Next;
-  blaze: BaseBlazeEvent;
-};
-
 export type ActionHandler = (
-  blaze: BaseBlazeEvent,
-  ...values: unknown[]
-) => Promise<unknown | void> | null | undefined;
+  ctx: BlazeContext
+) => Promise<unknown | void> | unknown | void;
 
-export type RestResponse = Response & TypedResponse<never>;
+export type RestRoute = `${Method} /${string}` | `/${string}`;
 
-export type RestHandler = (
-  ctx: Context
-) => RestResponse | Promise<RestResponse>;
-
-export interface RestParam {
-  authorization?: RestHandler;
-  handler: RestHandler;
+export interface RestParamOption {
   method?: Method;
   path: string;
+}
+
+export type RestParam = RestParamOption | RestRoute;
+
+export interface RestHandlerOption {
+  router: Hono;
+  rest: RestParam;
+  handler: ActionHandler;
 }
 
 export interface EventHandler {
@@ -50,8 +41,8 @@ export interface EventHandler {
 
 export interface Action {
   name?: string;
-  authorization?: ActionHandler;
-  handler?: ActionHandler;
+  middlewares?: ActionHandler[];
+  handler: ActionHandler;
   rest?: RestParam;
 }
 

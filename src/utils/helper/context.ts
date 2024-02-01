@@ -1,4 +1,5 @@
-import { Context as HonoCtx } from 'hono';
+import { type BlazeContext } from '@/event/BlazeContext';
+import { type Context as HonoCtx } from 'hono';
 
 export async function getReqBody(ctx: HonoCtx) {
   const contentType = ctx.req.header('Content-Type');
@@ -31,4 +32,16 @@ export async function getReqBody(ctx: HonoCtx) {
   }
 
   return null;
+}
+
+export function getStatusCode(ctx: BlazeContext, defaultStatusCode: number) {
+  const status = ctx.header.get('status');
+
+  let statusCode = Array.isArray(status) ? +status.at(-1)! : +status;
+
+  if (Number.isNaN(statusCode)) {
+    statusCode = defaultStatusCode;
+  }
+
+  return statusCode;
 }

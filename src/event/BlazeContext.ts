@@ -1,5 +1,5 @@
 import qs from 'node:querystring';
-import { Context as HonoCtx } from 'hono';
+import { type Context as HonoCtx } from 'hono';
 import { getReqBody } from '@/utils/helper/context';
 import { BlazeEvent } from './BlazeEvent';
 
@@ -83,10 +83,16 @@ export class BlazeContext<
     return BlazeEvent.emit(...args);
   }
 
-  private getHeader(key: string) {
-    const value = this.$headers[key];
+  private getHeader(): Record<string, string | string[]>;
+  private getHeader(key: string): string | string[];
+  private getHeader(key?: string) {
+    if (key) {
+      const value = this.$headers[key];
 
-    return value;
+      return value;
+    }
+
+    return this.$headers;
   }
 
   private setHeader(key: string, value: string, append: boolean = false) {
@@ -108,8 +114,8 @@ export class BlazeContext<
 
   public get header() {
     return {
-      get: this.getHeader,
-      set: this.setHeader,
+      get: this.getHeader.bind(this),
+      set: this.setHeader.bind(this),
     };
   }
 
