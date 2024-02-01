@@ -1,4 +1,5 @@
 import { Service } from '@/types/blaze';
+import { BlazeContext } from '@/event/BlazeContext';
 import { Hono } from 'hono';
 import { assignAction } from './helper/action';
 
@@ -16,6 +17,12 @@ export function setupAction(service: Service) {
     router: service.router,
   });
 
+  const blazeCtx = new BlazeContext({
+    body: {},
+    params: {},
+    honoCtx: null,
+  });
+
   const handlers = assignAction({
     router,
     service,
@@ -24,5 +31,6 @@ export function setupAction(service: Service) {
   return {
     router,
     handlers,
+    blazeCtx,
   };
 }

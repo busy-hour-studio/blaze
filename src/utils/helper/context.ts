@@ -1,8 +1,8 @@
 import { type BlazeContext } from '@/event/BlazeContext';
 import { type Context as HonoCtx } from 'hono';
 
-export async function getReqBody(ctx: HonoCtx) {
-  const contentType = ctx.req.header('Content-Type');
+export async function getReqBody(honoCtx: HonoCtx) {
+  const contentType = honoCtx.req.header('Content-Type');
 
   if (!contentType) return null;
 
@@ -14,28 +14,31 @@ export async function getReqBody(ctx: HonoCtx) {
   const isBlob = contentType.startsWith('application/octet-stream');
 
   if (isFormLike) {
-    return ctx.req.parseBody({
+    return honoCtx.req.parseBody({
       all: true,
     });
   }
 
   if (isJson) {
-    return ctx.req.json();
+    return honoCtx.req.json();
   }
 
   if (isText) {
-    return ctx.req.text();
+    return honoCtx.req.text();
   }
 
   if (isBlob) {
-    return ctx.req.blob();
+    return honoCtx.req.blob();
   }
 
   return null;
 }
 
-export function getStatusCode(ctx: BlazeContext, defaultStatusCode: number) {
-  const status = ctx.header.get('status');
+export function getStatusCode(
+  honoCtx: BlazeContext,
+  defaultStatusCode: number
+) {
+  const status = honoCtx.header.get('status');
 
   let statusCode = Array.isArray(status) ? +status.at(-1)! : +status;
 
