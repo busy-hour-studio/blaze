@@ -5,11 +5,32 @@ export type ActionHandler = (
   ctx: BlazeContext
 ) => Promise<unknown | void> | unknown | void;
 
+export type BeforeHookHandler = (ctx: BlazeContext) => Promise<void> | void;
+
+export type AfterHookHandler = (
+  ctx: BlazeContext,
+  res: unknown
+) => Promise<void> | void;
+
 export interface Action {
   name?: string;
-  middlewares?: ActionHandler[];
   handler: ActionHandler;
   rest?: RestParam;
+  hooks?: {
+    before?: BeforeHookHandler | BeforeHookHandler[];
+    after?: AfterHookHandler | AfterHookHandler[];
+  };
+}
+
+export interface AfterHookHandlerOption {
+  result: unknown;
+  hooks: AfterHookHandler[];
+  blazeCtx: BlazeContext;
+}
+
+export interface BeforeHookHandlerOption {
+  hooks: BeforeHookHandler[];
+  blazeCtx: BlazeContext;
 }
 
 export type ActionCallResult<U> =

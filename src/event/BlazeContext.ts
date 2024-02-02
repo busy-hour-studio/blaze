@@ -1,8 +1,8 @@
-import qs from 'node:querystring';
-import { type Context as HonoCtx } from 'hono';
-import { type ActionCallResult } from '@/types/action';
+import { type ActionCallResult as Result } from '@/types/action';
 import { type CreateContextOption } from '@/types/context';
 import { getReqBody } from '@/utils/helper/context';
+import { type Context as HonoCtx } from 'hono';
+import qs from 'node:querystring';
 import { BlazeEvent } from './BlazeEvent';
 
 export class BlazeContext<
@@ -66,12 +66,10 @@ export class BlazeContext<
   }
 
   // eslint-disable-next-line no-use-before-define, @typescript-eslint/no-shadow
-  public async call<T, U = T extends Array<infer T> ? T : T>(
+  public async call<T, U = T extends Array<infer T> ? Result<T> : Result<T>>(
     ...args: Parameters<(typeof BlazeEvent)['emitAsync']>
-  ): Promise<ActionCallResult<U>> {
-    const result = await BlazeEvent.emitAsync<T, U>(...args);
-
-    return result as never;
+  ) {
+    return BlazeEvent.emitAsync<T, U>(...args);
   }
 
   public emit(...args: Parameters<(typeof BlazeEvent)['emit']>) {
