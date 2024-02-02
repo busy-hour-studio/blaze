@@ -1,4 +1,4 @@
-import type { Service } from '@/types/blaze';
+import type { Service } from '@/types/service';
 
 export function hasOwnProperty<
   Z extends NonNullable<unknown>,
@@ -38,7 +38,9 @@ export function createRestPath(service: Service) {
 }
 
 export function createServiceName(service: Service) {
-  return [service.prefix ?? '', service.name].filter(Boolean).join('.');
+  return [service.version ?? '', service.prefix ?? '', service.name]
+    .filter(Boolean)
+    .join('.');
 }
 
 export async function resolvePromise<T>(promise: Promise<T> | T) {

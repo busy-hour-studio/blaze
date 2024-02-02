@@ -1,5 +1,5 @@
-import { Method, RestParam, RestRoute } from '@/types/blaze';
 import { Hono } from 'hono';
+import { Method, RestParam, RestRoute } from '@/types/rest';
 
 export function extractRestPath(restRoute: RestRoute) {
   const restPath = restRoute.split(' ');
