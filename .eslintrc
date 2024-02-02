@@ -40,10 +40,8 @@
     "no-console": "off",
     "no-shadow": "off",
     "max-params": ["error", 3],
-    "import/no-unresolved": [
-      "off",
-      { "ignore": ["^@busyhour"] }
-    ]
+    "no-restricted-syntax": "off",
+    "no-await-in-loop": "off"
   },
   "settings": {
     "import/parsers": {

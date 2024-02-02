@@ -1,9 +1,7 @@
-import { BaseBlazeEvent } from '@/event/BaseBlazeEvent';
-
 import { type Router } from 'hono/router';
 import { type RouterRoute } from 'hono/types';
-import { BlazeContext } from '@/event/BlazeContext';
-import { Hono } from 'hono';
+import { type BlazeContext } from '@/event/BlazeContext';
+import { type Hono, type Context as HonoCtx } from 'hono';
 
 export type Method =
   | 'ALL'
@@ -32,6 +30,7 @@ export interface RestHandlerOption {
   router: Hono;
   rest: RestParam;
   handler: ActionHandler;
+  middlewares: ActionHandler[];
 }
 
 export interface EventHandler {
@@ -46,6 +45,10 @@ export interface Action {
   rest?: RestParam;
 }
 
+export type ActionCallResult<U> =
+  | { error: Error; ok: false; result: null }
+  | { error: null; ok: true; result: U };
+
 export interface Actions {
   [key: string]: Action;
 }
@@ -54,8 +57,25 @@ export interface Service {
   name: string;
   prefix?: string;
   actions: Actions;
-  onCreated?(ctx: BaseBlazeEvent): void;
-  onStarted?(ctx: BaseBlazeEvent): void;
+  onCreated?: ActionHandler;
+  onStarted?: ActionHandler;
   onStopped?(handlers: EventHandler[]): void;
   router?: Router<[never, RouterRoute]>;
+}
+
+export interface LoadServiceOption {
+  app: Hono;
+  servicePath: string;
+  ignoreNotFound?: boolean;
+}
+
+export interface AssignActionOption {
+  service: Service;
+  router: Hono;
+}
+
+export interface RestErrorHandlerOption {
+  err: Error | unknown;
+  ctx: BlazeContext;
+  honoCtx: HonoCtx;
 }
