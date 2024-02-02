@@ -19,7 +19,7 @@ In Busy Hour we use [hono](https://github.com/honojs/hono) as our backend framew
 To get started to use `blaze` on your project, you can start by installing it to your [Node](https://nodejs.org/) project by using the following command.
 
 ```bash
-pnpm i blaze
+pnpm i @busy-hour/blaze
 ```
 
 Once you install `blaze` in your project, you can start using it by following the complete instruction how to start using blaze on your project on our [wiki](https://github.com/Busy-Hour-Studio/blaze/wiki) .
