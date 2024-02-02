@@ -1,17 +1,9 @@
 import qs from 'node:querystring';
 import { type Context as HonoCtx } from 'hono';
-import { type ActionCallResult } from '@/types/blaze';
+import { type ActionCallResult } from '@/types/action';
+import { type CreateContextOption } from '@/types/context';
 import { getReqBody } from '@/utils/helper/context';
 import { BlazeEvent } from './BlazeEvent';
-
-type Option<
-  Body extends Record<string, unknown> = Record<string, unknown>,
-  Params extends Record<string, unknown> = Record<string, unknown>,
-> = {
-  honoCtx: HonoCtx | null;
-  body: Body | null;
-  params: Params | null;
-};
 
 export class BlazeContext<
   Meta extends Record<string, unknown> = Record<string, unknown>,
@@ -30,7 +22,7 @@ export class BlazeContext<
   private $reqHeaders: Record<string, string> | null;
   private $isRest: boolean;
 
-  constructor(options: Option<Body, Params>) {
+  constructor(options: CreateContextOption<Body, Params>) {
     const { honoCtx, body, params } = options;
 
     this.$honoCtx = honoCtx ?? null;
@@ -175,7 +167,9 @@ export class BlazeContext<
     Meta extends Record<string, unknown> = Record<string, unknown>,
     Body extends Record<string, unknown> = Record<string, unknown>,
     Params extends Record<string, unknown> = Record<string, unknown>,
-  >(options: Option<Body, Params>): Promise<BlazeContext<Meta, Body, Params>> {
+  >(
+    options: CreateContextOption<Body, Params>
+  ): Promise<BlazeContext<Meta, Body, Params>> {
     const { honoCtx } = options;
 
     let body: Body | null = null;

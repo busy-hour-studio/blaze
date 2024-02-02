@@ -1,9 +1,6 @@
 import { type Context as HonoCtx } from 'hono';
-import {
-  type ActionHandler,
-  type RestErrorHandlerOption,
-  type RestHandlerOption,
-} from '@/types/blaze';
+import { type ActionHandler } from '@/types/action';
+import { type RestErrorHandlerOption, RestHandlerOption } from '@/types/rest';
 import { BlazeError } from '@/errors/BlazeError';
 import { BlazeContext } from '@/event/BlazeContext';
 import { extractRestParams, getRouteHandler } from './rest';

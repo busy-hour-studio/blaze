@@ -1,10 +1,8 @@
 import { BlazeEvent } from '@/event/BlazeEvent';
 import { BlazeContext } from '@/event/BlazeContext';
-import {
-  type Action,
-  type AssignActionOption,
-  type EventHandler,
-} from '@/types/blaze';
+import { type Action } from '@/types/action';
+import { type EventHandler } from '@/types/event';
+import { type AssignActionOption } from '@/types/service';
 import { setupRestHandler } from './handler';
 import { resolvePromise } from '../common';
 
