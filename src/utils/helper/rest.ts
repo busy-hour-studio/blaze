@@ -1,5 +1,5 @@
-import { Hono } from 'hono';
 import { Method, RestParam, RestRoute } from '@/types/rest';
+import { Hono } from 'hono';
 
 export function extractRestPath(restRoute: RestRoute) {
   const restPath = restRoute.split(' ');
