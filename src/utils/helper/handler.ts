@@ -1,16 +1,16 @@
-import { type Context as HonoCtx } from 'hono';
-import {
-  type RestErrorHandlerOption,
-  type RestHandlerOption,
-  type CreateRestHandlerOption,
-  type AfterHookRestHandlerOption,
-  type BeforeHookRestHandlerOption,
-} from '@/types/rest';
 import { BlazeError } from '@/errors/BlazeError';
 import { BlazeContext } from '@/event/BlazeContext';
-import { extractRestParams, getRouteHandler } from './rest';
+import {
+  type AfterHookRestHandlerOption,
+  type BeforeHookRestHandlerOption,
+  type CreateRestHandlerOption,
+  type RestErrorHandlerOption,
+  type RestHandlerOption,
+} from '@/types/rest';
+import { type Context as HonoCtx } from 'hono';
 import { resolvePromise } from '../common';
 import { getStatusCode } from './context';
+import { extractRestParams, getRouteHandler } from './rest';
 
 function handleRestError(options: RestErrorHandlerOption) {
   const { err, ctx, honoCtx } = options;

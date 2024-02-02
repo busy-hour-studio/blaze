@@ -1,15 +1,15 @@
-import { BlazeEvent } from '@/event/BlazeEvent';
 import { BlazeContext } from '@/event/BlazeContext';
+import { BlazeEvent } from '@/event/BlazeEvent';
 import {
+  type Action,
   type ActionCallResult,
   type AfterHookHandlerOption,
   type BeforeHookHandlerOption,
-  type Action,
 } from '@/types/action';
 import { type EventHandler } from '@/types/event';
 import { type AssignActionOption } from '@/types/service';
-import { setupRestHandler } from './handler';
 import { resolvePromise } from '../common';
+import { setupRestHandler } from './handler';
 
 async function handleBeforeActionHook(
   options: BeforeHookHandlerOption

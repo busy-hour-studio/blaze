@@ -1,6 +1,6 @@
 import { type Hono } from 'hono';
-import { type RouterRoute } from 'hono/types';
 import { type Router } from 'hono/router';
+import { type RouterRoute } from 'hono/types';
 import { type ActionHandler, type Actions } from './action';
 import { type EventHandler } from './event';
 

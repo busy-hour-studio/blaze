@@ -1,9 +1,9 @@
+import { BlazeEvent } from '@/event/BlazeEvent';
+import { type LoadServiceOption } from '@/types/service';
 import fs from 'node:fs';
 import path from 'node:path';
-import { type LoadServiceOption } from '@/types/service';
-import { BlazeEvent } from '@/event/BlazeEvent';
-import { createRestPath, createServiceName, loadService } from './common';
 import { setupAction } from './actions';
+import { createRestPath, createServiceName, loadService } from './common';
 
 export function loadServices(options: LoadServiceOption) {
   const { app, servicePath, ignoreNotFound = false } = options;
