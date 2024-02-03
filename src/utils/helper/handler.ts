@@ -1,92 +1,12 @@
-import { BlazeError } from '@/errors/BlazeError';
 import { BlazeContext } from '@/event/BlazeContext';
-import {
-  type AfterHookRestHandlerOption,
-  type BeforeHookRestHandlerOption,
-  type CreateRestHandlerOption,
-  type RestErrorHandlerOption,
-  type RestHandlerOption,
-} from '@/types/rest';
+import { type CreateRestHandlerOption } from '@/types/rest';
 import { type Context as HonoCtx } from 'hono';
 import { resolvePromise } from '../common';
 import { getStatusCode } from './context';
-import { extractRestParams, getRouteHandler } from './rest';
+import { handleRestAfterHook, handleRestBeforeHook } from './hooks';
+import { handleRestError } from './rest';
 
-function handleRestError(options: RestErrorHandlerOption) {
-  const { err, ctx, honoCtx } = options;
-
-  if (err instanceof BlazeError) {
-    return honoCtx.json(err, {
-      status: err.status,
-    });
-  }
-
-  const status = getStatusCode(ctx, 500);
-
-  return honoCtx.json(err, {
-    status,
-  });
-}
-
-async function handleRestBeforeHook(options: BeforeHookRestHandlerOption) {
-  const { hooks, honoCtx, blazeCtx } = options;
-
-  for (const hook of hooks) {
-    const [, hookErr] = await resolvePromise(hook(blazeCtx));
-
-    if (hookErr) {
-      handleRestError({
-        ctx: blazeCtx,
-        err: hookErr,
-        honoCtx,
-      });
-
-      return {
-        ok: false,
-        result: null,
-      };
-    }
-  }
-
-  return {
-    ok: true,
-    result: null,
-  };
-}
-
-async function handleRestAfterHook(options: AfterHookRestHandlerOption) {
-  const { blazeCtx, honoCtx, hooks, result } = options;
-
-  let finalResult: unknown = result;
-
-  for (const hook of hooks) {
-    const [hookRes, hookErr] = await resolvePromise(
-      hook(blazeCtx, finalResult)
-    );
-
-    if (hookErr) {
-      handleRestError({
-        ctx: blazeCtx,
-        err: hookErr,
-        honoCtx,
-      });
-
-      return {
-        ok: false,
-        result: null,
-      };
-    }
-
-    finalResult = hookRes;
-  }
-
-  return {
-    ok: true,
-    result: finalResult,
-  };
-}
-
-function createRestHandler(options: CreateRestHandlerOption) {
+export function createRestHandler(options: CreateRestHandlerOption) {
   const { handler, hooks } = options;
 
   return async function routeHandler(honoCtx: HonoCtx) {
@@ -113,13 +33,19 @@ function createRestHandler(options: CreateRestHandlerOption) {
         ? hooks.before
         : [hooks.before];
 
-      const { ok: shouldContinue } = await handleRestBeforeHook({
+      const beforeHookResult = await handleRestBeforeHook({
         hooks: beforeHooks,
         blazeCtx,
         honoCtx,
       });
 
-      if (!shouldContinue) return;
+      if (!beforeHookResult.ok) {
+        return handleRestError({
+          ctx: blazeCtx,
+          err: beforeHookResult.error,
+          honoCtx,
+        });
+      }
     }
 
     // eslint-disable-next-line prefer-const
@@ -138,17 +64,22 @@ function createRestHandler(options: CreateRestHandlerOption) {
         ? hooks.after
         : [hooks.after];
 
-      const { ok: shouldContinue, result: afterResult } =
-        await handleRestAfterHook({
-          result,
-          hooks: afterHooks,
-          blazeCtx,
+      const afterHookResult = await handleRestAfterHook({
+        result,
+        hooks: afterHooks,
+        blazeCtx,
+        honoCtx,
+      });
+
+      if (!afterHookResult.ok) {
+        return handleRestError({
+          ctx: blazeCtx,
+          err: afterHookResult.error,
           honoCtx,
         });
+      }
 
-      if (!shouldContinue) return;
-
-      result = afterResult;
+      result = afterHookResult.result;
     }
 
     if (!result) {
@@ -161,15 +92,4 @@ function createRestHandler(options: CreateRestHandlerOption) {
       status,
     });
   };
-}
-
-export function setupRestHandler(options: RestHandlerOption) {
-  const [method, path] = extractRestParams(options.rest);
-  const apiHandler = createRestHandler({
-    handler: options.handler,
-    hooks: options.hooks,
-  });
-  const routeHandler = getRouteHandler(options.router, method);
-
-  routeHandler(path, apiHandler);
 }

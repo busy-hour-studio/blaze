@@ -1,5 +1,12 @@
-import { Method, RestParam, RestRoute } from '@/types/rest';
+import { BlazeError } from '@/errors/BlazeError';
+import {
+  type Method,
+  type RestErrorHandlerOption,
+  type RestParam,
+  type RestRoute,
+} from '@/types/rest';
 import { Hono } from 'hono';
+import { getStatusCode } from './context';
 
 export function extractRestPath(restRoute: RestRoute) {
   const restPath = restRoute.split(' ');
@@ -21,4 +28,20 @@ export function getRouteHandler(router: Hono, method: Method | null) {
   if (!method) return router.all;
 
   return router[method.toLowerCase() as Lowercase<Method>];
+}
+
+export function handleRestError(options: RestErrorHandlerOption) {
+  const { err, ctx, honoCtx } = options;
+
+  if (err instanceof BlazeError) {
+    return honoCtx.json(err, {
+      status: err.status,
+    });
+  }
+
+  const status = getStatusCode(ctx, 500);
+
+  return honoCtx.json(err, {
+    status,
+  });
 }
