@@ -15,10 +15,10 @@
     "@changesets/cli": "^2.27.1",
     "@commitlint/cli": "^17.8.1",
     "@commitlint/config-conventional": "^17.8.1",
-    "@hono/node-server": "^1.4.0",
-    "@types/node": "^20.11.5",
-    "@typescript-eslint/eslint-plugin": "^6.19.0",
-    "@typescript-eslint/parser": "^6.19.0",
+    "@hono/node-server": "^1.7.0",
+    "@types/node": "^20.11.16",
+    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "@typescript-eslint/parser": "^6.20.0",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^9.1.0",
@@ -35,8 +35,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "eventemitter2": "^6.4.9",
-    "hono": "^3.12.6"
+    "hono": "^3.12.10"
   },
   "lint-staged": {
     "src/**/*.{ts,tsx}": [

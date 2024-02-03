@@ -10,16 +10,18 @@ export type BeforeHookHandler = (ctx: BlazeContext) => Promise<void> | void;
 export type AfterHookHandler = (
   ctx: BlazeContext,
   res: unknown
-) => Promise<void> | void;
+) => Promise<unknown | void> | unknown | void;
+
+export type ActionHook = {
+  before?: BeforeHookHandler | BeforeHookHandler[];
+  after?: AfterHookHandler | AfterHookHandler[];
+};
 
 export interface Action {
   name?: string;
   handler: ActionHandler;
   rest?: RestParam;
-  hooks?: {
-    before?: BeforeHookHandler | BeforeHookHandler[];
-    after?: AfterHookHandler | AfterHookHandler[];
-  };
+  hooks?: ActionHook;
 }
 
 export interface AfterHookHandlerOption {

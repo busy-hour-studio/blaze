@@ -112,6 +112,10 @@ export class BlazeContext<
     };
   }
 
+  public get body() {
+    return this.$body;
+  }
+
   public get query() {
     if (!this.$honoCtx) return {};
 
@@ -157,7 +161,8 @@ export class BlazeContext<
     return {
       headers: this.reqHeaders,
       query: this.query,
-      params: this.params,
+      params: this.$params,
+      body: this.$body,
     };
   }
 
