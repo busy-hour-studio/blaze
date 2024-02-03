@@ -24,18 +24,18 @@ export interface Action {
 
 export interface AfterHookHandlerOption {
   result: unknown;
-  hooks: AfterHookHandler[];
+  hooks: AfterHookHandler | AfterHookHandler[];
   blazeCtx: BlazeContext;
 }
 
 export interface BeforeHookHandlerOption {
-  hooks: BeforeHookHandler[];
+  hooks: BeforeHookHandler | BeforeHookHandler[];
   blazeCtx: BlazeContext;
 }
 
 export type ActionCallResult<U> =
-  | { error: Error; ok: false; result: null }
-  | { error: null; ok: true; result: U };
+  | { error: Error; ok: false }
+  | { ok: true; result: U };
 
 export interface Actions {
   [key: string]: Action;

@@ -17,8 +17,7 @@ export interface Service {
 
 export interface LoadServiceOption {
   app: Hono;
-  servicePath: string;
-  ignoreNotFound?: boolean;
+  path: string;
 }
 
 export interface AssignActionOption {

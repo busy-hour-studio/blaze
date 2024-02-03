@@ -1,69 +1,11 @@
 import { BlazeContext } from '@/event/BlazeContext';
 import { BlazeEvent } from '@/event/BlazeEvent';
-import {
-  type Action,
-  type ActionCallResult,
-  type AfterHookHandlerOption,
-  type BeforeHookHandlerOption,
-} from '@/types/action';
+import { type Action, type ActionCallResult } from '@/types/action';
 import { type EventHandler } from '@/types/event';
 import { type AssignActionOption } from '@/types/service';
-import { resolvePromise } from '../common';
-import { setupRestHandler } from './handler';
-
-async function handleBeforeActionHook(
-  options: BeforeHookHandlerOption
-): Promise<ActionCallResult<unknown>> {
-  const { blazeCtx, hooks } = options;
-
-  for (const hook of hooks) {
-    const [, hookErr] = await resolvePromise(hook(blazeCtx));
-
-    if (hookErr) {
-      return {
-        error: hookErr as Error,
-        ok: false,
-        result: null,
-      };
-    }
-  }
-
-  return {
-    error: null,
-    ok: true,
-    result: null,
-  };
-}
-
-async function handleAfterActionHook(
-  options: AfterHookHandlerOption
-): Promise<ActionCallResult<unknown>> {
-  const { blazeCtx, result, hooks } = options;
-
-  let finalResult: unknown = result;
-
-  for (const hook of hooks) {
-    const [hookRes, hookErr] = await resolvePromise(
-      hook(blazeCtx, finalResult)
-    );
-
-    if (hookErr) {
-      return {
-        error: hookErr as Error,
-        ok: false,
-        result: null,
-      };
-    }
-
-    finalResult = hookRes;
-  }
-
-  return {
-    error: null,
-    ok: true,
-    result: finalResult,
-  };
-}
+import { getServiceName, resolvePromise } from '../common';
+import { setupRestHandler } from '../rest';
+import { handleAfterActionHook, handleBeforeActionHook } from './hooks';
 
 export function createActionHandler(action: Action) {
   return async function eventHandler(
@@ -84,18 +26,13 @@ export function createActionHandler(action: Action) {
       return {
         error: blazeErr as Error,
         ok: false,
-        result: null,
       };
     }
 
     if (action.hooks?.before) {
-      const beforeHooks = Array.isArray(action.hooks.before)
-        ? action.hooks.before
-        : [action.hooks.before];
-
       const beforeHooksRes = await handleBeforeActionHook({
         blazeCtx,
-        hooks: beforeHooks,
+        hooks: action.hooks.before,
       });
 
       if (!beforeHooksRes.ok) return beforeHooksRes;
@@ -108,18 +45,13 @@ export function createActionHandler(action: Action) {
       return {
         error: err as Error,
         ok: false,
-        result: null,
       };
     }
 
     if (action.hooks?.after) {
-      const afterHooks = Array.isArray(action.hooks.after)
-        ? action.hooks.after
-        : [action.hooks.after];
-
       const afterHooksRes = await handleAfterActionHook({
         blazeCtx,
-        hooks: afterHooks,
+        hooks: action.hooks.after,
         result,
       });
 
@@ -127,7 +59,6 @@ export function createActionHandler(action: Action) {
     }
 
     return {
-      error: null,
       ok: true,
       result,
     };
@@ -139,8 +70,9 @@ export function assignAction(options: AssignActionOption) {
 
   const handlers: EventHandler[] = [];
 
-  Object.entries<Action>(service.actions).forEach(([name, action]) => {
-    const actionName = `${service.name}.${name}`;
+  Object.entries<Action>(service.actions).forEach(([actionAlias, action]) => {
+    const serviceName = getServiceName(service);
+    const actionName = [serviceName, actionAlias].join('.');
 
     if (action.rest) {
       setupRestHandler({

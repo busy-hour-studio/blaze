@@ -5,42 +5,28 @@ export function hasOwnProperty<
   X extends NonNullable<unknown> = NonNullable<unknown>,
   Y extends PropertyKey = PropertyKey,
 >(obj: X, property: Y): obj is X & Record<Y, Z> {
-  // eslint-disable-next-line no-prototype-builtins
-  return obj.hasOwnProperty(property);
-}
-
-export function loadService(filePath: string) {
-  const file = require(filePath) as
-    | Service
-    | {
-        default: Service;
-      };
-  let service: Service;
-
-  if (hasOwnProperty<Service>(file, 'default')) {
-    service = file.default;
-  } else {
-    service = file;
-  }
-
-  return service;
+  return Object.hasOwn(obj, property);
 }
 
 export function removeTrailingSlash(path: string) {
   return path.replace(/^\/+/, '');
 }
 
-export function createRestPath(service: Service) {
-  return ['/', service.prefix ?? '', service.name]
+export function getRestPath(service: Service) {
+  const version = service.version ? `v${service.version}` : '';
+  const prefix = service.prefix ?? '';
+
+  return ['/', version, prefix, service.name]
     .map((val) => removeTrailingSlash(val))
     .filter(Boolean)
     .join('/');
 }
 
-export function createServiceName(service: Service) {
-  return [service.version ?? '', service.prefix ?? '', service.name]
-    .filter(Boolean)
-    .join('.');
+export function getServiceName(service: Service) {
+  const version = service.version ? `v${service.version}` : '';
+  const prefix = service.prefix ?? '';
+
+  return [version, prefix, service.name].filter(Boolean).join('.');
 }
 
 export async function resolvePromise<T>(promise: Promise<T> | T) {
@@ -51,4 +37,8 @@ export async function resolvePromise<T>(promise: Promise<T> | T) {
   } catch (err) {
     return [null, err] as const;
   }
+}
+
+export function toArray<T>(value: T | T[]): T[] {
+  return Array.isArray(value) ? value : [value];
 }
