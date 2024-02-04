@@ -1,7 +1,7 @@
 import { BlazeContext } from '@/event/BlazeContext';
 import { BlazeEvent } from '@/event/BlazeEvent';
 import { type Action, type ActionCallResult } from '@/types/action';
-import { type EventHandler } from '@/types/event';
+import { type EventArgs, type EventHandler } from '@/types/event';
 import { type AssignActionOption } from '@/types/service';
 import { getServiceName, resolvePromise } from '../common';
 import { setupRestHandler } from '../rest';
@@ -9,17 +9,15 @@ import { handleAfterActionHook, handleBeforeActionHook } from './hooks';
 
 export function createActionHandler(action: Action) {
   return async function eventHandler(
-    body: Record<string, unknown>,
-    params: Record<string, unknown>
+    args: Required<EventArgs>
   ): Promise<ActionCallResult<unknown>> {
-    const options = {
-      honoCtx: null,
-      body,
-      params,
-    };
-
     const [blazeCtx, blazeErr] = await resolvePromise(
-      BlazeContext.create(options)
+      BlazeContext.create({
+        honoCtx: null,
+        body: args.body,
+        params: args.params,
+        headers: args.headers,
+      })
     );
 
     if (!blazeCtx || blazeErr) {
@@ -65,33 +63,33 @@ export function createActionHandler(action: Action) {
   };
 }
 
-export function assignAction(options: AssignActionOption) {
+export function assignAction(options: AssignActionOption): EventHandler[] {
   const { service, router } = options;
 
-  const handlers: EventHandler[] = [];
+  const handlers = Object.entries<Action>(service.actions).map<EventHandler>(
+    ([actionAlias, action]) => {
+      const serviceName = getServiceName(service);
+      const actionName = [serviceName, actionAlias].join('.');
 
-  Object.entries<Action>(service.actions).forEach(([actionAlias, action]) => {
-    const serviceName = getServiceName(service);
-    const actionName = [serviceName, actionAlias].join('.');
+      if (action.rest) {
+        setupRestHandler({
+          handler: action.handler,
+          hooks: action.hooks,
+          rest: action.rest,
+          router,
+        });
+      }
 
-    if (action.rest) {
-      setupRestHandler({
-        handler: action.handler,
-        hooks: action.hooks,
-        rest: action.rest,
-        router,
-      });
+      const eventHandler = createActionHandler(action);
+
+      BlazeEvent.on(actionName, eventHandler);
+
+      return {
+        name: actionName,
+        handler: eventHandler,
+      };
     }
-
-    const eventHandler = createActionHandler(action);
-
-    BlazeEvent.on(actionName, eventHandler);
-
-    handlers.push({
-      name: actionName,
-      handler: eventHandler,
-    });
-  });
+  );
 
   return handlers;
 }

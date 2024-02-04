@@ -10,16 +10,14 @@ export function createRestHandler(options: CreateRestHandlerOption) {
   const { handler, hooks } = options;
 
   return async function routeHandler(honoCtx: HonoCtx) {
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    const options = {
-      honoCtx,
-      // NULL => automatically use honoCtx value instead
-      body: null,
-      params: null,
-    };
-
     const [blazeCtx, blazeErr] = await resolvePromise(
-      BlazeContext.create(options)
+      BlazeContext.create({
+        honoCtx,
+        // NULL => automatically use honoCtx value instead
+        body: null,
+        params: null,
+        headers: null,
+      })
     );
 
     if (!blazeCtx || blazeErr) {

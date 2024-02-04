@@ -1,1 +1,1 @@
-export { loadServices } from './utils/setup';
+export { initializeServices } from './utils/setup';

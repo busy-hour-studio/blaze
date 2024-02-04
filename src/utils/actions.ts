@@ -18,8 +18,9 @@ export function setupAction(service: Service) {
   });
 
   const blazeCtx = new BlazeContext({
-    body: {},
-    params: {},
+    body: null,
+    params: null,
+    headers: null,
     honoCtx: null,
   });
 
