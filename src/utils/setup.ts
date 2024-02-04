@@ -2,7 +2,7 @@ import { type LoadServiceOption } from '@/types/service';
 import fs from 'node:fs';
 import { initializeService } from './helper/setup';
 
-export function loadServices(options: LoadServiceOption) {
+export function initializeServices(options: LoadServiceOption) {
   const { app, path: servicePath } = options;
 
   if (!fs.existsSync(servicePath)) {

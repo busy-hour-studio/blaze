@@ -1,14 +1,14 @@
-import { type ActionCallResult as Result } from '@/types/action';
 import { type CreateContextOption } from '@/types/context';
 import { getReqBody } from '@/utils/helper/context';
 import { type Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
-import { BlazeEvent } from './BlazeEvent';
+import { BlazeBroker } from './BlazeBroker';
 
 export class BlazeContext<
   Meta extends Record<string, unknown> = Record<string, unknown>,
   Body extends Record<string, unknown> = Record<string, unknown>,
   Params extends Record<string, unknown> = Record<string, unknown>,
+  Headers extends Record<string, string> = Record<string, string>,
 > {
   private $honoCtx: HonoCtx<{
     Variables: Meta;
@@ -19,21 +19,27 @@ export class BlazeContext<
   private $body: Body | null;
   private $params: Body | Params | null;
   private $reqParams: Params | null;
-  private $reqHeaders: Record<string, string> | null;
+  private $reqHeaders: Headers;
   private $isRest: boolean;
+  private $broker: BlazeBroker;
 
-  constructor(options: CreateContextOption<Body, Params>) {
-    const { honoCtx, body, params } = options;
+  constructor(options: CreateContextOption<Body, Params, Headers>) {
+    const { honoCtx, body, params, headers } = options;
 
-    this.$honoCtx = honoCtx ?? null;
+    this.$honoCtx = honoCtx;
     this.$meta = {} as Meta;
     this.$headers = {};
-    this.$reqHeaders = null;
+    this.$reqHeaders = headers ?? ({} as Headers);
     this.$reqParams = params;
     this.$params = null;
     this.$query = null;
     this.$body = body;
     this.$isRest = !!options.honoCtx;
+    this.$broker = new BlazeBroker();
+
+    this.call = this.$broker.call.bind(this.$broker);
+    this.mcall = this.$broker.mcall.bind(this.$broker);
+    this.emit = this.$broker.emit.bind(this.$broker);
   }
 
   private getMeta(key: keyof Meta): Meta[keyof Meta] {
@@ -60,21 +66,19 @@ export class BlazeContext<
 
   public get meta() {
     return {
-      get: this.getMeta,
-      set: this.setMeta,
+      get: this.getMeta.bind(this),
+      set: this.setMeta.bind(this),
     };
   }
 
-  // eslint-disable-next-line no-use-before-define, @typescript-eslint/no-shadow
-  public async call<T, U = T extends Array<infer T> ? Result<T> : Result<T>>(
-    ...args: Parameters<(typeof BlazeEvent)['emitAsync']>
-  ) {
-    return BlazeEvent.emitAsync<T, U>(...args);
+  public get broker() {
+    return this.$broker;
   }
 
-  public emit(...args: Parameters<(typeof BlazeEvent)['emit']>) {
-    return BlazeEvent.emit(...args);
-  }
+  // Aliases
+  public call = this.broker?.call;
+  public mcall = this.broker?.mcall;
+  public emit = this.broker?.emit;
 
   private getHeader(): Record<string, string | string[]>;
   private getHeader(key: string): string | string[];
@@ -148,18 +152,9 @@ export class BlazeContext<
     return this.$isRest;
   }
 
-  private get reqHeaders() {
-    if (!this.$honoCtx) return {};
-    if (this.$reqHeaders) return this.$reqHeaders;
-
-    this.$reqHeaders = this.$honoCtx.req.header();
-
-    return this.$reqHeaders;
-  }
-
   public get request() {
     return {
-      headers: this.reqHeaders,
+      headers: this.$reqHeaders,
       query: this.query,
       params: this.$params,
       body: this.$body,
@@ -170,13 +165,15 @@ export class BlazeContext<
     Meta extends Record<string, unknown> = Record<string, unknown>,
     Body extends Record<string, unknown> = Record<string, unknown>,
     Params extends Record<string, unknown> = Record<string, unknown>,
+    Headers extends Record<string, string> = Record<string, string>,
   >(
-    options: CreateContextOption<Body, Params>
-  ): Promise<BlazeContext<Meta, Body, Params>> {
+    options: CreateContextOption<Body, Params, Headers>
+  ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
     const { honoCtx } = options;
 
     let body: Body | null = null;
     let params: Params | null = null;
+    let headers: Headers | null = null;
 
     if (options.body) {
       body = options.body;
@@ -190,10 +187,17 @@ export class BlazeContext<
       params = honoCtx.req.param() as never;
     }
 
-    const ctx = new BlazeContext<Meta, Body, Params>({
+    if (options.headers) {
+      headers = options.headers;
+    } else if (honoCtx) {
+      headers = honoCtx.req.header() as never;
+    }
+
+    const ctx = new BlazeContext<Meta, Body, Params, Headers>({
       body,
       params,
       honoCtx,
+      headers,
     });
 
     return ctx;

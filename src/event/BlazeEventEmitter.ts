@@ -1,9 +1,4 @@
-export type EventListener = (
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  ...values: any[]
-) => Promise<void | unknown> | void | unknown;
-
-export type EventName = string | symbol | (string | symbol)[];
+import { type EventListener, type EventName } from '@/types/event';
 
 type Option = {
   maxListener?: number;
