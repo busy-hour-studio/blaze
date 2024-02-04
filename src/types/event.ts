@@ -11,9 +11,3 @@ export type EventListener = (
 ) => Promise<void | unknown> | void | unknown;
 
 export type EventName = string | symbol | (string | symbol)[];
-
-export type EventArgs = {
-  body?: Record<string, unknown> | null;
-  params?: Record<string, unknown> | null;
-  headers?: Record<string, string> | null;
-};
