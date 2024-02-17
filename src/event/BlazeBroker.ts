@@ -1,15 +1,34 @@
+import { BlazeError } from '@/errors/BlazeError';
 import { type ActionCallResult as Result } from '@/types/action';
 import { type EventName } from '@/types/event';
 import { RESERVED_KEYWORD } from '@/utils/constant';
 import { BlazeEvent } from './BlazeEvent';
 
 export class BlazeBroker {
+  public hasListener(eventName: EventName) {
+    return BlazeEvent.listenerCount(eventName) > 0;
+  }
+
+  private validateEventName(eventName: EventName) {
+    if (this.hasListener(eventName)) return;
+
+    throw new BlazeError({
+      status: 500,
+      errors: {
+        message: `No listener for event ${eventName}`,
+      },
+      message: 'No listener for event',
+    });
+  }
+
   // eslint-disable-next-line no-use-before-define, @typescript-eslint/no-shadow
   public async call<T, U = T extends Array<infer T> ? Result<T> : Result<T>>(
     eventName: EventName,
     ...values: unknown[]
   ) {
-    return BlazeEvent.emitAsync<T, U>(eventName, ...values);
+    this.validateEventName(eventName);
+
+    return BlazeEvent.emitAsync<T, U>(eventName, ...values) as Promise<U[]>;
   }
 
   // eslint-disable-next-line no-use-before-define, @typescript-eslint/no-shadow
@@ -31,9 +50,5 @@ export class BlazeBroker {
     const evtName = [RESERVED_KEYWORD.PREFIX.EVENT, eventName].join('.');
 
     this.call<T, U>(evtName, ...values);
-  }
-
-  public hasListener(eventName: EventName) {
-    return BlazeEvent.listenerCount(eventName) > 0;
   }
 }

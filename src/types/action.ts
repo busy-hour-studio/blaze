@@ -1,12 +1,12 @@
 import { type BlazeContext } from '@/event/BlazeContext';
 import { type RestParam } from './rest';
 
-export interface ServiceEventHandler {
+export interface Event {
   (ctx: BlazeContext): Promise<void> | void;
 }
 
-export interface ServiceEvents {
-  [key: string]: ServiceEventHandler;
+export interface Events {
+  [key: string]: Event;
 }
 
 export interface ActionHandler {
@@ -27,7 +27,6 @@ export interface ActionHook {
 }
 
 export interface Action {
-  name?: string;
   handler: ActionHandler;
   rest?: RestParam;
   hooks?: ActionHook;

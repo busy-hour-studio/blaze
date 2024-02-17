@@ -1,7 +1,7 @@
 import { type Hono } from 'hono';
 import { type Router } from 'hono/router';
 import { type RouterRoute } from 'hono/types';
-import { type ActionHandler, type Actions, type ServiceEvents } from './action';
+import { type ActionHandler, type Actions, type Events } from './action';
 import { type EventHandler } from './event';
 
 export interface Service {
@@ -9,7 +9,7 @@ export interface Service {
   prefix?: string;
   version?: number;
   actions?: Actions;
-  events?: ServiceEvents;
+  events?: Events;
   onCreated?: ActionHandler;
   onStarted?: ActionHandler;
   onStopped?(handlers: EventHandler[]): void;
