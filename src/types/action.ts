@@ -1,21 +1,30 @@
 import { type BlazeContext } from '@/event/BlazeContext';
 import { type RestParam } from './rest';
 
-export type ActionHandler = (
-  ctx: BlazeContext
-) => Promise<unknown | void> | unknown | void;
+export interface ServiceEventHandler {
+  (ctx: BlazeContext): Promise<void> | void;
+}
 
-export type BeforeHookHandler = (ctx: BlazeContext) => Promise<void> | void;
+export interface ServiceEvents {
+  [key: string]: ServiceEventHandler;
+}
 
-export type AfterHookHandler = (
-  ctx: BlazeContext,
-  res: unknown
-) => Promise<unknown | void> | unknown | void;
+export interface ActionHandler {
+  (ctx: BlazeContext): Promise<unknown | void> | unknown | void;
+}
 
-export type ActionHook = {
+export interface BeforeHookHandler {
+  (ctx: BlazeContext): Promise<void> | void;
+}
+
+export interface AfterHookHandler {
+  (ctx: BlazeContext, res: unknown): Promise<unknown | void> | unknown | void;
+}
+
+export interface ActionHook {
   before?: BeforeHookHandler | BeforeHookHandler[];
   after?: AfterHookHandler | AfterHookHandler[];
-};
+}
 
 export interface Action {
   name?: string;

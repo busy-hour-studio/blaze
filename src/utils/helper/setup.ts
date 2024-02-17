@@ -1,9 +1,12 @@
+import { type BlazeContext } from '@/event/BlazeContext';
 import { BlazeEvent } from '@/event/BlazeEvent';
 import { Service } from '@/types/service';
 import { Hono } from 'hono';
 import path from 'node:path';
 import { setupAction } from '../actions';
 import { getRestPath, getServiceName, hasOwnProperty } from '../common';
+import { RESERVED_KEYWORD } from '../constant';
+import { setupEvent } from './event';
 
 function loadService(filePath: string) {
   const file = require(filePath) as
@@ -28,7 +31,11 @@ function loadService(filePath: string) {
   return service;
 }
 
-export function initializeService(app: Hono, servicePath: string) {
+export function initializeService(
+  app: Hono,
+  servicePath: string,
+  blazeCtx: BlazeContext
+) {
   // eslint-disable-next-line func-names
   return function (filePath: string) {
     const service = loadService(path.resolve(servicePath, filePath));
@@ -39,13 +46,18 @@ export function initializeService(app: Hono, servicePath: string) {
 
     const routePath = getRestPath(service);
     const serviceName = getServiceName(service);
-    const killEventName = [serviceName, 'kill'].join('.');
+    const killEventName = [serviceName, RESERVED_KEYWORD.SUFFIX.KILL].join('.');
 
-    const { router, handlers, blazeCtx } = setupAction(service);
+    const { router, handlers } = setupAction(service);
+
+    const eventHandler = setupEvent(service);
+    handlers.concat(eventHandler);
 
     service.onCreated?.(blazeCtx);
 
-    app.route(`/${routePath}`, router);
+    if (router) {
+      app.route(`/${routePath}`, router);
+    }
 
     function onStarted() {
       BlazeEvent.on(killEventName, () => {

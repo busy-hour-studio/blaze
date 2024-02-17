@@ -16,7 +16,7 @@ export function getRestPath(service: Service) {
   const version = service.version ? `v${service.version}` : '';
   const prefix = service.prefix ?? '';
 
-  return ['/', version, prefix, service.name]
+  return [version, prefix, service.name]
     .map((val) => removeTrailingSlash(val))
     .filter(Boolean)
     .join('/');
