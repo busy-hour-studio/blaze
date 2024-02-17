@@ -1,6 +1,6 @@
-import { type BlazeContext } from '@/event/BlazeContext';
+import type { BlazeContext } from '@/event/BlazeContext';
 import { BlazeEvent } from '@/event/BlazeEvent';
-import { Service } from '@/types/service';
+import type { Service } from '@/types/service';
 import { Hono } from 'hono';
 import path from 'node:path';
 import { setupAction } from '../actions';

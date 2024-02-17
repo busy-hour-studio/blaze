@@ -1,9 +1,9 @@
-import {
-  type ActionCallResult,
-  type AfterHookHandlerOption,
-  type BeforeHookHandlerOption,
+import type {
+  ActionCallResult,
+  AfterHookHandlerOption,
+  BeforeHookHandlerOption,
 } from '@/types/action';
-import {
+import type {
   AfterHookRestHandlerOption,
   BeforeHookRestHandlerOption,
 } from '@/types/rest';

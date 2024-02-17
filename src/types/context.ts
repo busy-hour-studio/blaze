@@ -1,4 +1,4 @@
-import { type Context as HonoCtx } from 'hono';
+import type { Context as HonoCtx } from 'hono';
 
 export interface CreateContextOption<
   Body extends Record<string, unknown> = Record<string, unknown>,

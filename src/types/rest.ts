@@ -1,9 +1,9 @@
-import { type BlazeContext } from '@/event/BlazeContext';
-import { type Hono, type Context as HonoCtx } from 'hono';
-import {
-  type Action,
-  type AfterHookHandlerOption,
-  type BeforeHookHandlerOption,
+import type { BlazeContext } from '@/event/BlazeContext';
+import type { Hono, Context as HonoCtx } from 'hono';
+import type {
+  Action,
+  AfterHookHandlerOption,
+  BeforeHookHandlerOption,
 } from './action';
 
 export type Method =

@@ -1,5 +1,5 @@
 import { BlazeContext } from '@/event/BlazeContext';
-import { type LoadServiceOption } from '@/types/service';
+import type { LoadServiceOption } from '@/types/service';
 import fs from 'node:fs';
 import { initializeService } from './helper/setup';
 

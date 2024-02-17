@@ -1,5 +1,5 @@
-import { EventHandler } from '@/types/event';
-import { type Service } from '@/types/service';
+import type { EventHandler } from '@/types/event';
+import type { Service } from '@/types/service';
 import { Hono } from 'hono';
 import { assignAction } from './helper/action';
 

@@ -1,8 +1,8 @@
 import { BlazeContext } from '@/event/BlazeContext';
 import { BlazeEvent } from '@/event/BlazeEvent';
-import { type Event } from '@/types/action';
-import { type EventHandler } from '@/types/event';
-import { Service } from '@/types/service';
+import type { Event } from '@/types/action';
+import type { EventHandler } from '@/types/event';
+import type { Service } from '@/types/service';
 import { getServiceName, resolvePromise } from '../common';
 import { RESERVED_KEYWORD } from '../constant';
 
