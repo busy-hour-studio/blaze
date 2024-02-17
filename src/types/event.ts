@@ -1,4 +1,4 @@
-import { type ActionHandler } from './action';
+import type { ActionHandler } from './action';
 
 export interface EventHandler {
   name: string;

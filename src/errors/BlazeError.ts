@@ -1,4 +1,4 @@
-import { BlazeErrorOption } from '@/types/error';
+import type { BlazeErrorOption } from '@/types/error';
 
 export class BlazeError extends Error {
   public status: number;

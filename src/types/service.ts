@@ -1,8 +1,8 @@
-import { type Hono } from 'hono';
-import { type Router } from 'hono/router';
-import { type RouterRoute } from 'hono/types';
-import { type ActionHandler, type Actions, type Events } from './action';
-import { type EventHandler } from './event';
+import type { Hono } from 'hono';
+import type { Router } from 'hono/router';
+import type { RouterRoute } from 'hono/types';
+import type { ActionHandler, Actions, Events } from './action';
+import type { EventHandler } from './event';
 
 export interface Service {
   name: string;

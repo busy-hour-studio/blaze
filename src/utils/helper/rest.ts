@@ -1,9 +1,9 @@
 import { BlazeError } from '@/errors/BlazeError';
-import {
-  type Method,
-  type RestErrorHandlerOption,
-  type RestParam,
-  type RestRoute,
+import type {
+  Method,
+  RestErrorHandlerOption,
+  RestParam,
+  RestRoute,
 } from '@/types/rest';
 import { Hono } from 'hono';
 import { getStatusCode } from './context';

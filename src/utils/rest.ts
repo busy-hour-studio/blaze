@@ -1,4 +1,4 @@
-import { type RestHandlerOption } from '@/types/rest';
+import type { RestHandlerOption } from '@/types/rest';
 import { createRestHandler } from './helper/handler';
 import { extractRestParams, getRouteHandler } from './helper/rest';
 

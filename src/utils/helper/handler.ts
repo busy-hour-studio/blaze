@@ -1,6 +1,6 @@
 import { BlazeContext } from '@/event/BlazeContext';
-import { type CreateRestHandlerOption } from '@/types/rest';
-import { type Context as HonoCtx } from 'hono';
+import type { CreateRestHandlerOption } from '@/types/rest';
+import type { Context as HonoCtx } from 'hono';
 import { resolvePromise } from '../common';
 import { getStatusCode } from './context';
 import { handleRestAfterHook, handleRestBeforeHook } from './hooks';

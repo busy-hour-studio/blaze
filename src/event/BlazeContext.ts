@@ -1,6 +1,6 @@
-import { type CreateContextOption } from '@/types/context';
+import type { CreateContextOption } from '@/types/context';
 import { getReqBody } from '@/utils/helper/context';
-import { type Context as HonoCtx } from 'hono';
+import type { Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
 import { BlazeBroker } from './BlazeBroker';
 

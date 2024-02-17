@@ -1,8 +1,8 @@
 import { BlazeContext } from '@/event/BlazeContext';
 import { BlazeEvent } from '@/event/BlazeEvent';
-import { type Action, type ActionCallResult } from '@/types/action';
-import { type EventHandler } from '@/types/event';
-import { type AssignActionOption } from '@/types/service';
+import type { Action, ActionCallResult } from '@/types/action';
+import type { EventHandler } from '@/types/event';
+import type { AssignActionOption } from '@/types/service';
 import { getServiceName, resolvePromise } from '../common';
 import { setupRestHandler } from '../rest';
 import { handleAfterActionHook, handleBeforeActionHook } from './hooks';

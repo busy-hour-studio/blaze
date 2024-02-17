@@ -1,5 +1,5 @@
-import { type BlazeContext } from '@/event/BlazeContext';
-import { type RestParam } from './rest';
+import type { BlazeContext } from '@/event/BlazeContext';
+import type { RestParam } from './rest';
 
 export interface Event {
   (ctx: BlazeContext): Promise<void> | void;
