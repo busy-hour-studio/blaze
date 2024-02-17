@@ -68,6 +68,8 @@ export function createActionHandler(action: Action) {
 export function assignAction(options: AssignActionOption): EventHandler[] {
   const { service, router } = options;
 
+  if (!service.actions) return [];
+
   const handlers = Object.entries<Action>(service.actions).map<EventHandler>(
     ([actionAlias, action]) => {
       const serviceName = getServiceName(service);
