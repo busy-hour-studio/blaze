@@ -10,11 +10,7 @@ export function setupAction(service: Service) {
       handlers: [] as EventHandler[],
     };
 
-  if (
-    !service.actions ||
-    typeof service.actions !== 'object' ||
-    Array.isArray(service.actions)
-  ) {
+  if (typeof service.actions !== 'object' || Array.isArray(service.actions)) {
     throw new Error('Service actions must be an object');
   }
 
