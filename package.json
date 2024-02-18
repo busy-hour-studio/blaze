@@ -2,17 +2,17 @@
   "name": "@busy-hour/blaze",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "build": "rimraf dist && tsc --project tsconfig.build.json && resolve-tspaths",
-    "dev": "tsx --watch src src/index.ts",
+    "prepublish": "pnpm build",
+    "release": "pnpm publish --access public && git push --follow-tags",
+    "release:beta": "npm publish --tag next --access public && git push --follow-tags",
     "types": "tsc --project tsconfig.json",
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.5.0",
-    "@changesets/cli": "^2.27.1",
     "@commitlint/cli": "^17.8.1",
     "@commitlint/config-conventional": "^17.8.1",
     "@hono/node-server": "^1.7.0",
@@ -37,10 +37,27 @@
   "dependencies": {
     "hono": "^3.12.10"
   },
+  "keywords": [
+    "hono",
+    "backend",
+    "event-driven",
+    "blaze",
+    "framework",
+    "scalable"
+  ],
   "lint-staged": {
     "src/**/*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ]
-  }
+  },
+  "files": [
+    "dist",
+    "src",
+    "README.md",
+    "LICENSE",
+    "package.json",
+    "CONTRIBUTING.md",
+    "CHANGELOG.md"
+  ]
 }
