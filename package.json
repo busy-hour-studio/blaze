@@ -7,9 +7,11 @@
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "build": "rimraf dist && tsc --project tsconfig.build.json && resolve-tspaths",
     "prepublish": "pnpm build",
+    "lint": "eslint src/**/*.{ts,tsx} --fix",
+    "prerelease": "standard-version",
     "release": "pnpm publish --access public && git push --follow-tags",
     "release:beta": "npm publish --tag next --access public && git push --follow-tags",
-    "types": "tsc --project tsconfig.json",
+    "check-types": "tsc --project tsconfig.json",
     "prepare": "husky install"
   },
   "devDependencies": {
@@ -31,6 +33,7 @@
     "prettier": "^3.2.4",
     "resolve-tspaths": "^0.8.17",
     "rimraf": "^5.0.5",
+    "standard-version": "^9.5.0",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.3.3"
   },
