@@ -2,7 +2,7 @@
   "name": "@busy-hour/blaze",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/index.js",
     "build": "rimraf dist && tsc --project tsconfig.build.json && resolve-tspaths",
