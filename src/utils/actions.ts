@@ -1,4 +1,4 @@
-import type { EventHandler } from '@/types/event';
+import type { EventActionHandler } from '@/types/event';
 import type { Service } from '@/types/service';
 import { Hono } from 'hono';
 import { assignAction } from './helper/action';
@@ -7,7 +7,7 @@ export function setupAction(service: Service) {
   if (!service.actions)
     return {
       router: null,
-      handlers: [] as EventHandler[],
+      handlers: [] as EventActionHandler[],
     };
 
   if (typeof service.actions !== 'object' || Array.isArray(service.actions)) {

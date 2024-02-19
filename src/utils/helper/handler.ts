@@ -32,7 +32,7 @@ export function createRestHandler(options: CreateRestHandlerOption) {
         : [hooks.before];
 
       const beforeHookResult = await handleRestBeforeHook({
-        hooks: beforeHooks,
+        hooks: beforeHooks as never,
         blazeCtx,
         honoCtx,
       });
@@ -47,7 +47,7 @@ export function createRestHandler(options: CreateRestHandlerOption) {
     }
 
     // eslint-disable-next-line prefer-const
-    let [result, handlerErr] = await resolvePromise(handler(blazeCtx));
+    let [result, handlerErr] = await resolvePromise(handler(blazeCtx as never));
 
     if (handlerErr) {
       return handleRestError({
@@ -64,7 +64,7 @@ export function createRestHandler(options: CreateRestHandlerOption) {
 
       const afterHookResult = await handleRestAfterHook({
         result,
-        hooks: afterHooks,
+        hooks: afterHooks as never,
         blazeCtx,
         honoCtx,
       });

@@ -15,7 +15,7 @@ export type Method =
 export type RestRoute = `${Method} /${string}` | `/${string}`;
 
 export interface RestParamOption {
-  method?: Method;
+  method?: Method | null;
   path: string;
 }
 

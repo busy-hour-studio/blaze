@@ -1,31 +1,42 @@
 import type { BlazeContext } from '@/event/BlazeContext';
 import type { ZodObject, ZodRawShape, ZodTypeAny } from 'zod';
-import type { RecordUnknown } from './helper';
+import type { FinalActionType, RecordUnknown } from './helper';
 import type { ActionHook } from './hooks';
 import type { RestParam } from './rest';
 
 export interface ActionHandler<
+  Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
 > {
   (
-    ctx: BlazeContext<RecordUnknown, Body, Params>
+    ctx: BlazeContext<Meta, Body, Params>
   ): Promise<unknown | void> | unknown | void;
 }
 
 export interface Action<
   Body extends ZodTypeAny = ZodTypeAny,
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  FinalParams extends RecordUnknown = Params['_output'] & RecordUnknown,
-  FinalBody extends RecordUnknown = Body['_output'] & RecordUnknown,
+  ActionType extends FinalActionType<Body, Params> = FinalActionType<
+    Body,
+    Params
+  >,
 > {
-  request?: {
-    body?: Body;
-    params?: Params;
-  };
-  handler: ActionHandler<FinalBody, FinalParams>;
-  rest?: RestParam;
-  hooks?: ActionHook<FinalBody, FinalParams>;
+  validation?: {
+    body?: Body | null;
+    params?: Params | null;
+  } | null;
+  handler: ActionHandler<
+    ActionType['Meta'],
+    ActionType['Body'],
+    ActionType['Params']
+  >;
+  rest?: RestParam | null;
+  hooks?: ActionHook<
+    ActionType['Meta'],
+    ActionType['Body'],
+    ActionType['Params']
+  > | null;
 }
 
 export type ActionCallResult<U> =

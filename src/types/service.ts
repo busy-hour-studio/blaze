@@ -2,17 +2,17 @@ import type { Hono } from 'hono';
 import type { Router } from 'hono/router';
 import type { RouterRoute } from 'hono/types';
 import type { ActionHandler, Actions } from './action';
-import type { EventHandler, Events } from './event';
+import type { EventActionHandler, Events } from './event';
 
 export interface Service {
   name: string;
-  prefix?: string;
-  version?: number;
-  actions?: Actions;
-  events?: Events;
-  onCreated?: ActionHandler;
-  onStarted?: ActionHandler;
-  onStopped?(handlers: EventHandler[]): void;
+  prefix?: string | null;
+  version?: number | null;
+  actions?: Actions | null;
+  events?: Events | null;
+  onCreated?: ActionHandler | null;
+  onStarted?: ActionHandler | null;
+  onStopped?(handlers: EventActionHandler[]): void;
   router?: Router<[never, RouterRoute]>;
 }
 

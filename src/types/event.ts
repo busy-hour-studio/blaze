@@ -1,7 +1,9 @@
 import type { BlazeContext } from '@/event/BlazeContext';
+import { ZodObject, ZodRawShape, ZodTypeAny } from 'zod';
 import type { ActionHandler } from './action';
+import { FinalEventType, RecordUnknown } from './helper';
 
-export interface EventHandler {
+export interface EventActionHandler {
   name: string;
   handler(...values: unknown[]): ReturnType<ActionHandler>;
 }
@@ -15,8 +17,19 @@ export interface EventListener {
 
 export type EventName = string;
 
-export interface Event {
-  (ctx: BlazeContext): Promise<void> | void;
+export interface EventHandler<
+  Meta extends RecordUnknown = RecordUnknown,
+  Params extends RecordUnknown = RecordUnknown,
+> {
+  (ctx: BlazeContext<Meta, Params>): Promise<void> | void;
+}
+
+export interface Event<
+  Params extends ZodTypeAny | ZodObject<ZodRawShape> = ZodTypeAny,
+  EventType extends FinalEventType<Params> = FinalEventType<Params>,
+> {
+  validation?: Params | null;
+  handler: EventHandler<EventType['Meta'], EventType['Params']>;
 }
 
 export interface Events {

@@ -3,38 +3,47 @@ import type { Context as HonoCtx } from 'hono';
 import type { RecordUnknown } from './helper';
 
 export interface BeforeHookHandler<
+  Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
 > {
-  (ctx: BlazeContext<RecordUnknown, Body, Params>): Promise<void> | void;
+  (ctx: BlazeContext<Meta, Body, Params>): Promise<void> | void;
 }
 
 export interface AfterHookHandler<
+  Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
 > {
   (
-    ctx: BlazeContext<RecordUnknown, Body, Params>,
+    ctx: BlazeContext<Meta, Body, Params>,
     res: unknown
   ): Promise<unknown | void> | unknown | void;
 }
 
 export type AcceptedBeforeHook<
+  Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
-> = BeforeHookHandler<Body, Params> | BeforeHookHandler<Body, Params>[];
+> =
+  | BeforeHookHandler<Meta, Body, Params>
+  | BeforeHookHandler<Meta, Body, Params>[];
 
 export type AcceptedAfterHook<
+  Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
-> = AfterHookHandler<Body, Params> | AfterHookHandler<Body, Params>[];
+> =
+  | AfterHookHandler<Meta, Body, Params>
+  | AfterHookHandler<Meta, Body, Params>[];
 
 export interface ActionHook<
+  Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
 > {
-  before?: AcceptedBeforeHook<Body, Params>;
-  after?: AcceptedBeforeHook<Body, Params>;
+  before?: AcceptedBeforeHook<Meta, Body, Params> | null;
+  after?: AcceptedBeforeHook<Meta, Body, Params> | null;
 }
 
 export interface AfterHookHandlerOption {
