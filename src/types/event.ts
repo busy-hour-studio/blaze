@@ -1,7 +1,8 @@
+import type { BlazeServiceEvent } from '@/classes/BlazeServiceEvent';
 import type { BlazeContext } from '@/event/BlazeContext';
-import { ZodObject, ZodRawShape, ZodTypeAny } from 'zod';
+import type { ZodObject, ZodRawShape, ZodTypeAny } from 'zod';
 import type { ActionHandler } from './action';
-import { FinalEventType, RecordUnknown } from './helper';
+import type { FinalEventType, RecordUnknown } from './helper';
 
 export interface EventActionHandler {
   name: string;
@@ -33,5 +34,5 @@ export interface Event<
 }
 
 export interface Events {
-  [key: string]: Event;
+  [key: string]: Event | BlazeServiceEvent;
 }

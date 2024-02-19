@@ -1,4 +1,5 @@
-import { BlazeContext } from '@/event/BlazeContext';
+import type { BlazeServiceHook } from '@/classes/BlazeServiceHook';
+import type { BlazeContext } from '@/event/BlazeContext';
 import type { Context as HonoCtx } from 'hono';
 import type { RecordUnknown } from './helper';
 
@@ -26,16 +27,28 @@ export type AcceptedBeforeHook<
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
 > =
-  | BeforeHookHandler<Meta, Body, Params>
-  | BeforeHookHandler<Meta, Body, Params>[];
+  | (
+      | BeforeHookHandler<Meta, Body, Params>
+      | BlazeServiceHook<false, Meta, Body, Params>
+    )
+  | (
+      | BeforeHookHandler<Meta, Body, Params>
+      | BlazeServiceHook<false, Meta, Body, Params>
+    )[];
 
 export type AcceptedAfterHook<
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
 > =
-  | AfterHookHandler<Meta, Body, Params>
-  | AfterHookHandler<Meta, Body, Params>[];
+  | (
+      | AfterHookHandler<Meta, Body, Params>
+      | BlazeServiceHook<true, Meta, Body, Params>
+    )
+  | (
+      | AfterHookHandler<Meta, Body, Params>
+      | BlazeServiceHook<true, Meta, Body, Params>
+    )[];
 
 export interface ActionHook<
   Meta extends RecordUnknown = RecordUnknown,
@@ -43,7 +56,7 @@ export interface ActionHook<
   Params extends RecordUnknown = RecordUnknown,
 > {
   before?: AcceptedBeforeHook<Meta, Body, Params> | null;
-  after?: AcceptedBeforeHook<Meta, Body, Params> | null;
+  after?: AcceptedAfterHook<Meta, Body, Params> | null;
 }
 
 export interface AfterHookHandlerOption {

@@ -1,3 +1,4 @@
+import type { BlazeServiceAction } from '@/classes/BlazeServiceAction';
 import type { BlazeContext } from '@/event/BlazeContext';
 import type { ZodObject, ZodRawShape, ZodTypeAny } from 'zod';
 import type { FinalActionType, RecordUnknown } from './helper';
@@ -14,6 +15,14 @@ export interface ActionHandler<
   ): Promise<unknown | void> | unknown | void;
 }
 
+export interface ActionValidation<
+  Body extends ZodTypeAny,
+  Params extends ZodObject<ZodRawShape>,
+> {
+  body?: Body | null;
+  params?: Params | null;
+}
+
 export interface Action<
   Body extends ZodTypeAny = ZodTypeAny,
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
@@ -22,10 +31,7 @@ export interface Action<
     Params
   >,
 > {
-  validation?: {
-    body?: Body | null;
-    params?: Params | null;
-  } | null;
+  validation?: ActionValidation<Body, Params> | null;
   handler: ActionHandler<
     ActionType['Meta'],
     ActionType['Body'],
@@ -44,5 +50,5 @@ export type ActionCallResult<U> =
   | { ok: true; result: U };
 
 export interface Actions {
-  [key: string]: Action;
+  [key: string]: Action | BlazeServiceAction;
 }

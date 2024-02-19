@@ -13,7 +13,8 @@ export async function handleBeforeActionHook(
   const hooks = toArray(options.hooks);
 
   for (const hook of hooks) {
-    const [, hookErr] = await resolvePromise(hook(options.blazeCtx));
+    const hookFn = hook instanceof Function ? hook : hook.handler;
+    const [, hookErr] = await resolvePromise(hookFn(options.blazeCtx));
 
     if (hookErr) {
       return {
@@ -38,8 +39,9 @@ export async function handleAfterActionHook(
   let result: unknown = options.result;
 
   for (const hook of hooks) {
+    const hookFn = hook instanceof Function ? hook : hook.handler;
     const [hookRes, hookErr] = await resolvePromise(
-      hook(options.blazeCtx, result)
+      hookFn(options.blazeCtx, result)
     );
 
     if (hookErr) {
@@ -64,7 +66,8 @@ export async function handleRestBeforeHook(
   const hooks = toArray(options.hooks);
 
   for (const hook of hooks) {
-    const [, hookErr] = await resolvePromise(hook(options.blazeCtx));
+    const hookFn = hook instanceof Function ? hook : hook.handler;
+    const [, hookErr] = await resolvePromise(hookFn(options.blazeCtx));
 
     if (hookErr) {
       return {
@@ -89,8 +92,9 @@ export async function handleRestAfterHook(
   let result: unknown = options.result;
 
   for (const hook of hooks) {
+    const hookFn = hook instanceof Function ? hook : hook.handler;
     const [hookRes, hookErr] = await resolvePromise(
-      hook(options.blazeCtx, result)
+      hookFn(options.blazeCtx, result)
     );
 
     if (hookErr) {
