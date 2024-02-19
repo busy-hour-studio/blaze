@@ -1,46 +1,31 @@
 import type { BlazeContext } from '@/event/BlazeContext';
+import type { ZodObject, ZodRawShape, ZodTypeAny } from 'zod';
+import type { RecordUnknown } from './helper';
+import type { ActionHook } from './hooks';
 import type { RestParam } from './rest';
 
-export interface Event {
-  (ctx: BlazeContext): Promise<void> | void;
+export interface ActionHandler<
+  Body extends RecordUnknown = RecordUnknown,
+  Params extends RecordUnknown = RecordUnknown,
+> {
+  (
+    ctx: BlazeContext<RecordUnknown, Body, Params>
+  ): Promise<unknown | void> | unknown | void;
 }
 
-export interface Events {
-  [key: string]: Event;
-}
-
-export interface ActionHandler {
-  (ctx: BlazeContext): Promise<unknown | void> | unknown | void;
-}
-
-export interface BeforeHookHandler {
-  (ctx: BlazeContext): Promise<void> | void;
-}
-
-export interface AfterHookHandler {
-  (ctx: BlazeContext, res: unknown): Promise<unknown | void> | unknown | void;
-}
-
-export interface ActionHook {
-  before?: BeforeHookHandler | BeforeHookHandler[];
-  after?: AfterHookHandler | AfterHookHandler[];
-}
-
-export interface Action {
-  handler: ActionHandler;
+export interface Action<
+  Body extends ZodTypeAny = ZodTypeAny,
+  Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  FinalParams extends RecordUnknown = Params['_output'] & RecordUnknown,
+  FinalBody extends RecordUnknown = Body['_output'] & RecordUnknown,
+> {
+  request?: {
+    body?: Body;
+    params?: Params;
+  };
+  handler: ActionHandler<FinalBody, FinalParams>;
   rest?: RestParam;
-  hooks?: ActionHook;
-}
-
-export interface AfterHookHandlerOption {
-  result: unknown;
-  hooks: AfterHookHandler | AfterHookHandler[];
-  blazeCtx: BlazeContext;
-}
-
-export interface BeforeHookHandlerOption {
-  hooks: BeforeHookHandler | BeforeHookHandler[];
-  blazeCtx: BlazeContext;
+  hooks?: ActionHook<FinalBody, FinalParams>;
 }
 
 export type ActionCallResult<U> =

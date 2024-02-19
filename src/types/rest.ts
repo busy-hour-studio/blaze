@@ -1,10 +1,6 @@
 import type { BlazeContext } from '@/event/BlazeContext';
 import type { Hono, Context as HonoCtx } from 'hono';
-import type {
-  Action,
-  AfterHookHandlerOption,
-  BeforeHookHandlerOption,
-} from './action';
+import type { Action } from './action';
 
 export type Method =
   | 'ALL'
@@ -32,14 +28,6 @@ export interface RestHandlerOption extends Omit<Action, 'name' | 'rest'> {
 
 export interface CreateRestHandlerOption
   extends Pick<Action, 'handler' | 'hooks'> {}
-
-export interface AfterHookRestHandlerOption extends AfterHookHandlerOption {
-  honoCtx: HonoCtx;
-}
-
-export interface BeforeHookRestHandlerOption extends BeforeHookHandlerOption {
-  honoCtx: HonoCtx;
-}
 
 export interface RestErrorHandlerOption {
   err: Error | unknown;

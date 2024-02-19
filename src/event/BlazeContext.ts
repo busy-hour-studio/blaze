@@ -1,13 +1,14 @@
 import type { CreateContextOption } from '@/types/context';
+import type { RecordUnknown } from '@/types/helper';
 import { getReqBody } from '@/utils/helper/context';
 import type { Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
 import { BlazeBroker } from './BlazeBroker';
 
 export class BlazeContext<
-  Meta extends Record<string, unknown> = Record<string, unknown>,
-  Body extends Record<string, unknown> = Record<string, unknown>,
-  Params extends Record<string, unknown> = Record<string, unknown>,
+  Meta extends RecordUnknown = RecordUnknown,
+  Body extends RecordUnknown = RecordUnknown,
+  Params extends RecordUnknown = RecordUnknown,
   Headers extends Record<string, string> = Record<string, string>,
 > {
   private $honoCtx: HonoCtx<{
@@ -17,7 +18,7 @@ export class BlazeContext<
   private $headers: Record<string, string | string[]>;
   private $query: qs.ParsedUrlQuery | null;
   private $body: Body | null;
-  private $params: Body | Params | null;
+  private $params: (Body & Params) | null;
   private $reqParams: Params | null;
   private $reqHeaders: Headers;
   private $isRest: boolean;
@@ -40,6 +41,7 @@ export class BlazeContext<
     this.call = this.$broker.call.bind(this.$broker);
     this.mcall = this.$broker.mcall.bind(this.$broker);
     this.emit = this.$broker.emit.bind(this.$broker);
+    this.event = this.$broker.event.bind(this.$broker);
   }
 
   private getMeta(key: keyof Meta): Meta[keyof Meta] {
@@ -79,6 +81,7 @@ export class BlazeContext<
   public call = this.broker?.call;
   public mcall = this.broker?.mcall;
   public emit = this.broker?.emit;
+  public event = this.broker?.event;
 
   private getHeader(): Record<string, string | string[]>;
   private getHeader(key: string): string | string[];
@@ -116,10 +119,6 @@ export class BlazeContext<
     };
   }
 
-  public get body() {
-    return this.$body;
-  }
-
   public get query() {
     if (!this.$honoCtx) return {};
 
@@ -134,8 +133,6 @@ export class BlazeContext<
 
   public get params() {
     if (this.$params) return this.$params;
-
-    if (!this.$body && !this.$reqParams) return {};
 
     const body = this.$body ?? ({} as Body);
     const param = this.$reqParams ?? ({} as Params);
@@ -156,15 +153,15 @@ export class BlazeContext<
     return {
       headers: this.$reqHeaders,
       query: this.query,
-      params: this.$params,
+      params: this.$reqParams,
       body: this.$body,
     };
   }
 
   public static async create<
-    Meta extends Record<string, unknown> = Record<string, unknown>,
-    Body extends Record<string, unknown> = Record<string, unknown>,
-    Params extends Record<string, unknown> = Record<string, unknown>,
+    Meta extends RecordUnknown = RecordUnknown,
+    Body extends RecordUnknown = RecordUnknown,
+    Params extends RecordUnknown = RecordUnknown,
     Headers extends Record<string, string> = Record<string, string>,
   >(
     options: CreateContextOption<Body, Params, Headers>

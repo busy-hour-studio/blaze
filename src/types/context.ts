@@ -1,8 +1,9 @@
 import type { Context as HonoCtx } from 'hono';
+import type { RecordUnknown } from './helper';
 
 export interface CreateContextOption<
-  Body extends Record<string, unknown> = Record<string, unknown>,
-  Params extends Record<string, unknown> = Record<string, unknown>,
+  Body extends RecordUnknown = RecordUnknown,
+  Params extends RecordUnknown = RecordUnknown,
   Headers extends Record<string, string> = Record<string, string>,
 > {
   honoCtx: HonoCtx | null;

@@ -1,3 +1,4 @@
+import type { BlazeContext } from '@/event/BlazeContext';
 import type { ActionHandler } from './action';
 
 export interface EventHandler {
@@ -13,3 +14,11 @@ export interface EventListener {
 }
 
 export type EventName = string;
+
+export interface Event {
+  (ctx: BlazeContext): Promise<void> | void;
+}
+
+export interface Events {
+  [key: string]: Event;
+}

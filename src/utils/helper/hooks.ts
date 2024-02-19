@@ -1,12 +1,10 @@
+import type { ActionCallResult } from '@/types/action';
 import type {
-  ActionCallResult,
   AfterHookHandlerOption,
-  BeforeHookHandlerOption,
-} from '@/types/action';
-import type {
   AfterHookRestHandlerOption,
+  BeforeHookHandlerOption,
   BeforeHookRestHandlerOption,
-} from '@/types/rest';
+} from '@/types/hooks';
 import { resolvePromise, toArray } from '../common';
 
 export async function handleBeforeActionHook(

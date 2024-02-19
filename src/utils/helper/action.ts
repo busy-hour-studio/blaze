@@ -2,6 +2,7 @@ import { BlazeContext } from '@/event/BlazeContext';
 import { BlazeEvent } from '@/event/BlazeEvent';
 import type { Action, ActionCallResult } from '@/types/action';
 import type { EventHandler } from '@/types/event';
+import type { RecordUnknown } from '@/types/helper';
 import type { AssignActionOption } from '@/types/service';
 import { getServiceName, resolvePromise } from '../common';
 import { setupRestHandler } from '../rest';
@@ -9,8 +10,8 @@ import { handleAfterActionHook, handleBeforeActionHook } from './hooks';
 
 export function createActionHandler(action: Action) {
   return async function eventHandler(
-    body: Record<string, unknown>,
-    params: Record<string, unknown>,
+    body: RecordUnknown,
+    params: RecordUnknown,
     headers: Record<string, string>
   ): Promise<ActionCallResult<unknown>> {
     const [blazeCtx, blazeErr] = await resolvePromise(

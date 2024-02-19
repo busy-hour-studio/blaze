@@ -1,15 +1,15 @@
 import { BlazeContext } from '@/event/BlazeContext';
 import { BlazeEvent } from '@/event/BlazeEvent';
-import type { Event } from '@/types/action';
-import type { EventHandler } from '@/types/event';
+import type { Event, EventHandler } from '@/types/event';
+import type { RecordUnknown } from '@/types/helper';
 import type { Service } from '@/types/service';
 import { getServiceName, resolvePromise } from '../common';
 import { RESERVED_KEYWORD } from '../constant';
 
 export function createEventHandler(event: Event) {
   return async function eventHandler(
-    body: Record<string, unknown>,
-    params: Record<string, unknown>,
+    body: RecordUnknown,
+    params: RecordUnknown,
     headers: Record<string, string>
   ): Promise<void> {
     const [blazeCtx, blazeErr] = await resolvePromise(
