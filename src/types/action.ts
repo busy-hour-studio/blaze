@@ -47,6 +47,10 @@ export type ActionCallResult<U> =
   | { error: Error; ok: false }
   | { ok: true; result: U };
 
+export type ActionCallResponse<U> =
+  | { ok: false; error: Error; blazeCtx: BlazeContext }
+  | { ok: true; result: U; blazeCtx: BlazeContext };
+
 export interface Actions {
   [key: string]: Action;
 }

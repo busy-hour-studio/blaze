@@ -1,3 +1,6 @@
+import { BlazeContext } from '@/event/BlazeContext';
+import type { ActionCallResult } from '@/types/action';
+import type { CreateContextOption } from '@/types/context';
 import type { Service } from '@/types/service';
 
 export function hasOwnProperty<
@@ -41,4 +44,24 @@ export async function resolvePromise<T>(promise: Promise<T> | T) {
 
 export function toArray<T>(value: T | T[]): T[] {
   return Array.isArray(value) ? value : [value];
+}
+
+export async function createContext(
+  options: CreateContextOption
+): Promise<ActionCallResult<BlazeContext>> {
+  const [blazeCtx, blazeErr] = await resolvePromise(
+    BlazeContext.create(options)
+  );
+
+  if (!blazeCtx || blazeErr) {
+    return {
+      error: blazeErr as Error,
+      ok: false,
+    };
+  }
+
+  return {
+    result: blazeCtx,
+    ok: true,
+  };
 }

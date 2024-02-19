@@ -1,93 +1,44 @@
 import { BlazeContext } from '@/event/BlazeContext';
-import type { CreateRestHandlerOption } from '@/types/rest';
-import type { Context as HonoCtx } from 'hono';
+import { Action, ActionCallResult } from '@/types/action';
 import { resolvePromise } from '../common';
-import { getStatusCode } from './context';
-import { handleRestAfterHook, handleRestBeforeHook } from './hooks';
-import { handleRestError } from './rest';
+import { afterActionHookHandler, beforeActionHookHandler } from './hooks';
 
-export function createRestHandler(options: CreateRestHandlerOption) {
-  const { handler, hooks } = options;
-
-  return async function routeHandler(honoCtx: HonoCtx) {
-    const [blazeCtx, blazeErr] = await resolvePromise(
-      BlazeContext.create({
-        honoCtx,
-        // NULL => automatically use honoCtx value instead
-        body: null,
-        params: null,
-        headers: null,
-      })
-    );
-
-    if (!blazeCtx || blazeErr) {
-      return honoCtx.json(blazeErr, {
-        status: 500,
-      });
-    }
-
-    if (hooks?.before) {
-      const beforeHooks = Array.isArray(hooks.before)
-        ? hooks.before
-        : [hooks.before];
-
-      const beforeHookResult = await handleRestBeforeHook({
-        hooks: beforeHooks,
-        blazeCtx,
-        honoCtx,
-      });
-
-      if (!beforeHookResult.ok) {
-        return handleRestError({
-          ctx: blazeCtx,
-          err: beforeHookResult.error,
-          honoCtx,
-        });
-      }
-    }
-
-    // eslint-disable-next-line prefer-const
-    let [result, handlerErr] = await resolvePromise(handler(blazeCtx));
-
-    if (handlerErr) {
-      return handleRestError({
-        ctx: blazeCtx,
-        err: handlerErr,
-        honoCtx,
-      });
-    }
-
-    if (hooks?.after) {
-      const afterHooks = Array.isArray(hooks.after)
-        ? hooks.after
-        : [hooks.after];
-
-      const afterHookResult = await handleRestAfterHook({
-        result,
-        hooks: afterHooks,
-        blazeCtx,
-        honoCtx,
-      });
-
-      if (!afterHookResult.ok) {
-        return handleRestError({
-          ctx: blazeCtx,
-          err: afterHookResult.error,
-          honoCtx,
-        });
-      }
-
-      result = afterHookResult.result;
-    }
-
-    if (!result) {
-      return honoCtx.body(null, 204);
-    }
-
-    const status = getStatusCode(blazeCtx, 200);
-
-    return honoCtx.json(result, {
-      status,
+// Reuseable action handler for Call/Emit/REST
+export async function eventHandler(
+  action: Action,
+  blazeCtx: BlazeContext
+): Promise<ActionCallResult<unknown>> {
+  if (action?.hooks?.before) {
+    const beforeHooksRes = await beforeActionHookHandler({
+      blazeCtx,
+      hooks: action.hooks.before,
     });
+
+    if (!beforeHooksRes.ok) return beforeHooksRes;
+  }
+
+  // eslint-disable-next-line prefer-const
+  let [result, err] = await resolvePromise(action.handler(blazeCtx));
+
+  if (err) {
+    return {
+      error: err as Error,
+      ok: false,
+    };
+  }
+
+  if (action?.hooks?.after) {
+    const afterHooksRes = await afterActionHookHandler({
+      blazeCtx,
+      hooks: action.hooks.after,
+      result,
+    });
+
+    return afterHooksRes;
+  }
+
+  return {
+    ok: true,
+    result,
   };
 }

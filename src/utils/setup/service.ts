@@ -1,35 +1,12 @@
 import type { BlazeContext } from '@/event/BlazeContext';
 import { BlazeEvent } from '@/event/BlazeEvent';
-import type { Service } from '@/types/service';
 import { Hono } from 'hono';
 import path from 'node:path';
-import { setupAction } from '../actions';
-import { getRestPath, getServiceName, hasOwnProperty } from '../common';
+import { getRestPath, getServiceName } from '../common';
 import { RESERVED_KEYWORD } from '../constant';
-import { setupEvent } from './event';
-
-function loadService(filePath: string) {
-  const file = require(filePath) as
-    | Service
-    | {
-        default: Service;
-      };
-
-  let service: Service;
-
-  if (
-    // use __esModule as indicator for bun
-    hasOwnProperty<Service>(file, '__esModule') ||
-    // use default as indicator for node
-    hasOwnProperty<Service>(file, 'default')
-  ) {
-    service = file.default;
-  } else {
-    service = file;
-  }
-
-  return service;
-}
+import { loadService } from '../helper/service';
+import { BlazeServiceAction } from './action';
+import { BlazeServiceEvent } from './event';
 
 export function initializeService(
   app: Hono,
@@ -48,21 +25,19 @@ export function initializeService(
     const serviceName = getServiceName(service);
     const killEventName = [serviceName, RESERVED_KEYWORD.SUFFIX.KILL].join('.');
 
-    const { router, handlers } = setupAction(service);
-
-    const eventHandler = setupEvent(service);
-    handlers.concat(eventHandler);
+    const actions = new BlazeServiceAction(service);
+    const events = new BlazeServiceEvent(service);
 
     service.onCreated?.(blazeCtx);
 
-    if (router) {
-      app.route(`/${routePath}`, router);
+    if (actions.router) {
+      app.route(`/${routePath}`, actions.router);
     }
 
     function onStarted() {
       BlazeEvent.on(killEventName, () => {
         BlazeEvent.removeAllListeners(serviceName);
-        service.onStopped?.(handlers);
+        service.onStopped?.([...actions.handlers, ...events.handlers]);
       });
 
       service.onStarted?.(blazeCtx);

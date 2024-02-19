@@ -17,7 +17,7 @@ export class BlazeContext<
   private $headers: Record<string, string | string[]>;
   private $query: qs.ParsedUrlQuery | null;
   private $body: Body | null;
-  private $params: Body | Params | null;
+  private $params: (Body & Params) | null;
   private $reqParams: Params | null;
   private $reqHeaders: Headers;
   private $isRest: boolean;
@@ -40,6 +40,7 @@ export class BlazeContext<
     this.call = this.$broker.call.bind(this.$broker);
     this.mcall = this.$broker.mcall.bind(this.$broker);
     this.emit = this.$broker.emit.bind(this.$broker);
+    this.event = this.$broker.event.bind(this.$broker);
   }
 
   private getMeta(key: keyof Meta): Meta[keyof Meta] {
@@ -79,6 +80,7 @@ export class BlazeContext<
   public call = this.broker?.call;
   public mcall = this.broker?.mcall;
   public emit = this.broker?.emit;
+  public event = this.broker?.event;
 
   private getHeader(): Record<string, string | string[]>;
   private getHeader(key: string): string | string[];
@@ -116,10 +118,6 @@ export class BlazeContext<
     };
   }
 
-  public get body() {
-    return this.$body;
-  }
-
   public get query() {
     if (!this.$honoCtx) return {};
 
@@ -134,8 +132,6 @@ export class BlazeContext<
 
   public get params() {
     if (this.$params) return this.$params;
-
-    if (!this.$body && !this.$reqParams) return {};
 
     const body = this.$body ?? ({} as Body);
     const param = this.$reqParams ?? ({} as Params);
@@ -156,7 +152,7 @@ export class BlazeContext<
     return {
       headers: this.$reqHeaders,
       query: this.query,
-      params: this.$params,
+      params: this.$reqParams,
       body: this.$body,
     };
   }
