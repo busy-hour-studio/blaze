@@ -1,7 +1,7 @@
 import { BlazeContext } from '@/event/BlazeContext';
 import type { LoadServiceOption } from '@/types/service';
 import fs from 'node:fs';
-import { initializeService } from './helper/setup';
+import { initializeService } from './setup/service';
 
 export function initializeServices(options: LoadServiceOption) {
   const { app, path: servicePath } = options;
