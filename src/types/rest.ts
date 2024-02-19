@@ -26,8 +26,7 @@ export interface RestHandlerOption extends Omit<Action, 'name' | 'rest'> {
   rest: RestParam;
 }
 
-export interface CreateRestHandlerOption
-  extends Pick<Action, 'handler' | 'hooks'> {}
+export interface CreateRestHandlerOption extends Omit<Action, 'rest'> {}
 
 export interface RestErrorHandlerOption {
   err: Error | unknown;

@@ -1,20 +1,25 @@
+import { ActionValidation } from '@/types/action';
 import type { CreateContextOption } from '@/types/context';
 import type { RecordString, RecordUnknown } from '@/types/helper';
+import { hasOwnProperty } from '@/utils/common';
 import { getReqBody } from '@/utils/helper/context';
 import type { Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
+import { ZodTypeAny } from 'zod';
 import { BlazeBroker } from './BlazeBroker';
 
 export class BlazeContext<
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
+  Validation extends RecordUnknown = RecordUnknown,
   Headers extends RecordString = RecordString,
 > {
   private $honoCtx: HonoCtx<{
     Variables: Meta;
   }> | null;
   private $meta: Meta;
+  private $validation: Validation | null;
   private $headers: Record<string, string | string[]>;
   private $query: qs.ParsedUrlQuery | null;
   private $body: Body | null;
@@ -24,7 +29,12 @@ export class BlazeContext<
   private $isRest: boolean;
   private $broker: BlazeBroker;
 
-  constructor(options: CreateContextOption<Body, Params, Headers>) {
+  constructor(
+    options: Omit<
+      CreateContextOption<Body, Params, Validation, Headers>,
+      'validator'
+    >
+  ) {
     const { honoCtx, body, params, headers } = options;
 
     this.$honoCtx = honoCtx;
@@ -36,6 +46,7 @@ export class BlazeContext<
     this.$query = null;
     this.$body = body;
     this.$isRest = !!options.honoCtx;
+    this.$validation = options.validation ?? null;
     this.$broker = new BlazeBroker();
 
     this.call = this.$broker.call.bind(this.$broker);
@@ -119,6 +130,10 @@ export class BlazeContext<
     };
   }
 
+  public get validation() {
+    return this.$validation;
+  }
+
   public get query() {
     if (!this.$honoCtx) return {};
 
@@ -162,15 +177,17 @@ export class BlazeContext<
     Meta extends RecordUnknown = RecordUnknown,
     Body extends RecordUnknown = RecordUnknown,
     Params extends RecordUnknown = RecordUnknown,
+    Validation extends RecordUnknown = RecordUnknown,
     Headers extends RecordString = RecordString,
   >(
-    options: CreateContextOption<Body, Params, Headers>
-  ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
+    options: CreateContextOption<Body, Params, Validation, Headers>
+  ): Promise<BlazeContext<Meta, Body, Params, Validation, Headers>> {
     const { honoCtx } = options;
 
     let body: Body | null = null;
     let params: Params | null = null;
     let headers: Headers | null = null;
+    let validation: Validation | null = null;
 
     if (options.body) {
       body = options.body;
@@ -190,11 +207,38 @@ export class BlazeContext<
       headers = honoCtx.req.header() as never;
     }
 
-    const ctx = new BlazeContext<Meta, Body, Params, Headers>({
+    if (options.validator) {
+      if (
+        hasOwnProperty(options.validator, 'body') ||
+        hasOwnProperty(options.validator, 'params')
+      ) {
+        const validator = options.validator as ActionValidation;
+
+        if (validator.body) {
+          if (!validation) validation = {} as Validation;
+          Object.assign(validation, {
+            body: validator.body.safeParse(body),
+          });
+        }
+
+        if (validator.params) {
+          if (!validation) validation = {} as Validation;
+          Object.assign(validation, {
+            params: validator.params.safeParse(params),
+          });
+        }
+      } else {
+        const validator = options.validator as ZodTypeAny;
+        validation = validator.safeParse(body) as unknown as Validation;
+      }
+    }
+
+    const ctx = new BlazeContext<Meta, Body, Params, Validation, Headers>({
       body,
       params,
       honoCtx,
       headers,
+      validation,
     });
 
     return ctx;

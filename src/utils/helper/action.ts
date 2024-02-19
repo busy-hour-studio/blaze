@@ -14,12 +14,26 @@ export function createActionHandler(action: Action) {
     params: RecordUnknown,
     headers: RecordString
   ): Promise<ActionCallResult<unknown>> {
+    let validation: RecordUnknown | null = null;
+
+    if (action.validation?.body) {
+      if (!validation) validation = {};
+      validation.body = action.validation.body.safeParse(body);
+    }
+
+    if (action.validation?.params) {
+      if (!validation) validation = {};
+      validation.params = action.validation.params.safeParse(params);
+    }
+
     const [blazeCtx, blazeErr] = await resolvePromise(
       BlazeContext.create({
         honoCtx: null,
         body,
         params,
         headers,
+        validation,
+        validator: null,
       })
     );
 

@@ -13,7 +13,7 @@ export async function handleBeforeActionHook(
   const hooks = toArray(options.hooks);
 
   for (const hook of hooks) {
-    const [, hookErr] = await resolvePromise(hook(options.blazeCtx));
+    const [, hookErr] = await resolvePromise(hook(options.blazeCtx as never));
 
     if (hookErr) {
       return {
@@ -39,7 +39,7 @@ export async function handleAfterActionHook(
 
   for (const hook of hooks) {
     const [hookRes, hookErr] = await resolvePromise(
-      hook(options.blazeCtx, result)
+      hook(options.blazeCtx as never, result)
     );
 
     if (hookErr) {
@@ -64,7 +64,7 @@ export async function handleRestBeforeHook(
   const hooks = toArray(options.hooks);
 
   for (const hook of hooks) {
-    const [, hookErr] = await resolvePromise(hook(options.blazeCtx));
+    const [, hookErr] = await resolvePromise(hook(options.blazeCtx as never));
 
     if (hookErr) {
       return {
@@ -90,7 +90,7 @@ export async function handleRestAfterHook(
 
   for (const hook of hooks) {
     const [hookRes, hookErr] = await resolvePromise(
-      hook(options.blazeCtx, result)
+      hook(options.blazeCtx as never, result)
     );
 
     if (hookErr) {

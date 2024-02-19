@@ -4,13 +4,22 @@ import type { FinalActionType, RecordUnknown } from './helper';
 import type { ActionHook } from './hooks';
 import type { RestParam } from './rest';
 
+export interface ActionValidation<
+  Body extends ZodTypeAny = ZodTypeAny,
+  Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+> {
+  body?: Body | null;
+  params?: Params | null;
+}
+
 export interface ActionHandler<
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
+  Validation extends RecordUnknown = RecordUnknown,
 > {
   (
-    ctx: BlazeContext<Meta, Body, Params>
+    ctx: BlazeContext<Meta, Body, Params, Validation>
   ): Promise<unknown | void> | unknown | void;
 }
 
@@ -22,20 +31,19 @@ export interface Action<
     Params
   >,
 > {
-  validation?: {
-    body?: Body | null;
-    params?: Params | null;
-  } | null;
+  validation?: ActionValidation<Body, Params>;
   handler: ActionHandler<
-    ActionType['Meta'],
+    RecordUnknown,
     ActionType['Body'],
-    ActionType['Params']
+    ActionType['Params'],
+    ActionType['Validation']
   >;
   rest?: RestParam | null;
   hooks?: ActionHook<
-    ActionType['Meta'],
+    RecordUnknown,
     ActionType['Body'],
-    ActionType['Params']
+    ActionType['Params'],
+    ActionType['Validation']
   > | null;
 }
 

@@ -8,12 +8,20 @@ import { RESERVED_KEYWORD } from '../constant';
 
 export function createEventActionHandler(event: Event) {
   return async function EventActionHandler(body: RecordUnknown): Promise<void> {
+    let validation: RecordUnknown | null = null;
+
+    if (event.validation) {
+      validation = event.validation.safeParse(body);
+    }
+
     const [blazeCtx, blazeErr] = await resolvePromise(
       BlazeContext.create({
         honoCtx: null,
         body,
         params: null,
         headers: null,
+        validation,
+        validator: null,
       })
     );
 
@@ -28,20 +36,20 @@ export function setupEvent(service: Service): EventActionHandler[] {
 
   const handlers = Object.entries<Event>(
     service.events
-  ).map<EventActionHandler>(([actionAlias, action]) => {
+  ).map<EventActionHandler>(([eventAlias, action]) => {
     const serviceName = getServiceName(service);
-    const actionName = [
+    const eventName = [
       RESERVED_KEYWORD.PREFIX.EVENT,
       serviceName,
-      actionAlias,
+      eventAlias,
     ].join('.');
 
     const eventHandler = createEventActionHandler(action);
 
-    BlazeEvent.on(actionName, eventHandler);
+    BlazeEvent.on(eventName, eventHandler);
 
     return {
-      name: actionName,
+      name: eventName,
       handler: eventHandler,
     };
   });

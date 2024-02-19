@@ -1,6 +1,8 @@
 import { BlazeContext } from '@/event/BlazeContext';
+import type { ActionValidation } from '@/types/action';
 import type { CreateRestHandlerOption } from '@/types/rest';
 import type { Context as HonoCtx } from 'hono';
+import type { ZodObject, ZodRawShape, ZodTypeAny } from 'zod';
 import { resolvePromise } from '../common';
 import { getStatusCode } from './context';
 import { handleRestAfterHook, handleRestBeforeHook } from './hooks';
@@ -17,6 +19,11 @@ export function createRestHandler(options: CreateRestHandlerOption) {
         body: null,
         params: null,
         headers: null,
+        validation: null,
+        validator: options.validation as ActionValidation<
+          ZodTypeAny,
+          ZodObject<ZodRawShape>
+        >,
       })
     );
 
@@ -33,13 +40,13 @@ export function createRestHandler(options: CreateRestHandlerOption) {
 
       const beforeHookResult = await handleRestBeforeHook({
         hooks: beforeHooks as never,
-        blazeCtx,
+        blazeCtx: blazeCtx as never,
         honoCtx,
       });
 
       if (!beforeHookResult.ok) {
         return handleRestError({
-          ctx: blazeCtx,
+          ctx: blazeCtx as never,
           err: beforeHookResult.error,
           honoCtx,
         });
@@ -51,7 +58,7 @@ export function createRestHandler(options: CreateRestHandlerOption) {
 
     if (handlerErr) {
       return handleRestError({
-        ctx: blazeCtx,
+        ctx: blazeCtx as never,
         err: handlerErr,
         honoCtx,
       });
@@ -65,13 +72,13 @@ export function createRestHandler(options: CreateRestHandlerOption) {
       const afterHookResult = await handleRestAfterHook({
         result,
         hooks: afterHooks as never,
-        blazeCtx,
+        blazeCtx: blazeCtx as never,
         honoCtx,
       });
 
       if (!afterHookResult.ok) {
         return handleRestError({
-          ctx: blazeCtx,
+          ctx: blazeCtx as never,
           err: afterHookResult.error,
           honoCtx,
         });
@@ -84,7 +91,7 @@ export function createRestHandler(options: CreateRestHandlerOption) {
       return honoCtx.body(null, 204);
     }
 
-    const status = getStatusCode(blazeCtx, 200);
+    const status = getStatusCode(blazeCtx as never, 200);
 
     return honoCtx.json(result, {
       status,

@@ -15,11 +15,12 @@ export function initializeServices(options: LoadServiceOption) {
     params: null,
     headers: null,
     honoCtx: null,
+    validation: null,
   });
 
   const services = fs.readdirSync(servicePath);
   const pendingServices = services.map(
-    initializeService(app, servicePath, blazeCtx)
+    initializeService(app, servicePath, blazeCtx as never)
   );
 
   pendingServices.forEach((onStarted) => onStarted());

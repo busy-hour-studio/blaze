@@ -18,10 +18,12 @@ export interface EventListener {
 export type EventName = string;
 
 export interface EventHandler<
-  Meta extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
+  Validation extends RecordUnknown = RecordUnknown,
 > {
-  (ctx: BlazeContext<Meta, Params>): Promise<void> | void;
+  (
+    ctx: BlazeContext<RecordUnknown, Params, RecordUnknown, Validation>
+  ): Promise<void> | void;
 }
 
 export interface Event<
@@ -29,7 +31,7 @@ export interface Event<
   EventType extends FinalEventType<Params> = FinalEventType<Params>,
 > {
   validation?: Params | null;
-  handler: EventHandler<EventType['Meta'], EventType['Params']>;
+  handler: EventHandler<EventType['Params'], EventType['Validation']>;
 }
 
 export interface Events {

@@ -6,7 +6,6 @@ import type { EventActionHandler, Events } from './event';
 
 export interface Service {
   name: string;
-  prefix?: string | null;
   version?: number | null;
   actions?: Actions | null;
   events?: Events | null;

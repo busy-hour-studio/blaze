@@ -20,15 +20,14 @@ export interface FinalActionType<
   ValidParam = Params extends ZodObject<ZodRawShape>
     ? SafeParseReturnType<Params, Params['_output']>
     : never,
+  Validation = RecordUnknown & {
+    body: ValidBody;
+    params: ValidParam;
+  },
 > {
   Body: FinalBody;
   Params: FinalParams;
-  Meta: {
-    $validation$: {
-      $body$: ValidBody;
-      $params$: ValidParam;
-    } & RecordUnknown;
-  };
+  Validation: Validation;
 }
 
 export interface FinalEventType<
@@ -39,7 +38,5 @@ export interface FinalEventType<
     : never,
 > {
   Params: FinalParams;
-  Meta: {
-    $validation$: ValidParam;
-  };
+  Validation: ValidParam;
 }

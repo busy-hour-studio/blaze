@@ -53,7 +53,7 @@ export function initializeService(
     const eventHandler = setupEvent(service);
     handlers.concat(eventHandler);
 
-    service.onCreated?.(blazeCtx);
+    service.onCreated?.(blazeCtx as never);
 
     if (router) {
       app.route(`/${routePath}`, router);
@@ -65,7 +65,7 @@ export function initializeService(
         service.onStopped?.(handlers);
       });
 
-      service.onStarted?.(blazeCtx);
+      service.onStarted?.(blazeCtx as never);
     }
 
     return onStarted;

@@ -6,17 +6,19 @@ export interface BeforeHookHandler<
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
+  Validation extends RecordUnknown = RecordUnknown,
 > {
-  (ctx: BlazeContext<Meta, Body, Params>): Promise<void> | void;
+  (ctx: BlazeContext<Meta, Body, Params, Validation>): Promise<void> | void;
 }
 
 export interface AfterHookHandler<
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
+  Validation extends RecordUnknown = RecordUnknown,
 > {
   (
-    ctx: BlazeContext<Meta, Body, Params>,
+    ctx: BlazeContext<Meta, Body, Params, Validation>,
     res: unknown
   ): Promise<unknown | void> | unknown | void;
 }
@@ -25,25 +27,28 @@ export type AcceptedBeforeHook<
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
+  Validation extends RecordUnknown = RecordUnknown,
 > =
-  | BeforeHookHandler<Meta, Body, Params>
-  | BeforeHookHandler<Meta, Body, Params>[];
+  | BeforeHookHandler<Meta, Body, Params, Validation>
+  | BeforeHookHandler<Meta, Body, Params, Validation>[];
 
 export type AcceptedAfterHook<
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
+  Validation extends RecordUnknown = RecordUnknown,
 > =
-  | AfterHookHandler<Meta, Body, Params>
-  | AfterHookHandler<Meta, Body, Params>[];
+  | AfterHookHandler<Meta, Body, Params, Validation>
+  | AfterHookHandler<Meta, Body, Params, Validation>[];
 
 export interface ActionHook<
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
+  Validation extends RecordUnknown = RecordUnknown,
 > {
-  before?: AcceptedBeforeHook<Meta, Body, Params> | null;
-  after?: AcceptedBeforeHook<Meta, Body, Params> | null;
+  before?: AcceptedBeforeHook<Meta, Body, Params, Validation> | null;
+  after?: AcceptedBeforeHook<Meta, Body, Params, Validation> | null;
 }
 
 export interface AfterHookHandlerOption {
