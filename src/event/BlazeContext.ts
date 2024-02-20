@@ -1,14 +1,23 @@
-import type { CreateContextOption } from '@/types/context';
+import type {
+  ContextConstructorOption,
+  CreateContextOption,
+} from '@/types/context';
+import type {
+  RecordString,
+  RecordUnknown,
+  ValidationResult,
+} from '@/types/helper';
 import { getReqBody } from '@/utils/helper/context';
+import { validateInput } from '@/utils/helper/validator';
 import type { Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
 import { BlazeBroker } from './BlazeBroker';
 
 export class BlazeContext<
-  Meta extends Record<string, unknown> = Record<string, unknown>,
-  Body extends Record<string, unknown> = Record<string, unknown>,
-  Params extends Record<string, unknown> = Record<string, unknown>,
-  Headers extends Record<string, string> = Record<string, string>,
+  Meta extends RecordUnknown = RecordUnknown,
+  Body extends RecordUnknown = RecordUnknown,
+  Params extends RecordUnknown = RecordUnknown,
+  Headers extends RecordString = RecordString,
 > {
   private $honoCtx: HonoCtx<{
     Variables: Meta;
@@ -22,9 +31,10 @@ export class BlazeContext<
   private $reqHeaders: Headers;
   private $isRest: boolean;
   private $broker: BlazeBroker;
+  private $validations: ValidationResult | null;
 
-  constructor(options: CreateContextOption<Body, Params, Headers>) {
-    const { honoCtx, body, params, headers } = options;
+  constructor(options: ContextConstructorOption<Body, Params, Headers>) {
+    const { honoCtx, body, params, headers, validations } = options;
 
     this.$honoCtx = honoCtx;
     this.$meta = {} as Meta;
@@ -35,6 +45,7 @@ export class BlazeContext<
     this.$query = null;
     this.$body = body;
     this.$isRest = !!options.honoCtx;
+    this.$validations = validations;
     this.$broker = new BlazeBroker();
 
     this.call = this.$broker.call.bind(this.$broker);
@@ -118,6 +129,10 @@ export class BlazeContext<
     };
   }
 
+  public get validations() {
+    return this.$validations;
+  }
+
   public get query() {
     if (!this.$honoCtx) return {};
 
@@ -158,18 +173,22 @@ export class BlazeContext<
   }
 
   public static async create<
-    Meta extends Record<string, unknown> = Record<string, unknown>,
-    Body extends Record<string, unknown> = Record<string, unknown>,
-    Params extends Record<string, unknown> = Record<string, unknown>,
-    Headers extends Record<string, string> = Record<string, string>,
+    Meta extends RecordUnknown = RecordUnknown,
+    Body extends RecordUnknown = RecordUnknown,
+    Params extends RecordUnknown = RecordUnknown,
+    Headers extends RecordString = RecordString,
   >(
     options: CreateContextOption<Body, Params, Headers>
   ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
-    const { honoCtx } = options;
+    const { honoCtx, validator } = options;
 
     let body: Body | null = null;
     let params: Params | null = null;
     let headers: Headers | null = null;
+    const validations: ValidationResult = {
+      body: true,
+      params: true,
+    };
 
     if (options.body) {
       body = options.body;
@@ -180,13 +199,27 @@ export class BlazeContext<
     if (options.params) {
       params = options.params;
     } else if (honoCtx) {
-      params = honoCtx.req.param() as never;
+      params = honoCtx.req.param() as Params;
     }
 
     if (options.headers) {
       headers = options.headers;
     } else if (honoCtx) {
-      headers = honoCtx.req.header() as never;
+      headers = honoCtx.req.header() as Headers;
+    }
+
+    if (validator?.body) {
+      const result = validateInput(body, validator.body);
+      validations.body = result.success;
+
+      if (result.success) body = result.data as Body;
+    }
+
+    if (validator?.params) {
+      const result = validateInput(params, validator.params);
+      validations.params = result.success;
+
+      if (result.success) params = result.data as Params;
     }
 
     const ctx = new BlazeContext<Meta, Body, Params, Headers>({
@@ -194,6 +227,7 @@ export class BlazeContext<
       params,
       honoCtx,
       headers,
+      validations,
     });
 
     return ctx;

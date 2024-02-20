@@ -1,3 +1,4 @@
+import { BlazeError } from '@/errors/BlazeError';
 import type { Action } from '@/types/action';
 import type { Method, RestHandlerOption } from '@/types/rest';
 import type { Context as HonoCtx } from 'hono';
@@ -18,14 +19,18 @@ export class BlazeServiceRest {
   private routeHandler: MiddlewareHandlerInterface;
 
   constructor(options: RestHandlerOption) {
-    const { router, rest } = options;
+    const { router, action } = options;
 
-    const [method, path] = extractRestParams(rest);
+    if (!action.rest) {
+      throw new BlazeError('Rest property is required');
+    }
+
+    const [method, path] = extractRestParams(action.rest);
     const routeHandler = getRouteHandler(router, method);
 
     this.path = path;
     this.method = method;
-    this.action = options;
+    this.action = action;
     this.routeHandler = routeHandler;
     this.routeHandler(path, this.restHandler.bind(this));
   }
@@ -37,6 +42,7 @@ export class BlazeServiceRest {
       body: null,
       headers: null,
       params: null,
+      validator: this.action.validator as never,
     });
 
     if (!contextRes.ok) {

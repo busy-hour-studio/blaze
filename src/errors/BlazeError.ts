@@ -1,8 +1,9 @@
 import type { BlazeErrorOption } from '@/types/error';
+import type { RecordUnknown } from '@/types/helper';
 
 export class BlazeError extends Error {
   public status: number;
-  public errors: Record<string, unknown> | unknown | null;
+  public errors: RecordUnknown | unknown | null;
 
   constructor(err: BlazeErrorOption) {
     if (typeof err === 'string') {

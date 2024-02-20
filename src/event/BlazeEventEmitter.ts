@@ -1,7 +1,7 @@
 import type { EventListener, EventName } from '@/types/event';
 
 type Option = {
-  maxListener?: number;
+  maxListener?: number | null;
 };
 
 export class BlazeEventEmitter {

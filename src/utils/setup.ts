@@ -1,3 +1,4 @@
+import { BlazeError } from '@/errors/BlazeError';
 import { BlazeContext } from '@/event/BlazeContext';
 import type { LoadServiceOption } from '@/types/service';
 import fs from 'node:fs';
@@ -7,7 +8,7 @@ export function initializeServices(options: LoadServiceOption) {
   const { app, path: servicePath } = options;
 
   if (!fs.existsSync(servicePath)) {
-    throw new Error("Service path doesn't exist");
+    throw new BlazeError("Service path doesn't exist");
   }
 
   const blazeCtx = new BlazeContext({
@@ -15,6 +16,7 @@ export function initializeServices(options: LoadServiceOption) {
     params: null,
     headers: null,
     honoCtx: null,
+    validations: null,
   });
 
   const services = fs.readdirSync(servicePath);
