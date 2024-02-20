@@ -1,6 +1,7 @@
 import type { BlazeContext } from '@/event/BlazeContext';
-import type { ZodObject, ZodRawShape, ZodTypeAny } from 'zod';
+import type { ZodObject, ZodRawShape } from 'zod';
 import type { ActionHandler } from './action';
+import type { RecordString, RecordUnknown } from './helper';
 
 export interface EventActionHandler {
   name: string;
@@ -16,15 +17,24 @@ export interface EventListener {
 
 export type EventName = string;
 
-export interface EventHandler {
-  (ctx: BlazeContext): Promise<void> | void;
+export interface EventHandler<
+  Meta extends RecordUnknown = RecordUnknown,
+  Params extends RecordUnknown = RecordUnknown,
+  Header extends RecordString = RecordString,
+> {
+  (
+    ctx: BlazeContext<Meta, Params, RecordUnknown, Header>
+  ): Promise<void> | void;
 }
 
 export interface Event<
-  Params extends ZodTypeAny | ZodObject<ZodRawShape> = ZodTypeAny,
+  Meta extends RecordUnknown = RecordUnknown,
+  Header extends RecordString = RecordString,
+  Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  FinalParams extends RecordUnknown = Params['_output'] & RecordUnknown,
 > {
   validation?: Params | null;
-  handler: EventHandler;
+  handler: EventHandler<Meta, FinalParams, Header>;
 }
 
 export interface Events {
