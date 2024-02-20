@@ -1,6 +1,7 @@
 import { BlazeEvent } from '@/event/BlazeEvent';
 import type { Action } from '@/types/action';
-import { EventHandler } from '@/types/event';
+import type { EventActionHandler } from '@/types/event';
+import type { RecordString, RecordUnknown } from '@/types/helper';
 import type { Service } from '@/types/service';
 import { Hono } from 'hono';
 import { createContext, getServiceName } from '../common';
@@ -9,7 +10,7 @@ import { BlazeServiceRest } from './rest';
 
 export class BlazeServiceAction {
   public readonly serviceName: string;
-  public readonly handlers: EventHandler[];
+  public readonly handlers: EventActionHandler[];
   public readonly rests: BlazeServiceRest[];
   public readonly router: Hono | null;
 
@@ -26,38 +27,38 @@ export class BlazeServiceAction {
       router: options.router,
     });
 
-    this.handlers = Object.entries<Action>(options.actions).map<EventHandler>(
-      ([actionAlias, action]) => {
-        const actionName = [this.serviceName, actionAlias].join('.');
+    this.handlers = Object.entries<Action>(
+      options.actions
+    ).map<EventActionHandler>(([actionAlias, action]) => {
+      const actionName = [this.serviceName, actionAlias].join('.');
 
-        if (action.rest) {
-          const rest = new BlazeServiceRest({
-            handler: action.handler,
-            rest: action.rest,
-            hooks: action.hooks,
-            router: this.router!,
-          });
+      if (action.rest) {
+        const rest = new BlazeServiceRest({
+          handler: action.handler,
+          rest: action.rest,
+          hooks: action.hooks,
+          router: this.router!,
+        });
 
-          this.rests.push(rest);
-        }
-
-        const actionHandler = this.actionHandler(action);
-
-        BlazeEvent.on(actionName, actionHandler);
-
-        return {
-          name: actionName,
-          handler: actionHandler,
-        };
+        this.rests.push(rest);
       }
-    );
+
+      const actionHandler = this.actionHandler(action);
+
+      BlazeEvent.on(actionName, actionHandler);
+
+      return {
+        name: actionName,
+        handler: actionHandler,
+      };
+    });
   }
 
   private actionHandler(action: Action) {
     return async function actionHandler(
-      body: Record<string, unknown>,
-      params: Record<string, unknown>,
-      headers: Record<string, string>
+      body: RecordUnknown,
+      params: RecordUnknown,
+      headers: RecordString
     ) {
       const contextRes = await createContext({
         honoCtx: null,

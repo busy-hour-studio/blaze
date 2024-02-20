@@ -1,55 +1,30 @@
 import type { BlazeContext } from '@/event/BlazeContext';
+import type { ZodObject, ZodRawShape, ZodTypeAny } from 'zod';
+import type { ActionHook } from './hooks';
 import type { RestParam } from './rest';
 
-export interface Event {
-  (ctx: BlazeContext): Promise<void> | void;
-}
-
-export interface Events {
-  [key: string]: Event;
+export interface ActionValidation<
+  Body extends ZodTypeAny = ZodTypeAny,
+  Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+> {
+  body?: Body | null;
+  params?: Params | null;
 }
 
 export interface ActionHandler {
   (ctx: BlazeContext): Promise<unknown | void> | unknown | void;
 }
 
-export interface BeforeHookHandler {
-  (ctx: BlazeContext): Promise<void> | void;
-}
-
-export interface AfterHookHandler {
-  (ctx: BlazeContext, res: unknown): Promise<unknown | void> | unknown | void;
-}
-
-export interface ActionHook {
-  before?: BeforeHookHandler | BeforeHookHandler[];
-  after?: AfterHookHandler | AfterHookHandler[];
-}
-
 export interface Action {
+  validation?: ActionValidation;
   handler: ActionHandler;
-  rest?: RestParam;
-  hooks?: ActionHook;
-}
-
-export interface AfterHookHandlerOption {
-  result: unknown;
-  hooks: AfterHookHandler | AfterHookHandler[];
-  blazeCtx: BlazeContext;
-}
-
-export interface BeforeHookHandlerOption {
-  hooks: BeforeHookHandler | BeforeHookHandler[];
-  blazeCtx: BlazeContext;
+  rest?: RestParam | null;
+  hooks?: ActionHook | null;
 }
 
 export type ActionCallResult<U> =
   | { error: Error; ok: false }
   | { ok: true; result: U };
-
-export type ActionCallResponse<U> =
-  | { ok: false; error: Error; blazeCtx: BlazeContext }
-  | { ok: true; result: U; blazeCtx: BlazeContext };
 
 export interface Actions {
   [key: string]: Action;

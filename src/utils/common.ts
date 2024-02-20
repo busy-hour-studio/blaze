@@ -17,9 +17,8 @@ export function removeTrailingSlash(path: string) {
 
 export function getRestPath(service: Service) {
   const version = service.version ? `v${service.version}` : '';
-  const prefix = service.prefix ?? '';
 
-  return [version, prefix, service.name]
+  return [version, service.name]
     .map((val) => removeTrailingSlash(val))
     .filter(Boolean)
     .join('/');
@@ -27,9 +26,8 @@ export function getRestPath(service: Service) {
 
 export function getServiceName(service: Service) {
   const version = service.version ? `v${service.version}` : '';
-  const prefix = service.prefix ?? '';
 
-  return [version, prefix, service.name].filter(Boolean).join('.');
+  return [version, service.name].filter(Boolean).join('.');
 }
 
 export async function resolvePromise<T>(promise: Promise<T> | T) {

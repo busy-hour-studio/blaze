@@ -1,8 +1,8 @@
+import type { ActionCallResult } from '@/types/action';
 import type {
-  ActionCallResult,
   AfterHookHandlerOption,
   BeforeHookHandlerOption,
-} from '@/types/action';
+} from '@/types/hooks';
 import { resolvePromise, toArray } from '../common';
 
 export async function beforeActionHookHandler(

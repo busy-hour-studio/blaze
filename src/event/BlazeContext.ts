@@ -1,14 +1,15 @@
 import type { CreateContextOption } from '@/types/context';
+import type { RecordString, RecordUnknown } from '@/types/helper';
 import { getReqBody } from '@/utils/helper/context';
 import type { Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
 import { BlazeBroker } from './BlazeBroker';
 
 export class BlazeContext<
-  Meta extends Record<string, unknown> = Record<string, unknown>,
-  Body extends Record<string, unknown> = Record<string, unknown>,
-  Params extends Record<string, unknown> = Record<string, unknown>,
-  Headers extends Record<string, string> = Record<string, string>,
+  Meta extends RecordUnknown = RecordUnknown,
+  Body extends RecordUnknown = RecordUnknown,
+  Params extends RecordUnknown = RecordUnknown,
+  Headers extends RecordString = RecordString,
 > {
   private $honoCtx: HonoCtx<{
     Variables: Meta;
@@ -158,10 +159,10 @@ export class BlazeContext<
   }
 
   public static async create<
-    Meta extends Record<string, unknown> = Record<string, unknown>,
-    Body extends Record<string, unknown> = Record<string, unknown>,
-    Params extends Record<string, unknown> = Record<string, unknown>,
-    Headers extends Record<string, string> = Record<string, string>,
+    Meta extends RecordUnknown = RecordUnknown,
+    Body extends RecordUnknown = RecordUnknown,
+    Params extends RecordUnknown = RecordUnknown,
+    Headers extends RecordString = RecordString,
   >(
     options: CreateContextOption<Body, Params, Headers>
   ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
