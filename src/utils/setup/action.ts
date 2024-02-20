@@ -1,76 +1,40 @@
 import { BlazeEvent } from '@/event/BlazeEvent';
 import type { Action } from '@/types/action';
-import type { EventActionHandler } from '@/types/event';
-import type { RecordString, RecordUnknown } from '@/types/helper';
-import type { Service } from '@/types/service';
-import { Hono } from 'hono';
-import { createContext, getServiceName } from '../common';
+import { RecordString, RecordUnknown } from '@/types/helper';
+import type { CreateActionOption } from '@/types/service';
+import { createContext } from '../common';
 import { eventHandler } from '../helper/handler';
-import { BlazeServiceRest } from './rest';
 
 export class BlazeServiceAction {
   public readonly serviceName: string;
-  public readonly handlers: EventActionHandler[];
-  public readonly rests: BlazeServiceRest[];
-  public readonly router: Hono | null;
+  public readonly actionName: string;
+  public readonly action: Action;
 
-  constructor(options: Service) {
-    this.serviceName = getServiceName(options);
-    this.handlers = [];
-    this.rests = [];
-    this.router = null;
+  constructor(options: CreateActionOption) {
+    this.serviceName = options.serviceName;
+    this.actionName = [this.serviceName, options.actionAlias].join('.');
+    this.action = options.action;
 
-    if (!options.actions) return;
-
-    this.router = new Hono({
-      strict: false,
-      router: options.router,
-    });
-
-    this.handlers = Object.entries<Action>(
-      options.actions
-    ).map<EventActionHandler>(([actionAlias, action]) => {
-      const actionName = [this.serviceName, actionAlias].join('.');
-
-      if (action.rest) {
-        const rest = new BlazeServiceRest({
-          action,
-          router: this.router!,
-        });
-
-        this.rests.push(rest);
-      }
-
-      const actionHandler = this.actionHandler(action);
-
-      BlazeEvent.on(actionName, actionHandler);
-
-      return {
-        name: actionName,
-        handler: actionHandler,
-      };
-    });
+    BlazeEvent.on(this.actionName, this.actionHandler.bind(this));
   }
 
-  private actionHandler(action: Action) {
-    return async function actionHandler(
-      body: RecordUnknown,
-      params: RecordUnknown,
-      headers: RecordString
-    ) {
-      const contextRes = await createContext({
-        honoCtx: null,
-        body,
-        headers,
-        params,
-        validator: action.validator as never,
-      });
+  public async actionHandler(
+    body: RecordUnknown,
+    params: RecordUnknown,
+    headers: RecordString
+  ) {
+    const contextRes = await createContext({
+      honoCtx: null,
+      body,
+      headers,
+      params,
+      validator: this.action.validator as never,
+    });
 
-      if (!contextRes.ok) return contextRes;
+    if (!contextRes.ok) return contextRes;
 
-      const { result: blazeCtx } = contextRes;
+    const { result: blazeCtx } = contextRes;
 
-      return eventHandler(action, blazeCtx);
-    };
+    return eventHandler(this.action, blazeCtx);
   }
 }

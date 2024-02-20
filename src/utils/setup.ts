@@ -2,12 +2,12 @@ import { BlazeError } from '@/errors/BlazeError';
 import { BlazeContext } from '@/event/BlazeContext';
 import type { LoadServiceOption } from '@/types/service';
 import fs from 'node:fs';
-import { initializeService } from './setup/service';
+import { BlazeService } from './setup/service';
 
 export function initializeServices(options: LoadServiceOption) {
-  const { app, path: servicePath } = options;
+  const { app, path: sourcePath } = options;
 
-  if (!fs.existsSync(servicePath)) {
+  if (!fs.existsSync(sourcePath)) {
     throw new BlazeError("Service path doesn't exist");
   }
 
@@ -19,10 +19,17 @@ export function initializeServices(options: LoadServiceOption) {
     validations: null,
   });
 
-  const services = fs.readdirSync(servicePath);
-  const pendingServices = services.map(
-    initializeService(app, servicePath, blazeCtx)
-  );
+  const serviceFiles = fs.readdirSync(sourcePath);
+  const pendingServices = serviceFiles.map((servicePath) => {
+    const service = new BlazeService({
+      app,
+      servicePath,
+      blazeCtx,
+      sourcePath,
+    });
 
-  pendingServices.forEach((onStarted) => onStarted());
+    return service;
+  });
+
+  pendingServices.forEach((service) => service.onStarted());
 }
