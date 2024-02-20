@@ -1,3 +1,4 @@
+import { BlazeError } from '@/errors/BlazeError';
 import type { BlazeContext } from '@/event/BlazeContext';
 import { BlazeEvent } from '@/event/BlazeEvent';
 import { Hono } from 'hono';
@@ -18,7 +19,7 @@ export function initializeService(
     const service = loadService(path.resolve(servicePath, filePath));
 
     if (!service || !service.name) {
-      throw new Error('Service name is required');
+      throw new BlazeError('Service name is required');
     }
 
     const routePath = getRestPath(service);

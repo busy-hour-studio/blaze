@@ -4,7 +4,7 @@ import type { RecordString, RecordUnknown } from './helper';
 import type { ActionHook } from './hooks';
 import type { RestParam } from './rest';
 
-export interface ActionValidation<
+export interface ActionValidator<
   Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
 > {
@@ -31,7 +31,7 @@ export interface Action<
   FinalBody extends RecordUnknown = Body['_output'] & RecordUnknown,
   FinalParams extends RecordUnknown = Params['_output'] & RecordUnknown,
 > {
-  validation?: ActionValidation<Body, Params> | null;
+  validator?: ActionValidator<Body, Params> | null;
   handler: ActionHandler<Meta, FinalBody, FinalParams, Header>;
   rest?: RestParam | null;
   hooks?: ActionHook<Meta, FinalBody, FinalParams, Header> | null;

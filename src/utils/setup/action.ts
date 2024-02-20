@@ -34,9 +34,7 @@ export class BlazeServiceAction {
 
       if (action.rest) {
         const rest = new BlazeServiceRest({
-          handler: action.handler,
-          rest: action.rest,
-          hooks: action.hooks,
+          action,
           router: this.router!,
         });
 
@@ -65,6 +63,7 @@ export class BlazeServiceAction {
         body,
         headers,
         params,
+        validator: action.validator as never,
       });
 
       if (!contextRes.ok) return contextRes;

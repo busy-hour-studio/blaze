@@ -48,6 +48,7 @@ export class BlazeServiceEvent {
         body,
         headers,
         params,
+        validator: event.validation as never,
       });
 
       if (!contextRes.ok) return contextRes;

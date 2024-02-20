@@ -1,7 +1,7 @@
 import type { BlazeContext } from '@/event/BlazeContext';
 import type { ZodObject, ZodRawShape } from 'zod';
 import type { ActionHandler } from './action';
-import type { RecordString, RecordUnknown } from './helper';
+import type { Random, RecordString, RecordUnknown } from './helper';
 
 export interface EventActionHandler {
   name: string;
@@ -9,10 +9,7 @@ export interface EventActionHandler {
 }
 
 export interface EventListener {
-  (
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ...values: any[]
-  ): Promise<void | unknown> | void | unknown;
+  (...values: Random[]): Promise<void | unknown> | void | unknown;
 }
 
 export type EventName = string;
