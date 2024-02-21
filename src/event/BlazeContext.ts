@@ -4,6 +4,7 @@ import type {
   CreateContextOption,
 } from '@/types/context';
 import type {
+  ContextValidation,
   RecordString,
   RecordUnknown,
   ValidationResult,
@@ -12,6 +13,7 @@ import { getReqBody } from '@/utils/helper/context';
 import { validateInput } from '@/utils/helper/validator';
 import type { Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
+import type { ZodObject, ZodRawShape } from 'zod';
 import { BlazeBroker } from './BlazeBroker';
 
 export class BlazeContext<
@@ -178,8 +180,24 @@ export class BlazeContext<
     Body extends RecordUnknown = RecordUnknown,
     Params extends RecordUnknown = RecordUnknown,
     Headers extends RecordString = RecordString,
+    BodyValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+    ParamsValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+    HeaderValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+    Validator extends Partial<
+      ContextValidation<BodyValidation, ParamsValidation, HeaderValidation>
+    > = Partial<
+      ContextValidation<BodyValidation, ParamsValidation, HeaderValidation>
+    >,
   >(
-    options: CreateContextOption<Body, Params, Headers>
+    options: CreateContextOption<
+      Body,
+      Params,
+      Headers,
+      BodyValidation,
+      ParamsValidation,
+      HeaderValidation,
+      Validator
+    >
   ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
     const { honoCtx, validator, throwOnValidationError } = options;
 
@@ -189,6 +207,7 @@ export class BlazeContext<
     const validations: ValidationResult = {
       body: true,
       params: true,
+      header: true,
     };
 
     if (options.body) {
@@ -219,6 +238,7 @@ export class BlazeContext<
           errors: result.error,
           message: 'Invalid body',
           status: 400,
+          name: 'Invalid body',
         });
     }
 
@@ -232,6 +252,21 @@ export class BlazeContext<
           errors: result.error,
           message: 'Invalid params',
           status: 400,
+          name: 'Invalid params',
+        });
+    }
+
+    if (validator?.header) {
+      const result = validateInput(headers, validator.header);
+      validations.header = result.success;
+
+      if (result.success) headers = result.data as Headers;
+      else if (!result.success && throwOnValidationError)
+        throw new BlazeError({
+          errors: result.error,
+          message: 'Invalid header',
+          status: 400,
+          name: 'Invalid header',
         });
     }
 

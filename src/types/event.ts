@@ -26,12 +26,11 @@ export interface EventHandler<
 
 export interface Event<
   Meta extends RecordUnknown = RecordUnknown,
-  Header extends RecordString = RecordString,
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   FinalParams extends RecordUnknown = Params['_output'] & RecordUnknown,
 > {
   validation?: Params | null;
-  handler: EventHandler<Meta, FinalParams, Header>;
+  handler: EventHandler<Meta, FinalParams>;
   throwOnValidationError?: boolean | null;
 }
 

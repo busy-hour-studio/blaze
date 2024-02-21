@@ -1,9 +1,10 @@
-import type { RecordUnknown } from './helper';
+import type { RecordString, RecordUnknown } from './helper';
 
 export type BlazeErrorOption =
   | string
   | {
-      errors: RecordUnknown | unknown | null;
+      errors: RecordUnknown | RecordString | unknown | null;
       status: number;
       message: string;
+      name?: string | null;
     };

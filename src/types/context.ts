@@ -13,9 +13,12 @@ export interface CreateContextOption<
   Headers extends RecordString = RecordString,
   BodyValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   ParamsValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  HeaderValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Validator extends Partial<
-    ContextValidation<BodyValidation, ParamsValidation>
-  > = Partial<ContextValidation<BodyValidation, ParamsValidation>>,
+    ContextValidation<BodyValidation, ParamsValidation, HeaderValidation>
+  > = Partial<
+    ContextValidation<BodyValidation, ParamsValidation, HeaderValidation>
+  >,
 > {
   honoCtx: HonoCtx | null;
   body: Body | null;

@@ -8,9 +8,11 @@ import type { RestParam } from './rest';
 export interface ActionValidator<
   Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
 > {
   body?: Body | null;
   params?: Params | null;
+  header?: Header | null;
 }
 
 export interface ActionHandler<
@@ -40,17 +42,18 @@ export interface ActionOpenAPI {
 
 export interface Action<
   Meta extends RecordUnknown = RecordUnknown,
-  Header extends RecordString = RecordString,
+  Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  FinalHeader extends RecordString = Header['_output'] & RecordString,
   FinalBody extends RecordUnknown = Body['_output'] & RecordUnknown,
   FinalParams extends RecordUnknown = Params['_output'] & RecordUnknown,
 > {
   openapi?: ActionOpenAPI | null;
-  validator?: ActionValidator<Body, Params> | null;
-  handler: ActionHandler<Meta, FinalBody, FinalParams, Header>;
+  validator?: ActionValidator<Body, Params, Header> | null;
+  handler: ActionHandler<Meta, FinalBody, FinalParams, FinalHeader>;
   rest?: RestParam | null;
-  hooks?: ActionHook<Meta, FinalBody, FinalParams, Header> | null;
+  hooks?: ActionHook<Meta, FinalBody, FinalParams, FinalHeader> | null;
   throwOnValidationError?: boolean | null;
 }
 

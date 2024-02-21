@@ -49,8 +49,14 @@ export class BlazeServiceRest {
     });
 
     if (!contextRes.ok) {
+      let status: number = 500;
+
+      if (contextRes.error instanceof BlazeError) {
+        status = contextRes.error.status;
+      }
+
       return honoCtx.json(contextRes.error, {
-        status: 500,
+        status,
       });
     }
 
@@ -105,6 +111,10 @@ export class BlazeServiceRest {
 
     if (validator?.params) {
       request.params = validator.params;
+    }
+
+    if (validator?.header) {
+      request.headers = validator.header;
     }
 
     return {
