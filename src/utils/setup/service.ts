@@ -1,9 +1,9 @@
 import { BlazeError } from '@/errors/BlazeError';
 import { BlazeContext } from '@/event/BlazeContext';
+import { Blaze } from '@/router';
 import { Action } from '@/types/action';
 import type { EventActionHandler } from '@/types/event';
 import type { CreateServiceOption, Service } from '@/types/service';
-import { Hono } from 'hono';
 import path from 'node:path';
 import { getRestPath, getServiceName } from '../common';
 import { loadService } from '../helper/service';
@@ -15,12 +15,12 @@ export class BlazeService {
   public readonly servicePath: string;
   public readonly serviceName: string;
   public readonly restPath: string;
-  public readonly mainRouter: Hono;
+  public readonly mainRouter: Blaze;
   public readonly actions: BlazeServiceAction[];
   public readonly events: BlazeServiceEvent[];
   public readonly rests: BlazeServiceRest[];
   public readonly handlers: EventActionHandler[];
-  public router: Hono | null;
+  public router: Blaze | null;
 
   private readonly blazeCtx: BlazeContext;
   private readonly service: Service;
@@ -53,8 +53,7 @@ export class BlazeService {
 
   private loadRest(action: Action) {
     if (!this.router) {
-      this.router = new Hono({
-        strict: false,
+      this.router = new Blaze({
         router: this.service.router,
       });
     }

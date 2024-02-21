@@ -32,6 +32,7 @@ export interface Event<
 > {
   validation?: Params | null;
   handler: EventHandler<Meta, FinalParams, Header>;
+  throwOnValidationError?: boolean | null;
 }
 
 export interface Events {

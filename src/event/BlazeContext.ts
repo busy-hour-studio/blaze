@@ -1,3 +1,4 @@
+import { BlazeError } from '@/errors/BlazeError';
 import type {
   ContextConstructorOption,
   CreateContextOption,
@@ -180,7 +181,7 @@ export class BlazeContext<
   >(
     options: CreateContextOption<Body, Params, Headers>
   ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
-    const { honoCtx, validator } = options;
+    const { honoCtx, validator, throwOnValidationError } = options;
 
     let body: Body | null = null;
     let params: Params | null = null;
@@ -213,6 +214,12 @@ export class BlazeContext<
       validations.body = result.success;
 
       if (result.success) body = result.data as Body;
+      else if (!result.success && throwOnValidationError)
+        throw new BlazeError({
+          errors: result.error,
+          message: 'Invalid body',
+          status: 400,
+        });
     }
 
     if (validator?.params) {
@@ -220,6 +227,12 @@ export class BlazeContext<
       validations.params = result.success;
 
       if (result.success) params = result.data as Params;
+      else if (!result.success && throwOnValidationError)
+        throw new BlazeError({
+          errors: result.error,
+          message: 'Invalid params',
+          status: 400,
+        });
     }
 
     const ctx = new BlazeContext<Meta, Body, Params, Headers>({
