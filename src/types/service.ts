@@ -1,5 +1,5 @@
-import { BlazeContext } from '@/event/BlazeContext';
-import type { Hono } from 'hono';
+import type { BlazeContext } from '@/event/BlazeContext';
+import type { Blaze } from '@/router';
 import type { Router } from 'hono/router';
 import type { RouterRoute } from 'hono/types';
 import type { Action, ActionHandler, Actions } from './action';
@@ -17,7 +17,7 @@ export interface Service {
 }
 
 export interface LoadServiceOption {
-  app: Hono;
+  app: Blaze;
   path: string;
 }
 
@@ -25,7 +25,7 @@ export interface CreateServiceOption {
   sourcePath: string;
   servicePath: string;
   blazeCtx: BlazeContext;
-  app: Hono;
+  app: Blaze;
 }
 
 export interface CreateActionOption {

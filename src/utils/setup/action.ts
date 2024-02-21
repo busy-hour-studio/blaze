@@ -29,6 +29,7 @@ export class BlazeServiceAction {
       headers,
       params,
       validator: this.action.validator as never,
+      throwOnValidationError: this.action.throwOnValidationError,
     });
 
     if (!contextRes.ok) return contextRes;

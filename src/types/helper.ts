@@ -10,12 +10,15 @@ export type Random = any;
 export interface ContextValidation<
   Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
 > {
   body: Body;
   params: Params;
+  header: Header;
 }
 
 export interface ValidationResult {
   body: boolean;
   params: boolean;
+  header: boolean;
 }

@@ -9,13 +9,13 @@ export class BlazeError extends Error {
     if (typeof err === 'string') {
       super(err);
       this.status = 500;
+      this.name = 'BlazeError';
     } else {
       super(err.message);
 
       this.status = err.status;
       this.errors = err.errors;
+      this.name = err.name ?? 'BlazeError';
     }
-
-    this.name = 'BlazeError';
   }
 }
