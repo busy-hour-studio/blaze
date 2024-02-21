@@ -28,6 +28,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.11.19
     version: 20.11.19
+  '@types/swagger-ui-dist':
+    specifier: ^3.30.4
+    version: 3.30.4
   '@typescript-eslint/eslint-plugin':
     specifier: ^6.21.0
     version: 6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.56.0)(typescript@5.3.3)
@@ -465,6 +468,10 @@ packages:
 
   /@types/semver@7.5.7:
     resolution: {integrity: sha512-/wdoPq1QqkSj9/QOeKkFquEuPzQbHTWAMPH/PaUMB+JuR31lXhlWXRZ52IpfDYVlDOUBvX09uBrPwxGT1hjNBg==}
+    dev: true
+
+  /@types/swagger-ui-dist@3.30.4:
+    resolution: {integrity: sha512-FeOBc7uj4/lAIh4jkBzorvmNoUU9JgSccyDIRo0E9MJw9KQfSxlwpHCyKGnU9kfV5N5dEdfpY8wm7to3nSwTmA==}
     dev: true
 
   /@typescript-eslint/eslint-plugin@6.21.0(@typescript-eslint/parser@6.21.0)(eslint@8.56.0)(typescript@5.3.3):
