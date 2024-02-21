@@ -1,49 +1,128 @@
 import { BlazeError } from '@/errors/BlazeError';
-import type { BlazeContext } from '@/event/BlazeContext';
-import { BlazeEvent } from '@/event/BlazeEvent';
+import { BlazeContext } from '@/event/BlazeContext';
+import { Action } from '@/types/action';
+import type { EventActionHandler } from '@/types/event';
+import type { CreateServiceOption, Service } from '@/types/service';
 import { Hono } from 'hono';
 import path from 'node:path';
 import { getRestPath, getServiceName } from '../common';
-import { RESERVED_KEYWORD } from '../constant';
 import { loadService } from '../helper/service';
 import { BlazeServiceAction } from './action';
 import { BlazeServiceEvent } from './event';
+import { BlazeServiceRest } from './rest';
 
-export function initializeService(
-  app: Hono,
-  servicePath: string,
-  blazeCtx: BlazeContext
-) {
-  // eslint-disable-next-line func-names
-  return function (filePath: string) {
-    const service = loadService(path.resolve(servicePath, filePath));
+export class BlazeService {
+  public readonly servicePath: string;
+  public readonly serviceName: string;
+  public readonly restPath: string;
+  public readonly mainRouter: Hono;
+  public readonly actions: BlazeServiceAction[];
+  public readonly events: BlazeServiceEvent[];
+  public readonly rests: BlazeServiceRest[];
+  public readonly handlers: EventActionHandler[];
+  public router: Hono | null;
+
+  private readonly blazeCtx: BlazeContext;
+  private readonly service: Service;
+
+  constructor(options: CreateServiceOption) {
+    this.servicePath = path.resolve(options.sourcePath, options.servicePath);
+
+    const service = loadService(this.servicePath);
 
     if (!service || !service.name) {
       throw new BlazeError('Service name is required');
     }
 
-    const routePath = getRestPath(service);
-    const serviceName = getServiceName(service);
-    const killEventName = [serviceName, RESERVED_KEYWORD.SUFFIX.KILL].join('.');
+    this.blazeCtx = options.blazeCtx;
+    this.serviceName = getServiceName(service);
+    this.restPath = getRestPath(service);
+    this.mainRouter = options.app;
 
-    const actions = new BlazeServiceAction(service);
-    const events = new BlazeServiceEvent(service);
+    this.actions = [];
+    this.events = [];
+    this.rests = [];
+    this.handlers = [];
 
-    service.onCreated?.(blazeCtx);
+    this.service = service;
+    this.router = null;
 
-    if (actions.router) {
-      app.route(`/${routePath}`, actions.router);
-    }
+    this.loadServiceActions();
+    this.loadServiceEvents();
+  }
 
-    function onStarted() {
-      BlazeEvent.on(killEventName, () => {
-        BlazeEvent.removeAllListeners(serviceName);
-        service.onStopped?.([...actions.handlers, ...events.handlers]);
+  private loadRest(action: Action) {
+    if (!this.router) {
+      this.router = new Hono({
+        strict: false,
+        router: this.service.router,
       });
-
-      service.onStarted?.(blazeCtx);
     }
 
-    return onStarted;
-  };
+    const restInstance = new BlazeServiceRest({
+      action,
+      router: this.router,
+    });
+
+    this.rests.push(restInstance);
+  }
+
+  private loadServiceActions() {
+    if (!this.service.actions) return [];
+
+    const actions = Object.entries(this.service.actions).map(
+      ([actionAlias, action]) => {
+        if (action.rest) this.loadRest(action);
+
+        const actionInstace = new BlazeServiceAction({
+          action,
+          actionAlias,
+          serviceName: this.serviceName,
+        });
+
+        this.handlers.push({
+          name: actionInstace.actionName,
+          handler: actionInstace.actionHandler,
+        });
+
+        return actionInstace;
+      }
+    );
+
+    return this.actions.concat(actions);
+  }
+
+  private loadServiceEvents() {
+    if (!this.service.events) return;
+
+    const events = Object.entries(this.service.events).map(
+      ([eventAlias, event]) => {
+        const eventInstance = new BlazeServiceEvent({
+          event,
+          eventAlias,
+          serviceName: this.serviceName,
+        });
+
+        this.handlers.push({
+          name: eventInstance.eventName,
+          handler: eventInstance.eventHandler,
+        });
+
+        return eventInstance;
+      }
+    );
+
+    return this.events.concat(events);
+  }
+
+  private assignRestRoute() {
+    if (!this.router) return;
+
+    this.mainRouter.route(`/${this.restPath}`, this.router);
+  }
+
+  public onStarted() {
+    this.assignRestRoute();
+    this.service.onStarted?.(this.blazeCtx);
+  }
 }

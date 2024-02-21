@@ -89,8 +89,8 @@ export class BlazeEventEmitter {
 
     if (listenerCount >= this.$maxListeners) return;
 
-    this.$emitter.get(eventName)?.add(onceListener);
-    this.$onceEmitter.get(eventName)?.set(onceListener, listener);
+    this.$emitter.get(eventName)?.add?.(onceListener);
+    this.$onceEmitter.get(eventName)?.set?.(onceListener, listener);
   }
 
   public off(eventName: EventName, listener: EventListener) {

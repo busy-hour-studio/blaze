@@ -1,8 +1,9 @@
+import { BlazeContext } from '@/event/BlazeContext';
 import type { Hono } from 'hono';
 import type { Router } from 'hono/router';
 import type { RouterRoute } from 'hono/types';
-import type { ActionHandler, Actions } from './action';
-import type { EventActionHandler, Events } from './event';
+import type { Action, ActionHandler, Actions } from './action';
+import type { Event, EventActionHandler, Events } from './event';
 
 export interface Service {
   name: string;
@@ -20,7 +21,21 @@ export interface LoadServiceOption {
   path: string;
 }
 
-export interface AssignActionOption {
-  service: Service;
-  router: Hono;
+export interface CreateServiceOption {
+  sourcePath: string;
+  servicePath: string;
+  blazeCtx: BlazeContext;
+  app: Hono;
+}
+
+export interface CreateActionOption {
+  action: Action;
+  serviceName: string;
+  actionAlias: string;
+}
+
+export interface CreateEventOption {
+  event: Event;
+  serviceName: string;
+  eventAlias: string;
 }
