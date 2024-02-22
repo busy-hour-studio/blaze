@@ -1,7 +1,7 @@
 import { BlazeError } from '@/errors/BlazeError';
 import { BlazeContext } from '@/event/BlazeContext';
 import { Blaze } from '@/router';
-import { Action } from '@/types/action';
+import type { Action } from '@/types/action';
 import type { EventActionHandler } from '@/types/event';
 import type { CreateServiceOption, Service } from '@/types/service';
 import path from 'node:path';

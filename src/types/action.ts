@@ -1,7 +1,7 @@
 import type { BlazeContext } from '@/event/BlazeContext';
-import { ResponseConfig } from '@asteasolutions/zod-to-openapi';
+import type { ResponseConfig } from '@asteasolutions/zod-to-openapi';
 import type { ZodObject, ZodRawShape } from 'zod';
-import type { RecordString, RecordUnknown } from './helper';
+import type { Random, RecordString, RecordUnknown } from './helper';
 import type { ActionHook } from './hooks';
 import type { RestParam } from './rest';
 
@@ -62,5 +62,5 @@ export type ActionCallResult<U> =
   | { ok: true; result: U };
 
 export interface Actions {
-  [key: string]: Action;
+  [key: string]: Action<RecordUnknown, Random, Random, Random>;
 }

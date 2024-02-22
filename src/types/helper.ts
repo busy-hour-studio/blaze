@@ -12,9 +12,9 @@ export interface ContextValidation<
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
 > {
-  body: Body;
-  params: Params;
-  header: Header;
+  body?: Body | null;
+  params?: Params | null;
+  header?: Header | null;
 }
 
 export interface ValidationResult {

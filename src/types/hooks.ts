@@ -15,10 +15,11 @@ export interface AfterHookHandler<
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Header extends RecordString = RecordString,
+  Result = unknown,
 > {
   (
     ctx: BlazeContext<Meta, Body, Params, Header>,
-    res: unknown
+    res: Result
   ): Promise<unknown | void> | unknown | void;
 }
 

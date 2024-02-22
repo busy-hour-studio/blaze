@@ -4,9 +4,9 @@
 // Instead of adding it to the dep, we just take the code and modify it
 //  We do this since the flow of @honojs/zod-openapi
 //    does not align with the flow of @busy-hour/blaze
-
 import type { BlazeOpenAPIOption, CreateBlazeOption } from '@/types/router';
 import { assignOpenAPIRegistry } from '@/utils/helper/router';
+import type { RouteConfig } from '@asteasolutions/zod-to-openapi';
 import {
   OpenAPIRegistry,
   OpenApiGeneratorV3,
@@ -35,8 +35,8 @@ export class Blaze<
 
     const newRoute = {
       ...route,
-      method: method as never,
-    };
+      method,
+    } as RouteConfig;
 
     this.openAPIRegistry.registerPath(newRoute);
     this.on(route.method, route.path, route.handler);
