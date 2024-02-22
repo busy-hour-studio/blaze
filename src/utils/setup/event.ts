@@ -1,6 +1,10 @@
 import { BlazeEvent } from '@/event/BlazeEvent';
 import type { Event } from '@/types/event';
-import type { RecordString, RecordUnknown } from '@/types/helper';
+import type {
+  ContextValidation,
+  RecordString,
+  RecordUnknown,
+} from '@/types/helper';
 import type { CreateEventOption } from '@/types/service';
 import { createContext } from '../common';
 import { RESERVED_KEYWORD } from '../constant';
@@ -10,6 +14,7 @@ export class BlazeServiceEvent {
   public readonly serviceName: string;
   public readonly eventName: string;
   public readonly event: Event;
+  private readonly validator: ContextValidation;
 
   constructor(options: CreateEventOption) {
     this.serviceName = options.serviceName;
@@ -19,6 +24,9 @@ export class BlazeServiceEvent {
       options.eventAlias,
     ].join('.');
     this.event = options.event;
+    this.validator = {
+      body: this.event.validator,
+    };
 
     BlazeEvent.on(this.eventName, this.eventHandler.bind(this));
   }
@@ -33,8 +41,8 @@ export class BlazeServiceEvent {
       body,
       headers,
       params,
-      validator: this.event.validation as never,
-      throwOnValidationError: this.event.throwOnValidationError,
+      validator: this.validator,
+      throwOnValidationError: this.event.throwOnValidationError ?? false,
     });
 
     if (!contextRes.ok) return contextRes;

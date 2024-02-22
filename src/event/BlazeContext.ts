@@ -228,6 +228,20 @@ export class BlazeContext<
       headers = honoCtx.req.header() as Headers;
     }
 
+    if (validator?.header) {
+      const result = validateInput(headers, validator.header);
+      validations.header = result.success;
+
+      if (result.success) headers = result.data as Headers;
+      else if (!result.success && throwOnValidationError)
+        throw new BlazeError({
+          errors: result.error,
+          message: 'Invalid header',
+          status: 400,
+          name: 'Invalid header',
+        });
+    }
+
     if (validator?.body) {
       const result = validateInput(body, validator.body);
       validations.body = result.success;
@@ -253,20 +267,6 @@ export class BlazeContext<
           message: 'Invalid params',
           status: 400,
           name: 'Invalid params',
-        });
-    }
-
-    if (validator?.header) {
-      const result = validateInput(headers, validator.header);
-      validations.header = result.success;
-
-      if (result.success) headers = result.data as Headers;
-      else if (!result.success && throwOnValidationError)
-        throw new BlazeError({
-          errors: result.error,
-          message: 'Invalid header',
-          status: 400,
-          name: 'Invalid header',
         });
     }
 

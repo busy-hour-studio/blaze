@@ -1,6 +1,6 @@
 import { BlazeEvent } from '@/event/BlazeEvent';
 import type { Action } from '@/types/action';
-import { RecordString, RecordUnknown } from '@/types/helper';
+import type { RecordString, RecordUnknown } from '@/types/helper';
 import type { CreateActionOption } from '@/types/service';
 import { createContext } from '../common';
 import { eventHandler } from '../helper/handler';
@@ -28,8 +28,8 @@ export class BlazeServiceAction {
       body,
       headers,
       params,
-      validator: this.action.validator as never,
-      throwOnValidationError: this.action.throwOnValidationError,
+      validator: this.action.validator || null,
+      throwOnValidationError: this.action.throwOnValidationError ?? false,
     });
 
     if (!contextRes.ok) return contextRes;

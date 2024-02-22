@@ -14,18 +14,18 @@ export interface CreateContextOption<
   BodyValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   ParamsValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   HeaderValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  Validator extends Partial<
-    ContextValidation<BodyValidation, ParamsValidation, HeaderValidation>
-  > = Partial<
-    ContextValidation<BodyValidation, ParamsValidation, HeaderValidation>
-  >,
+  Validator extends ContextValidation<
+    BodyValidation,
+    ParamsValidation,
+    HeaderValidation
+  > = ContextValidation<BodyValidation, ParamsValidation, HeaderValidation>,
 > {
   honoCtx: HonoCtx | null;
   body: Body | null;
   params: Params | null;
   headers: Headers | null;
   validator: Validator | null;
-  throwOnValidationError: boolean | null | undefined;
+  throwOnValidationError: boolean | null;
 }
 
 export interface ContextConstructorOption<

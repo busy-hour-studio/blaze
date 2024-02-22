@@ -29,11 +29,11 @@ export interface Event<
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   FinalParams extends RecordUnknown = Params['_output'] & RecordUnknown,
 > {
-  validation?: Params | null;
+  validator?: Params | null;
   handler: EventHandler<Meta, FinalParams>;
   throwOnValidationError?: boolean | null;
 }
 
 export interface Events {
-  [key: string]: Event;
+  [key: string]: Event<RecordUnknown, Random>;
 }
