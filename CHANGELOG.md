@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/Busy-Hour-Studio/blaze/compare/v1.1.0...v1.1.1) (2024-02-23)
+
+
+### Bug Fixes
+
+* service/action/hooks type error ([2f87656](https://github.com/Busy-Hour-Studio/blaze/commit/2f87656772d6f79b956c24b2d6c6d61d8ba9156d))
+
 ## [1.1.0](https://github.com/Busy-Hour-Studio/blaze/compare/v1.0.0...v1.1.0) (2024-02-22)
 
 
