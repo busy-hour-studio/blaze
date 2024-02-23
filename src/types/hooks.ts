@@ -15,7 +15,7 @@ export interface AfterHookHandler<
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Header extends RecordString = RecordString,
-  Result = unknown,
+  Result = never,
 > {
   (
     ctx: BlazeContext<Meta, Body, Params, Header>,
@@ -37,18 +37,20 @@ export type AcceptedAfterHook<
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Header extends RecordString = RecordString,
+  Result = never,
 > =
-  | AfterHookHandler<Meta, Body, Params, Header>
-  | AfterHookHandler<Meta, Body, Params, Header>[];
+  | AfterHookHandler<Meta, Body, Params, Header, Result>
+  | AfterHookHandler<Meta, Body, Params, Header, Result>[];
 
 export interface ActionHook<
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Header extends RecordString = RecordString,
+  Result = never,
 > {
   before?: AcceptedBeforeHook<Meta, Body, Params, Header> | null;
-  after?: AcceptedAfterHook<Meta, Body, Params, Header> | null;
+  after?: AcceptedAfterHook<Meta, Body, Params, Header, Result> | null;
 }
 
 export interface AfterHookHandlerOption<
@@ -56,9 +58,10 @@ export interface AfterHookHandlerOption<
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Header extends RecordString = RecordString,
+  Result = never,
 > {
   result: unknown;
-  hooks: AcceptedAfterHook<Meta, Body, Params, Header>;
+  hooks: AcceptedAfterHook<Meta, Body, Params, Header, Result>;
   blazeCtx: BlazeContext<Meta, Body, Params, Header>;
 }
 

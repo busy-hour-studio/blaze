@@ -33,11 +33,11 @@ export async function afterActionHookHandler(
   const hooks = toArray(options.hooks);
 
   // eslint-disable-next-line prefer-destructuring
-  let result: unknown = options.result;
+  let result = options.result;
 
   for (const hook of hooks) {
     const [hookRes, hookErr] = await resolvePromise(
-      hook(options.blazeCtx, result)
+      hook(options.blazeCtx, result as never)
     );
 
     if (hookErr) {
