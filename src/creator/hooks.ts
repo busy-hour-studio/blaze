@@ -6,7 +6,7 @@ export function createAfterHook<
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Header extends RecordString = RecordString,
-  Result = unknown,
+  Result = never,
 >(hook: AfterHookHandler<Meta, Body, Params, Header, Result>) {
   return hook;
 }

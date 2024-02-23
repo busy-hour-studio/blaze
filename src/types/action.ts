@@ -53,7 +53,7 @@ export interface Action<
   validator?: ActionValidator<Body, Params, Header> | null;
   handler: ActionHandler<Meta, FinalBody, FinalParams, FinalHeader>;
   rest?: RestParam | null;
-  hooks?: ActionHook<Meta, FinalBody, FinalParams, FinalHeader> | null;
+  hooks?: ActionHook<Meta, FinalBody, FinalParams, FinalHeader, never> | null;
   throwOnValidationError?: boolean | null;
 }
 

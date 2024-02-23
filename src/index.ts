@@ -15,6 +15,7 @@ export type {
 export type { Method, RestParam, RestRoute } from './types/rest';
 export type { Service } from './types/service';
 
-export * from './creator';
+export { BlazeCreator } from './creator';
+export { BlazeError } from './errors/BlazeError';
 export * from './router';
 export { initializeServices } from './utils/setup';

@@ -28,10 +28,10 @@ export interface BlazeActionCreator {
       Body extends RecordUnknown = RecordUnknown,
       Params extends RecordUnknown = RecordUnknown,
       Header extends RecordString = RecordString,
-      Result = unknown,
+      Result = never,
     >(
       hook: AfterHookHandler<Meta, Body, Params, Header, Result>
-    ): AfterHookHandler<Meta, Body, Params, Header, Result>;
+    ): AfterHookHandler<Meta, Body, Params, Header, never>;
     before<
       Meta extends RecordUnknown = RecordUnknown,
       Body extends RecordUnknown = RecordUnknown,
