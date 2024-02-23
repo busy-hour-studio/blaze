@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/Busy-Hour-Studio/blaze/compare/v1.0.0...v1.1.0) (2024-02-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* service,action,event,hooks creator
+
+### Features
+
+* header validations ([377eee0](https://github.com/Busy-Hour-Studio/blaze/commit/377eee07e9d195c9e14cbaba416da3298410d2a8))
+* zod validations support ([4c98c73](https://github.com/Busy-Hour-Studio/blaze/commit/4c98c739b2a044e68efa35d3e5ef5d006fe51123))
+* zod validator types ([27c7506](https://github.com/Busy-Hour-Studio/blaze/commit/27c75060e6073ccf29a76a0bae5a6fa4d4c1cdbc))
+* zod-openapi doc generator ([91cbe0e](https://github.com/Busy-Hour-Studio/blaze/commit/91cbe0ef2b34f9fa74d6076c7496a717652ccf13))
+
+
+* service,action,event,hooks creator ([5f4242b](https://github.com/Busy-Hour-Studio/blaze/commit/5f4242bf6bd541710ea93c96d4e8eaea600430f0))
+
 ## 1.0.0 (2024-02-18)
 
 
