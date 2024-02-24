@@ -9,8 +9,8 @@
     "build": "rimraf dist && tsc --project tsconfig.build.json && resolve-tspaths",
     "prepublish": "pnpm build",
     "lint": "eslint src/**/*.{ts,tsx} --fix",
-    "release": "standard-version",
-    "release:beta": "standard-version",
+    "release": "commit-and-tag-version",
+    "release:beta": "commit-and-tag-version",
     "postrelease": "pnpm publish --access public && git push --follow-tags",
     "postrelease:beta": "pnpm publish --tag next --access public && git push --follow-tags",
     "check-types": "tsc --project tsconfig.json",
@@ -23,6 +23,7 @@
     "@types/node": "^20.11.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "commit-and-tag-version": "^12.2.0",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^9.1.0",
@@ -35,13 +36,12 @@
     "prettier": "^3.2.5",
     "resolve-tspaths": "^0.8.18",
     "rimraf": "^5.0.5",
-    "standard-version": "^9.5.0",
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.3.3"
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^6.3.1",
-    "hono": "^3.12.10",
+    "hono": "^4.0.5",
     "zod": "^3.22.4"
   },
   "keywords": [
