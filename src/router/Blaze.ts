@@ -1,9 +1,12 @@
-// Most of the code are taken from @honojs/zod-openapi
-// https://github.com/honojs/middleware/blob/main/packages/zod-openapi
+/*
+    This Blaze class are heavily inspired by @honojs/zod-openapi
+    https://github.com/honojs/middleware/blob/main/packages/zod-openapi
+    MIT License
+    Copyright (c) 2023 Yusuke Wada
 
-// Instead of adding it to the dep, we just take the code and modify it
-//  We do this since the flow of @honojs/zod-openapi
-//    does not align with the flow of @busy-hour/blaze
+    The main difference is that we don't validate user request 
+    immediately, since we will validate it in the BlazeContext instead
+*/
 import type { BlazeOpenAPIOption, CreateBlazeOption } from '@/types/router';
 import { assignOpenAPIRegistry } from '@/utils/helper/router';
 import type { RouteConfig } from '@asteasolutions/zod-to-openapi';

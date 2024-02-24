@@ -1,7 +1,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "noEmit": false
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "declaration": true,
+    "outDir": "./dist/types"
   },
   "exclude": ["commitlint.config.ts", "test", "dist", "example", "benchmark"]
 }
