@@ -16,7 +16,7 @@
     "prepublish": "pnpm build",
     "lint": "eslint src/**/*.{ts,tsx} --fix",
     "release": "commit-and-tag-version",
-    "release:beta": "commit-and-tag-version",
+    "release:beta": "commit-and-tag-version --prerelease",
     "postrelease": "pnpm publish --access public && git push --follow-tags",
     "postrelease:beta": "pnpm publish --tag next --access public && git push --follow-tags",
     "check-types": "tsc --project tsconfig.json",
