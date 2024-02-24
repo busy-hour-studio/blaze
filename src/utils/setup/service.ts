@@ -1,8 +1,10 @@
 import { BlazeError } from '@/errors/BlazeError';
 import { BlazeContext } from '@/event/BlazeContext';
+import { BlazeEvent } from '@/event/BlazeEvent';
 import { Blaze } from '@/router';
 import type { Action } from '@/types/action';
 import type { EventActionHandler } from '@/types/event';
+import type { Method } from '@/types/rest';
 import type { CreateServiceOption, Service } from '@/types/service';
 import path from 'node:path';
 import { getRestPath, getServiceName } from '../common';
@@ -30,7 +32,7 @@ export class BlazeService {
 
     const service = loadService(this.servicePath);
 
-    if (!service || !service.name) {
+    if (typeof service.name === 'undefined' || service.name === null) {
       throw new BlazeError('Service name is required');
     }
 
@@ -118,6 +120,41 @@ export class BlazeService {
     if (!this.router) return;
 
     this.mainRouter.route(`/${this.restPath}`, this.router);
+  }
+
+  public onStopped() {
+    // Trigger the on stopped listener
+    this.service.onStopped?.(this.handlers);
+
+    // Remove all the rest
+    this.rests.forEach((rest) => {
+      const method: Method = rest.method ?? 'ALL';
+
+      // this.router?.off?.(method, rest.path);
+      this.mainRouter?.off?.(method, rest.path);
+    });
+
+    // Remove all the action
+    this.actions.forEach((action) => {
+      BlazeEvent.off(action.actionName, action.actionHandler);
+    });
+  }
+
+  public onRestarted() {
+    // Trigger the on restarted listener
+    // this.service.onRestarted?.(this.handlers);
+
+    // Re-assign the rest
+    this.rests.forEach((rest) => {
+      const method: Method = rest.method ?? 'ALL';
+
+      this.router?.on?.(method, rest.path, rest.restHandler);
+    });
+
+    // Re-assign the action
+    this.actions.forEach((action) => {
+      BlazeEvent.on(action.actionName, action.actionHandler);
+    });
   }
 
   public onStarted() {

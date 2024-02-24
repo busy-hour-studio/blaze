@@ -9,6 +9,7 @@ import type {
   RecordUnknown,
   ValidationResult,
 } from '@/types/helper';
+import type { ResponseType } from '@/types/rest';
 import { getReqBody } from '@/utils/helper/context';
 import { validateInput } from '@/utils/helper/validator';
 import type { Context as HonoCtx } from 'hono';
@@ -35,6 +36,7 @@ export class BlazeContext<
   private $isRest: boolean;
   private $broker: BlazeBroker;
   private $validations: ValidationResult | null;
+  private $response: ResponseType;
 
   constructor(options: ContextConstructorOption<Body, Params, Headers>) {
     const { honoCtx, body, params, headers, validations } = options;
@@ -50,6 +52,7 @@ export class BlazeContext<
     this.$isRest = !!options.honoCtx;
     this.$validations = validations;
     this.$broker = new BlazeBroker();
+    this.$response = 'json';
 
     this.call = this.$broker.call.bind(this.$broker);
     this.mcall = this.$broker.mcall.bind(this.$broker);
@@ -134,6 +137,21 @@ export class BlazeContext<
 
   public get validations() {
     return this.$validations;
+  }
+
+  private getResponse() {
+    return this.$response;
+  }
+
+  private setResponse(value: ResponseType) {
+    this.$response = value;
+  }
+
+  public get response() {
+    return {
+      get: this.getResponse.bind(this),
+      set: this.setResponse.bind(this),
+    };
   }
 
   public get query() {

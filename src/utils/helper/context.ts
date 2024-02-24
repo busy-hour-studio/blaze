@@ -34,11 +34,8 @@ export async function getReqBody(honoCtx: HonoCtx) {
   return null;
 }
 
-export function getStatusCode(
-  honoCtx: BlazeContext,
-  defaultStatusCode: number
-) {
-  const status = honoCtx.header.get('status');
+export function getStatusCode(ctx: BlazeContext, defaultStatusCode: number) {
+  const status = ctx.header.get('status');
 
   let statusCode = Array.isArray(status) ? +status.at(-1)! : +status;
 

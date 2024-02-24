@@ -3,6 +3,7 @@ import type {
   Method,
   RestErrorHandlerOption,
   RestParam,
+  RestResponseHandlerOption,
   RestRoute,
 } from '@/types/rest';
 import { Hono } from 'hono';
@@ -44,4 +45,29 @@ export function handleRestError(options: RestErrorHandlerOption) {
   return honoCtx.json(err, {
     status,
   });
+}
+export function handleRestResponse(options: RestResponseHandlerOption) {
+  const { ctx, honoCtx, result } = options;
+  const status = getStatusCode(ctx, 200);
+  const headers = ctx.header.get();
+
+  const respOption = {
+    headers,
+    status,
+  };
+
+  switch (ctx.response.get()) {
+    case 'json':
+      return honoCtx.json(result, respOption);
+
+    case 'text':
+      return honoCtx.text(result as string, respOption);
+
+    case 'html':
+      return honoCtx.html(result as string, respOption);
+
+    case 'body':
+    default:
+      return honoCtx.body(result, respOption);
+  }
 }

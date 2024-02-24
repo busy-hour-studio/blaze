@@ -4,9 +4,12 @@ import type { Method, RestHandlerOption } from '@/types/rest';
 import type { OpenAPIRequest } from '@/types/router';
 import type { Context as HonoCtx } from 'hono';
 import { createContext } from '../common';
-import { getStatusCode } from '../helper/context';
 import { eventHandler } from '../helper/handler';
-import { extractRestParams, handleRestError } from '../helper/rest';
+import {
+  extractRestParams,
+  handleRestError,
+  handleRestResponse,
+} from '../helper/rest';
 
 export class BlazeServiceRest {
   public readonly path: string;
@@ -37,7 +40,7 @@ export class BlazeServiceRest {
     });
   }
 
-  private async restHandler(honoCtx: HonoCtx) {
+  public async restHandler(honoCtx: HonoCtx) {
     const contextRes = await createContext({
       honoCtx,
       // NULL => automatically use honoCtx value instead
@@ -78,10 +81,10 @@ export class BlazeServiceRest {
       return honoCtx.body(null, 204);
     }
 
-    const status = getStatusCode(blazeCtx, 200);
-
-    return honoCtx.json(result, {
-      status,
+    return handleRestResponse({
+      ctx: blazeCtx,
+      honoCtx,
+      result,
     });
   }
 

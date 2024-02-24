@@ -60,6 +60,16 @@ export class Blaze<
     return document;
   }
 
+  public off(method: string, path: string) {
+    const index = this.router.routes.findIndex(
+      (route) => route[0] === method && route[1] === path
+    );
+
+    if (index === -1) return;
+
+    this.router.routes.splice(index, 1);
+  }
+
   public doc(path: string, config: OpenAPIObjectConfig) {
     this.get(path, (ctx) => {
       try {
