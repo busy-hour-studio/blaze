@@ -1,7 +1,9 @@
 {
   "name": "@busy-hour/blaze",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/cjs/index.js",
+  "types": "dist/types/index.d.ts",
+  "module": "dist/index.js",
+  "type": "module",
   "version": "1.2.0",
   "license": "MIT",
   "scripts": {
@@ -31,7 +33,6 @@
     "arg": "^5.0.2",
     "commit-and-tag-version": "^12.2.0",
     "esbuild": "^0.20.1",
-    "esbuild-plugin-alias": "^0.2.1",
     "eslint": "^8.56.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-prettier": "^9.1.0",

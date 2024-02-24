@@ -1,2 +1,2 @@
 export { Blaze } from './Blaze';
-export { z } from './zod';
+export { z } from './validator';

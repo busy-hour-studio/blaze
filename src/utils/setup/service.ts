@@ -1,12 +1,16 @@
-import { BlazeError } from '@/errors/BlazeError';
-import { BlazeContext } from '@/event/BlazeContext';
-import { BlazeEvent } from '@/event/BlazeEvent';
-import { Blaze } from '@/router';
-import type { Action } from '@/types/action';
-import type { EventActionHandler } from '@/types/event';
-import type { Method } from '@/types/rest';
-import type { CreateServiceOption, Service } from '@/types/service';
 import path from 'node:path';
+import { BlazeError } from '../../errors/BlazeError';
+import { BlazeContext } from '../../event/BlazeContext';
+import { BlazeEvent } from '../../event/BlazeEvent';
+import { Blaze } from '../../router';
+import type { Action } from '../../types/action';
+import type { EventActionHandler } from '../../types/event';
+import type { Method } from '../../types/rest';
+import type {
+  CreateServiceOption,
+  Service,
+  ServiceConstructorOption,
+} from '../../types/service';
 import { getRestPath, getServiceName } from '../common';
 import { loadService } from '../helper/service';
 import { BlazeServiceAction } from './action';
@@ -27,26 +31,25 @@ export class BlazeService {
   private readonly blazeCtx: BlazeContext;
   private readonly service: Service;
 
-  constructor(options: CreateServiceOption) {
-    this.servicePath = path.resolve(options.sourcePath, options.servicePath);
-
-    const service = loadService(this.servicePath);
+  constructor(options: ServiceConstructorOption) {
+    const { service, blazeCtx, servicePath, app } = options;
 
     if (typeof service.name === 'undefined' || service.name === null) {
       throw new BlazeError('Service name is required');
     }
 
-    this.blazeCtx = options.blazeCtx;
+    this.service = service;
+    this.servicePath = servicePath;
+    this.blazeCtx = blazeCtx;
     this.serviceName = getServiceName(service);
     this.restPath = getRestPath(service);
-    this.mainRouter = options.app;
+    this.mainRouter = app;
 
     this.actions = [];
     this.events = [];
     this.rests = [];
     this.handlers = [];
 
-    this.service = service;
     this.router = null;
 
     this.loadServiceActions();
@@ -160,5 +163,19 @@ export class BlazeService {
   public onStarted() {
     this.assignRestRoute();
     this.service.onStarted?.(this.blazeCtx);
+  }
+
+  public static async create(options: CreateServiceOption) {
+    const servicePath = path.resolve(options.sourcePath, options.servicePath);
+    const serviceFile = await loadService(servicePath);
+
+    const service = new BlazeService({
+      app: options.app,
+      blazeCtx: options.blazeCtx,
+      servicePath,
+      service: serviceFile,
+    });
+
+    return service;
   }
 }

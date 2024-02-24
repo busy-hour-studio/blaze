@@ -1,11 +1,11 @@
-import { BlazeEvent } from '@/event/BlazeEvent';
-import type { Event } from '@/types/event';
+import { BlazeEvent } from '../../event/BlazeEvent';
+import type { Event } from '../../types/event';
 import type {
   ContextValidation,
   RecordString,
   RecordUnknown,
-} from '@/types/helper';
-import type { CreateEventOption } from '@/types/service';
+} from '../../types/helper';
+import type { CreateEventOption } from '../../types/service';
 import { createContext } from '../common';
 import { RESERVED_KEYWORD } from '../constant';
 import { eventHandler } from '../helper/handler';

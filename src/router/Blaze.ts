@@ -7,8 +7,6 @@
     The main difference is that we don't validate user request 
     immediately, since we will validate it in the BlazeContext instead
 */
-import type { BlazeOpenAPIOption, CreateBlazeOption } from '@/types/router';
-import { assignOpenAPIRegistry } from '@/utils/helper/router';
 import type { RouteConfig } from '@asteasolutions/zod-to-openapi';
 import {
   OpenAPIRegistry,
@@ -19,6 +17,8 @@ import type { OpenAPIObjectConfig } from '@asteasolutions/zod-to-openapi/dist/v3
 import type { Env, Schema } from 'hono';
 import { Hono } from 'hono';
 import type { MergePath, MergeSchemaPath } from 'hono/types';
+import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router';
+import { assignOpenAPIRegistry } from '../utils/helper/router';
 
 export class Blaze<
   E extends Env = Env,

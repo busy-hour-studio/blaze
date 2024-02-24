@@ -1,6 +1,6 @@
-import type { Action, ActionValidator } from '@/types/action';
-import type { RecordUnknown } from '@/types/helper';
 import type { ZodObject, ZodRawShape } from 'zod';
+import type { Action, ActionValidator } from '../types/action';
+import type { RecordUnknown } from '../types/helper';
 
 export function createActionValidator<
   Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,

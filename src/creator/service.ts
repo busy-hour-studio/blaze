@@ -1,4 +1,4 @@
-import type { Service } from '@/types/service';
+import type { Service } from '../types/service';
 
 export function createService(service: Service) {
   return service;
