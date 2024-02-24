@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.1-alpha.0](https://github.com/Busy-Hour-Studio/blaze/compare/v1.2.0...v1.2.1-alpha.0) (2024-02-24)
+
+
+### Bug Fixes
+
+* esbuild conflict between esm and cjs ([9bc8ee3](https://github.com/Busy-Hour-Studio/blaze/commit/9bc8ee3a8f870dabe3b2125190f2063868db002b))
+
 ## [1.2.0](https://github.com/Busy-Hour-Studio/blaze/compare/v1.1.1...v1.2.0) (2024-02-24)
 
 
