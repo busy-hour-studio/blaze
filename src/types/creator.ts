@@ -1,7 +1,7 @@
-import type { Action, ActionOpenAPI, ActionValidator } from '@/types/action';
-import type { Event } from '@/types/event';
-import type { RecordString, RecordUnknown } from '@/types/helper';
 import type { ZodObject, ZodRawShape } from 'zod';
+import type { Action, ActionOpenAPI, ActionValidator } from './action';
+import type { Event } from './event';
+import type { RecordString, RecordUnknown } from './helper';
 import type { AfterHookHandler, BeforeHookHandler } from './hooks';
 import type { Service } from './service';
 

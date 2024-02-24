@@ -1,8 +1,8 @@
-import { BlazeError } from '@/errors/BlazeError';
-import type { Action } from '@/types/action';
-import type { Method, RestHandlerOption } from '@/types/rest';
-import type { OpenAPIRequest } from '@/types/router';
 import type { Context as HonoCtx } from 'hono';
+import { BlazeError } from '../../errors/BlazeError';
+import type { Action } from '../../types/action';
+import type { Method, RestHandlerOption } from '../../types/rest';
+import type { OpenAPIRequest } from '../../types/router';
 import { createContext } from '../common';
 import { eventHandler } from '../helper/handler';
 import {

@@ -1,6 +1,6 @@
-import type { Event } from '@/types/event';
-import type { RecordUnknown } from '@/types/helper';
 import type { ZodObject, ZodRawShape } from 'zod';
+import type { Event } from '../types/event';
+import type { RecordUnknown } from '../types/helper';
 
 export function createEventValidator<
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,

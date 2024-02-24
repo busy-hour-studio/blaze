@@ -1,12 +1,12 @@
-import { BlazeError } from '@/errors/BlazeError';
+import { Hono } from 'hono';
+import { BlazeError } from '../../errors/BlazeError';
 import type {
   Method,
   RestErrorHandlerOption,
   RestParam,
   RestResponseHandlerOption,
   RestRoute,
-} from '@/types/rest';
-import { Hono } from 'hono';
+} from '../../types/rest';
 import { getStatusCode } from './context';
 
 export function extractRestPath(restRoute: RestRoute) {

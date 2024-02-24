@@ -14,7 +14,6 @@
 import { exec } from 'child_process';
 import type { BuildOptions, Plugin, PluginBuild } from 'esbuild';
 import { build } from 'esbuild';
-import alias from 'esbuild-plugin-alias';
 import { glob } from 'glob';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -71,11 +70,6 @@ const cjsBuild = () =>
     outbase: './src',
     outdir: './dist/cjs',
     format: 'cjs',
-    plugins: [
-      alias({
-        '@': path.resolve(__dirname, './src'),
-      }),
-    ],
   });
 
 const esmBuild = () =>
@@ -85,12 +79,7 @@ const esmBuild = () =>
     outbase: './src',
     outdir: './dist',
     format: 'esm',
-    plugins: [
-      alias({
-        '@': path.resolve(__dirname, './src'),
-      }),
-      addExtension('.js'),
-    ],
+    plugins: [addExtension('.js')],
   });
 
 Promise.all([esmBuild(), cjsBuild()]);

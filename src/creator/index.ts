@@ -2,7 +2,7 @@ import type {
   BlazeActionCreator,
   BlazeEventCreator,
   BlazeServiceCreator,
-} from '@/types/creator';
+} from '../types/creator';
 import { createAction, createActionValidator } from './action';
 import { createEvent, createEventValidator } from './event';
 import { createAfterHook, createBeforeHook } from './hooks';

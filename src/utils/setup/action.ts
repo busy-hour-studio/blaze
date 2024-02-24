@@ -1,7 +1,7 @@
-import { BlazeEvent } from '@/event/BlazeEvent';
-import type { Action } from '@/types/action';
-import type { RecordString, RecordUnknown } from '@/types/helper';
-import type { CreateActionOption } from '@/types/service';
+import { BlazeEvent } from '../../event/BlazeEvent';
+import type { Action } from '../../types/action';
+import type { RecordString, RecordUnknown } from '../../types/helper';
+import type { CreateActionOption } from '../../types/service';
 import { createContext } from '../common';
 import { eventHandler } from '../helper/handler';
 

@@ -46,9 +46,6 @@ devDependencies:
   esbuild:
     specifier: ^0.20.1
     version: 0.20.1
-  esbuild-plugin-alias:
-    specifier: ^0.2.1
-    version: 0.2.1
   eslint:
     specifier: ^8.56.0
     version: 8.56.0
@@ -1991,10 +1988,6 @@ packages:
       is-callable: 1.2.7
       is-date-object: 1.0.5
       is-symbol: 1.0.4
-    dev: true
-
-  /esbuild-plugin-alias@0.2.1:
-    resolution: {integrity: sha512-jyfL/pwPqaFXyKnj8lP8iLk6Z0m099uXR45aSN8Av1XD4vhvQutxxPzgA2bTcAwQpa1zCXDcWOlhFgyP3GKqhQ==}
     dev: true
 
   /esbuild@0.19.12:

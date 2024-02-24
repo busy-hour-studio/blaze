@@ -1,5 +1,5 @@
-import type { BlazeContext } from '@/event/BlazeContext';
 import type { Context as HonoCtx } from 'hono';
+import type { BlazeContext } from '../../event/BlazeContext';
 
 export async function getReqBody(honoCtx: HonoCtx) {
   const contentType = honoCtx.req.header('Content-Type');

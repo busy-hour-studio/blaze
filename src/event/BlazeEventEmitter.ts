@@ -1,4 +1,4 @@
-import type { EventListener, EventName } from '@/types/event';
+import type { EventListener, EventName } from '../types/event';
 
 type Option = {
   maxListener?: number | null;

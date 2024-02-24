@@ -1,6 +1,6 @@
-import type { BlazeContext } from '@/event/BlazeContext';
-import type { Blaze } from '@/router';
 import type { Context as HonoCtx } from 'hono';
+import type { BlazeContext } from '../event/BlazeContext';
+import type { Blaze } from '../router';
 import type { Action } from './action';
 
 export type Method =

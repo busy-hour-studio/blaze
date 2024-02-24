@@ -1,7 +1,7 @@
-import type { Blaze } from '@/router';
 import type { OpenAPIDefinitions } from '@asteasolutions/zod-to-openapi/dist/openapi-registry';
 import type { Env, Schema } from 'hono';
 import { mergePath } from 'hono/utils/url';
+import type { Blaze } from '../../router';
 
 export function assignOpenAPIRegistry<
   E extends Env = Env,

@@ -1,5 +1,5 @@
-import type { BlazeContext } from '@/event/BlazeContext';
 import type { ZodObject, ZodRawShape } from 'zod';
+import type { BlazeContext } from '../event/BlazeContext';
 import type { ActionHandler } from './action';
 import type { Random, RecordString, RecordUnknown } from './helper';
 

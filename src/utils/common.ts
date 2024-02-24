@@ -1,7 +1,7 @@
-import { BlazeContext } from '@/event/BlazeContext';
-import type { ActionCallResult } from '@/types/action';
-import type { CreateContextOption } from '@/types/context';
-import type { Service } from '@/types/service';
+import { BlazeContext } from '../event/BlazeContext';
+import type { ActionCallResult } from '../types/action';
+import type { CreateContextOption } from '../types/context';
+import type { Service } from '../types/service';
 
 export function hasOwnProperty<
   Z extends NonNullable<unknown>,
