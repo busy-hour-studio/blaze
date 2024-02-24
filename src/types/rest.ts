@@ -1,6 +1,6 @@
 import type { Context as HonoCtx } from 'hono';
 import type { BlazeContext } from '../event/BlazeContext';
-import type { Blaze } from '../router';
+import type { BaseBlaze } from '../router/BaseBlaze';
 import type { Action } from './action';
 
 export type Method =
@@ -26,7 +26,7 @@ export type RestParam = RestParamOption | RestRoute;
 
 export interface RestHandlerOption {
   action: Omit<Action, 'name'>;
-  router: Blaze;
+  router: BaseBlaze;
 }
 
 export interface RestErrorHandlerOption {

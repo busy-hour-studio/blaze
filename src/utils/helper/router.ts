@@ -1,13 +1,13 @@
 import type { OpenAPIDefinitions } from '@asteasolutions/zod-to-openapi/dist/openapi-registry';
 import type { Env, Schema } from 'hono';
 import { mergePath } from 'hono/utils/url';
-import type { Blaze } from '../../router';
+import type { BaseBlaze } from '../../router/BaseBlaze';
 
 export function assignOpenAPIRegistry<
   E extends Env = Env,
   S extends Schema = NonNullable<unknown>,
   BasePath extends string = '/',
->(blaze: Blaze<E, S, BasePath>, docPath: string, def: OpenAPIDefinitions) {
+>(blaze: BaseBlaze<E, S, BasePath>, docPath: string, def: OpenAPIDefinitions) {
   switch (def.type) {
     case 'component':
       return blaze.openAPIRegistry.registerComponent(

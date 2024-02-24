@@ -9,6 +9,8 @@ import type { Method } from './rest';
 
 export interface CreateBlazeOption {
   router?: Router<[never, RouterRoute]>;
+  path?: string | null;
+  autoStart?: boolean | null;
 }
 
 export interface OpenAPIRequest {
