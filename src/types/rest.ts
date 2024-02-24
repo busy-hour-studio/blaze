@@ -13,6 +13,8 @@ export type Method =
   | 'DELETE'
   | 'USE';
 
+export type ResponseType = 'body' | 'text' | 'json' | 'html';
+
 export type RestRoute = `${Method} /${string}` | `/${string}`;
 
 export interface RestParamOption {
@@ -31,4 +33,9 @@ export interface RestErrorHandlerOption {
   err: Error | unknown;
   ctx: BlazeContext;
   honoCtx: HonoCtx;
+}
+export interface RestResponseHandlerOption {
+  ctx: BlazeContext;
+  honoCtx: HonoCtx;
+  result: unknown;
 }

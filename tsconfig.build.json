@@ -3,5 +3,5 @@
   "compilerOptions": {
     "noEmit": false
   },
-  "exclude": ["commitlint.config.ts", "test", "dist", "example"]
+  "exclude": ["commitlint.config.ts", "test", "dist", "example", "benchmark"]
 }

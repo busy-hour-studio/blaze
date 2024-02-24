@@ -42,13 +42,9 @@ export class BlazeBroker {
     return BlazeEvent.emit(eventName, ...values);
   }
 
-  // eslint-disable-next-line no-use-before-define, @typescript-eslint/no-shadow
-  public async event<T, U = T extends Array<infer T> ? Result<T> : Result<T>>(
-    eventName: EventName,
-    ...values: unknown[]
-  ) {
+  public event(eventName: EventName, ...values: unknown[]) {
     const evtName = [RESERVED_KEYWORD.PREFIX.EVENT, eventName].join('.');
 
-    this.call<T, U>(evtName, ...values);
+    this.event(evtName, ...values);
   }
 }
