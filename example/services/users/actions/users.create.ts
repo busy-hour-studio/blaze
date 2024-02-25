@@ -37,7 +37,7 @@ export const onCreateUser = BlazeCreator.action({
       // Validate request
       //   Use type case since we already know that it's already being validated
       //     if not, it will throw an error, keep in mind we use `throwOnValidationError` option
-      const user = ctx.request.body as UserSchema;
+      const user = (await ctx.request.body()) as UserSchema;
 
       // Throw error when user already exists
       if (USER_DB.has(user.email)) {
@@ -59,7 +59,7 @@ export const onCreateUser = BlazeCreator.action({
     },
   },
   async handler(ctx) {
-    const user = ctx.request.body as UserSchema;
+    const user = (await ctx.request.body()) as UserSchema;
 
     USER_DB.set(user.email, user);
 

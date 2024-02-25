@@ -47,7 +47,7 @@ export class BlazeServiceRest {
       body: null,
       headers: null,
       params: null,
-      validator: this.action.validator || null,
+      validator: this.action.validator ?? null,
       throwOnValidationError: this.action.throwOnValidationError ?? false,
     });
 

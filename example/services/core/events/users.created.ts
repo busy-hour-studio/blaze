@@ -4,7 +4,7 @@ import { USER_DB } from '../../users/utils/constants';
 
 export const onUserCreated = BlazeCreator.event({
   async handler(ctx) {
-    const user = ctx.request.body;
+    const user = await ctx.request.body();
 
     if (!user) return;
 
