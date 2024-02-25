@@ -41,7 +41,7 @@ export class BlazeServiceEvent {
       body,
       headers,
       params,
-      validator: this.validator,
+      validator: this.validator ?? null,
       throwOnValidationError: this.event.throwOnValidationError ?? false,
     });
 

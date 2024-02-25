@@ -32,7 +32,7 @@ export class BlazeContext<
   private $body: Body | null;
   private $params: (Body & Params) | null;
   private $reqParams: Params | null;
-  private $reqHeaders: Headers;
+  private $reqHeaders: Headers | null;
   private $isRest: boolean;
   private $broker: BlazeBroker;
   private $validations: ValidationResult | null;
@@ -44,7 +44,7 @@ export class BlazeContext<
     this.$honoCtx = honoCtx;
     this.$meta = {} as Meta;
     this.$headers = {};
-    this.$reqHeaders = headers ?? ({} as Headers);
+    this.$reqHeaders = headers;
     this.$reqParams = params;
     this.$params = null;
     this.$query = null;
@@ -154,10 +154,13 @@ export class BlazeContext<
     };
   }
 
-  public get query() {
-    if (!this.$honoCtx) return {};
+  public get isRest() {
+    return this.$isRest;
+  }
 
+  public get query() {
     if (this.$query) return this.$query;
+    if (!this.$honoCtx) return {};
 
     const url = new URL(this.$honoCtx.req.url).searchParams;
 
@@ -166,11 +169,29 @@ export class BlazeContext<
     return this.$query;
   }
 
-  public get params() {
+  private get reqParams(): Params {
+    if (this.$reqParams) return this.$reqParams;
+    if (!this.$honoCtx) return {} as Params;
+
+    this.$reqParams = this.$honoCtx.req.param() as Params;
+
+    return this.$reqParams;
+  }
+
+  private get reqHeaders(): Headers {
+    if (this.$reqHeaders) return this.$reqHeaders;
+    if (!this.$honoCtx) return {} as Headers;
+
+    this.$reqHeaders = this.$honoCtx.req.header() as Headers;
+
+    return this.$reqHeaders;
+  }
+
+  public async params() {
     if (this.$params) return this.$params;
 
-    const body = this.$body ?? ({} as Body);
-    const param = this.$reqParams ?? ({} as Params);
+    const body = (await this.getBody()) ?? ({} as Body);
+    const param = this.reqParams as Params;
 
     this.$params = {
       ...body,
@@ -180,16 +201,21 @@ export class BlazeContext<
     return this.$params;
   }
 
-  public get isRest() {
-    return this.$isRest;
+  private async getBody(): Promise<Body> {
+    if (this.$body) return this.$body;
+    if (!this.$honoCtx) return {} as Body;
+
+    this.$body = (await getReqBody(this.$honoCtx)) ?? ({} as Body);
+
+    return this.$body as Body;
   }
 
   public get request() {
     return {
-      headers: this.$reqHeaders,
+      headers: this.reqHeaders,
       query: this.query,
-      params: this.$reqParams,
-      body: this.$body,
+      params: this.reqParams,
+      body: this.getBody.bind(this),
     };
   }
 
@@ -219,34 +245,23 @@ export class BlazeContext<
   ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
     const { honoCtx, validator, throwOnValidationError } = options;
 
-    let body: Body | null = null;
-    let params: Params | null = null;
-    let headers: Headers | null = null;
+    /* eslint-disable prefer-destructuring */
+    let body: Body | null = options.body;
+    let params: Params | null = options.params;
+    let headers: Headers | null = options.headers;
+    /* eslint-enable prefer-destructuring */
+
     const validations: ValidationResult = {
       body: true,
       params: true,
       header: true,
     };
 
-    if (options.body) {
-      body = options.body;
-    } else if (honoCtx) {
-      body = await getReqBody(honoCtx);
-    }
-
-    if (options.params) {
-      params = options.params;
-    } else if (honoCtx) {
-      params = honoCtx.req.param() as Params;
-    }
-
-    if (options.headers) {
-      headers = options.headers;
-    } else if (honoCtx) {
-      headers = honoCtx.req.header() as Headers;
-    }
-
     if (validator?.header) {
+      if (!headers && honoCtx) {
+        headers = honoCtx.req.header() as Headers;
+      }
+
       const result = validateInput(headers, validator.header);
       validations.header = result.success;
 
@@ -261,6 +276,10 @@ export class BlazeContext<
     }
 
     if (validator?.body) {
+      if (!body && honoCtx) {
+        body = (await getReqBody(honoCtx)) as Body;
+      }
+
       const result = validateInput(body, validator.body);
       validations.body = result.success;
 
@@ -275,6 +294,10 @@ export class BlazeContext<
     }
 
     if (validator?.params) {
+      if (!params && honoCtx) {
+        params = honoCtx.req.param() as Params;
+      }
+
       const result = validateInput(params, validator.params);
       validations.params = result.success;
 
