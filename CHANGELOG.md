@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [1.2.2](https://github.com/Busy-Hour-Studio/blaze/compare/v1.2.1...v1.2.2) (2024-02-26)
+
+
+### Bug Fixes
+
+* event broker call ([0a8cdc1](https://github.com/Busy-Hour-Studio/blaze/commit/0a8cdc120427b8557fca6875df760b7a825a0f63))
+
 ## [1.2.1](https://github.com/Busy-Hour-Studio/blaze/compare/v1.2.1-alpha.0...v1.2.1) (2024-02-25)
 
 
