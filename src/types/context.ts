@@ -25,7 +25,7 @@ export interface CreateContextOption<
   params: Params | null;
   headers: Headers | null;
   validator: Validator | null;
-  throwOnValidationError: boolean | null;
+  throwOnValidationError: boolean;
 }
 
 export interface ContextConstructorOption<

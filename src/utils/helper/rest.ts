@@ -1,5 +1,6 @@
 import { Hono } from 'hono';
 import { BlazeError } from '../../errors/BlazeError';
+import type { BlazeContext } from '../../event/BlazeContext';
 import type {
   Method,
   RestErrorHandlerOption,
@@ -7,7 +8,6 @@ import type {
   RestResponseHandlerOption,
   RestRoute,
 } from '../../types/rest';
-import { getStatusCode } from './context';
 
 export function extractRestPath(restRoute: RestRoute) {
   const restPath = restRoute.split(' ');
@@ -29,6 +29,18 @@ export function getRouteHandler(router: Hono, method: Method | null) {
   if (!method) return router.all;
 
   return router[method.toLowerCase() as Lowercase<Method>];
+}
+
+export function getStatusCode(ctx: BlazeContext, defaultStatusCode: number) {
+  const status = ctx.header.get('status');
+
+  let statusCode = Array.isArray(status) ? +status.at(-1)! : +status;
+
+  if (Number.isNaN(statusCode)) {
+    statusCode = defaultStatusCode;
+  }
+
+  return statusCode;
 }
 
 export function handleRestError(options: RestErrorHandlerOption) {

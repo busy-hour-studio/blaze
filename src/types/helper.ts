@@ -1,3 +1,4 @@
+import type { Context as HonoContext } from 'hono';
 import type { ZodObject, ZodRawShape } from 'zod';
 
 export type RecordUnknown = Record<string, unknown>;
@@ -21,4 +22,26 @@ export interface ValidationResult {
   body: boolean;
   params: boolean;
   header: boolean;
+}
+
+export interface ContextData<
+  Body extends RecordUnknown = RecordUnknown,
+  Params extends RecordUnknown = RecordUnknown,
+  Headers extends RecordString = RecordString,
+> {
+  body: Body | null;
+  params: Params | null;
+  headers: Headers | null;
+}
+
+export interface DataValidatorOption<
+  Body extends RecordUnknown = RecordUnknown,
+  Params extends RecordUnknown = RecordUnknown,
+  Headers extends RecordString = RecordString,
+> {
+  data: ContextData<Body, Params, Headers>;
+  schema: ZodObject<ZodRawShape>;
+  honoCtx: HonoContext | null;
+  throwOnValidationError: boolean;
+  validations: ValidationResult;
 }

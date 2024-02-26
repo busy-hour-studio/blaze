@@ -1,12 +1,12 @@
 import type { Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
 import type { ZodObject, ZodRawShape } from 'zod';
-import { BlazeError } from '../errors/BlazeError';
 import type {
   ContextConstructorOption,
   CreateContextOption,
 } from '../types/context';
 import type {
+  ContextData,
   ContextValidation,
   RecordString,
   RecordUnknown,
@@ -14,7 +14,11 @@ import type {
 } from '../types/helper';
 import type { ResponseType } from '../types/rest';
 import { getReqBody } from '../utils/helper/context';
-import { validateInput } from '../utils/helper/validator';
+import {
+  validateBody,
+  validateHeader,
+  validateParams,
+} from '../utils/helper/validator';
 import { BlazeBroker } from './BlazeBroker';
 
 export class BlazeContext<
@@ -60,6 +64,16 @@ export class BlazeContext<
     this.event = this.$broker.event.bind(this.$broker);
   }
 
+  public get broker() {
+    return this.$broker;
+  }
+
+  // Aliases for broker
+  public call = this.broker?.call;
+  public mcall = this.broker?.mcall;
+  public emit = this.broker?.emit;
+  public event = this.broker?.event;
+
   private getMeta(key: keyof Meta): Meta[keyof Meta] {
     const value = this.$meta[key];
 
@@ -88,16 +102,6 @@ export class BlazeContext<
       set: this.setMeta.bind(this),
     };
   }
-
-  public get broker() {
-    return this.$broker;
-  }
-
-  // Aliases
-  public call = this.broker?.call;
-  public mcall = this.broker?.mcall;
-  public emit = this.broker?.emit;
-  public event = this.broker?.event;
 
   private getHeader(): Record<string, string | string[]>;
   private getHeader(key: string): string | string[];
@@ -244,12 +248,11 @@ export class BlazeContext<
     >
   ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
     const { honoCtx, validator, throwOnValidationError } = options;
-
-    /* eslint-disable prefer-destructuring */
-    let body: Body | null = options.body;
-    let params: Params | null = options.params;
-    let headers: Headers | null = options.headers;
-    /* eslint-enable prefer-destructuring */
+    const data: ContextData<Body, Params, Headers> = {
+      body: null,
+      params: null,
+      headers: null,
+    };
 
     const validations: ValidationResult = {
       body: true,
@@ -258,64 +261,40 @@ export class BlazeContext<
     };
 
     if (validator?.header) {
-      if (!headers && honoCtx) {
-        headers = honoCtx.req.header() as Headers;
-      }
-
-      const result = validateInput(headers, validator.header);
-      validations.header = result.success;
-
-      if (result.success) headers = result.data as Headers;
-      else if (!result.success && throwOnValidationError)
-        throw new BlazeError({
-          errors: result.error,
-          message: 'Invalid header',
-          status: 400,
-          name: 'Invalid header',
-        });
-    }
-
-    if (validator?.body) {
-      if (!body && honoCtx) {
-        body = (await getReqBody(honoCtx)) as Body;
-      }
-
-      const result = validateInput(body, validator.body);
-      validations.body = result.success;
-
-      if (result.success) body = result.data as Body;
-      else if (!result.success && throwOnValidationError)
-        throw new BlazeError({
-          errors: result.error,
-          message: 'Invalid body',
-          status: 400,
-          name: 'Invalid body',
-        });
+      validateHeader({
+        data,
+        honoCtx,
+        schema: validator.header,
+        throwOnValidationError,
+        validations,
+      });
     }
 
     if (validator?.params) {
-      if (!params && honoCtx) {
-        params = honoCtx.req.param() as Params;
-      }
+      validateParams({
+        data,
+        honoCtx,
+        schema: validator.params,
+        throwOnValidationError,
+        validations,
+      });
+    }
 
-      const result = validateInput(params, validator.params);
-      validations.params = result.success;
-
-      if (result.success) params = result.data as Params;
-      else if (!result.success && throwOnValidationError)
-        throw new BlazeError({
-          errors: result.error,
-          message: 'Invalid params',
-          status: 400,
-          name: 'Invalid params',
-        });
+    if (validator?.body) {
+      await validateBody({
+        data,
+        honoCtx,
+        schema: validator.body,
+        throwOnValidationError,
+        validations,
+      });
     }
 
     const ctx = new BlazeContext<Meta, Body, Params, Headers>({
-      body,
-      params,
+      body: data.body,
+      params: data.params,
+      headers: data.headers,
       honoCtx,
-      headers,
       validations,
     });
 

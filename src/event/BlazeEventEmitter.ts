@@ -35,6 +35,8 @@ export class BlazeEventEmitter {
     this.$emitter.get(eventName)?.forEach?.((listener) => {
       listener(...values);
     });
+
+    return true;
   }
 
   // eslint-disable-next-line no-use-before-define, @typescript-eslint/no-shadow

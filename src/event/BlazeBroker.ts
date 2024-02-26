@@ -45,6 +45,6 @@ export class BlazeBroker {
   public event(eventName: EventName, ...values: unknown[]) {
     const evtName = [RESERVED_KEYWORD.PREFIX.EVENT, eventName].join('.');
 
-    this.event(evtName, ...values);
+    return this.emit(evtName, ...values);
   }
 }
