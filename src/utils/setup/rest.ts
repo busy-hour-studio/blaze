@@ -3,7 +3,7 @@ import { BlazeError } from '../../errors/BlazeError';
 import type { Action } from '../../types/action';
 import type { Method, RestHandlerOption } from '../../types/rest';
 import type { OpenAPIRequest } from '../../types/router';
-import { createContext } from '../common';
+import { createContext, isNil } from '../common';
 import { eventHandler } from '../helper/handler';
 import {
   extractRestParams,
@@ -77,7 +77,7 @@ export class BlazeServiceRest {
 
     const { result } = restResult;
 
-    if (!result) {
+    if (isNil(result)) {
       return honoCtx.body(null, 204);
     }
 

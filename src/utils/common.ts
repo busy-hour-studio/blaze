@@ -44,6 +44,12 @@ export function toArray<T>(value: T | T[]): T[] {
   return Array.isArray(value) ? value : [value];
 }
 
+export function isNil<T>(
+  value: T | null | undefined
+): value is null | undefined {
+  return value === null || value === undefined;
+}
+
 export async function createContext(
   options: CreateContextOption
 ): Promise<ActionCallResult<BlazeContext>> {
