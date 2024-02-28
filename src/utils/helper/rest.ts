@@ -1,6 +1,5 @@
 import { Hono } from 'hono';
 import { BlazeError } from '../../errors/BlazeError';
-import type { BlazeContext } from '../../event/BlazeContext';
 import type {
   Method,
   RestErrorHandlerOption,
@@ -8,6 +7,7 @@ import type {
   RestResponseHandlerOption,
   RestRoute,
 } from '../../types/rest';
+import { mapToObject } from '../common';
 
 export function extractRestPath(restRoute: RestRoute) {
   const restPath = restRoute.split(' ');
@@ -31,18 +31,6 @@ export function getRouteHandler(router: Hono, method: Method | null) {
   return router[method.toLowerCase() as Lowercase<Method>];
 }
 
-export function getStatusCode(ctx: BlazeContext, defaultStatusCode: number) {
-  const status = ctx.header.get('status');
-
-  let statusCode = Array.isArray(status) ? +status.at(-1)! : +status;
-
-  if (Number.isNaN(statusCode)) {
-    statusCode = defaultStatusCode;
-  }
-
-  return statusCode;
-}
-
 export function handleRestError(options: RestErrorHandlerOption) {
   const { err, ctx, honoCtx } = options;
 
@@ -52,34 +40,35 @@ export function handleRestError(options: RestErrorHandlerOption) {
     });
   }
 
-  const status = getStatusCode(ctx, 500);
+  // eslint-disable-next-line prefer-destructuring
+  const status = ctx.status ?? 500;
 
-  return honoCtx.json(err, {
-    status,
-  });
+  return honoCtx.json(err, status);
 }
+
 export function handleRestResponse(options: RestResponseHandlerOption) {
   const { ctx, honoCtx, result } = options;
-  const status = getStatusCode(ctx, 200);
-  const headers = ctx.header.get();
+  const status = ctx.status ?? undefined;
+  let headers: Record<string, string> | undefined;
 
-  const respOption = {
-    headers,
-    status,
-  };
+  if (status) {
+    headers = ctx.headers.size > 0 ? mapToObject(ctx.headers) : undefined;
+  }
 
-  switch (ctx.response.get()) {
-    case 'json':
-      return honoCtx.json(result, respOption);
+  const args = [result as never, status, headers] as const;
 
+  switch (ctx.response) {
     case 'text':
-      return honoCtx.text(result as string, respOption);
+      return honoCtx.text(...args);
 
     case 'html':
-      return honoCtx.html(result as string, respOption);
+      return honoCtx.html(...args);
 
     case 'body':
+      return honoCtx.body(...args);
+
+    case 'json':
     default:
-      return honoCtx.body(result, respOption);
+      return honoCtx.json(...args);
   }
 }

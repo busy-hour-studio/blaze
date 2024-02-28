@@ -1,6 +1,7 @@
 import { BlazeContext } from '../event/BlazeContext';
 import type { ActionCallResult } from '../types/action';
 import type { CreateContextOption } from '../types/context';
+import type { Random } from '../types/helper';
 import type { Service } from '../types/service';
 
 export function hasOwnProperty<
@@ -9,6 +10,19 @@ export function hasOwnProperty<
   Y extends PropertyKey = PropertyKey,
 >(obj: X, property: Y): obj is X & Record<Y, Z> {
   return Object.hasOwn(obj, property);
+}
+
+export function mapToObject(
+  map: Map<Random, unknown>,
+  valueMapper?: (value: unknown) => unknown
+) {
+  return Array.from(map.entries()).reduce(
+    (acc, [key, value]) => ({
+      ...acc,
+      [key]: valueMapper ? valueMapper(value) : value,
+    }),
+    {}
+  );
 }
 
 export function removeTrailingSlash(path: string) {
