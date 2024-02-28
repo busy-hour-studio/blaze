@@ -4,7 +4,7 @@
   "types": "dist/types/index.d.ts",
   "module": "dist/index.js",
   "type": "module",
-  "version": "1.2.2",
+  "version": "2.0.0",
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/index.js",
