@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.0.0](https://github.com/Busy-Hour-Studio/blaze/compare/v1.2.2...v2.0.0) (2024-02-28)
+
+
+### ⚠ BREAKING CHANGES
+
+* context headers, response, status code
+
+* context headers, response, status code ([e18b2fd](https://github.com/Busy-Hour-Studio/blaze/commit/e18b2fd9d97e1f44ad9cf894df39bda6847bd3fe))
+
+
+### Bug Fixes
+
+* wrong rest response type ([b44c2b3](https://github.com/Busy-Hour-Studio/blaze/commit/b44c2b3b34f73636f2d200c217ced7290155aa09))
+
 ## [1.2.2](https://github.com/Busy-Hour-Studio/blaze/compare/v1.2.1...v1.2.2) (2024-02-26)
 
 
