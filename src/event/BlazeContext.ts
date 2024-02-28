@@ -1,4 +1,5 @@
 import type { Context as HonoCtx } from 'hono';
+import type { StatusCode } from 'hono/utils/http-status';
 import qs from 'node:querystring';
 import type { ZodObject, ZodRawShape } from 'zod';
 import type {
@@ -30,136 +31,49 @@ export class BlazeContext<
   private $honoCtx: HonoCtx<{
     Variables: Meta;
   }> | null;
-  private $meta: Meta;
-  private $headers: Record<string, string | string[]>;
   private $query: qs.ParsedUrlQuery | null;
   private $body: Body | null;
   private $params: (Body & Params) | null;
   private $reqParams: Params | null;
   private $reqHeaders: Headers | null;
-  private $isRest: boolean;
-  private $broker: BlazeBroker;
-  private $validations: ValidationResult | null;
-  private $response: ResponseType;
+
+  public response: ResponseType | null;
+  public status: StatusCode | null;
+  public readonly meta: Map<keyof Meta, Meta[keyof Meta]>;
+  public readonly headers: Map<string, string | string[]>;
+  public readonly validations: ValidationResult | null;
+  public readonly isRest: boolean;
+  public readonly broker: BlazeBroker;
+
+  // Aliases for broker
+  public readonly call: BlazeBroker['call'];
+  public readonly mcall: BlazeBroker['mcall'];
+  public readonly emit: BlazeBroker['emit'];
+  public readonly event: BlazeBroker['event'];
 
   constructor(options: ContextConstructorOption<Body, Params, Headers>) {
     const { honoCtx, body, params, headers, validations } = options;
 
     this.$honoCtx = honoCtx;
-    this.$meta = {} as Meta;
-    this.$headers = {};
     this.$reqHeaders = headers;
     this.$reqParams = params;
     this.$params = null;
     this.$query = null;
     this.$body = body;
-    this.$isRest = !!options.honoCtx;
-    this.$validations = validations;
-    this.$broker = new BlazeBroker();
-    this.$response = 'json';
 
-    this.call = this.$broker.call.bind(this.$broker);
-    this.mcall = this.$broker.mcall.bind(this.$broker);
-    this.emit = this.$broker.emit.bind(this.$broker);
-    this.event = this.$broker.event.bind(this.$broker);
-  }
+    this.response = null;
+    this.status = null;
+    this.meta = new Map<keyof Meta, Meta[keyof Meta]>();
+    this.headers = new Map<string, string | string[]>();
+    this.isRest = !!options.honoCtx;
+    this.validations = validations;
+    this.broker = new BlazeBroker();
 
-  public get broker() {
-    return this.$broker;
-  }
-
-  // Aliases for broker
-  public call = this.broker?.call;
-  public mcall = this.broker?.mcall;
-  public emit = this.broker?.emit;
-  public event = this.broker?.event;
-
-  private getMeta(key: keyof Meta): Meta[keyof Meta] {
-    const value = this.$meta[key];
-
-    if (!this.$honoCtx) return value;
-
-    const honoValue = this.$honoCtx.get(key);
-
-    if (honoValue !== value) {
-      this.$meta[key] = honoValue;
-    }
-
-    return this.$meta[key];
-  }
-
-  private setMeta(key: keyof Meta, value: Meta[keyof Meta]) {
-    this.$meta[key] = value;
-
-    if (!this.$honoCtx) return;
-
-    this.$honoCtx.set(key, value);
-  }
-
-  public get meta() {
-    return {
-      get: this.getMeta.bind(this),
-      set: this.setMeta.bind(this),
-    };
-  }
-
-  private getHeader(): Record<string, string | string[]>;
-  private getHeader(key: string): string | string[];
-  private getHeader(key?: string) {
-    if (key) {
-      const value = this.$headers[key];
-
-      return value;
-    }
-
-    return this.$headers;
-  }
-
-  private setHeader(key: string, value: string, append: boolean = false) {
-    if (!append) {
-      this.$headers[key] = value;
-      return;
-    }
-
-    const currentValue = this.$headers[key];
-    const isArray = Array.isArray(currentValue);
-
-    if (!isArray) {
-      this.$headers[key] = [currentValue, value];
-      return;
-    }
-
-    currentValue.push(value);
-  }
-
-  public get header() {
-    return {
-      get: this.getHeader.bind(this),
-      set: this.setHeader.bind(this),
-    };
-  }
-
-  public get validations() {
-    return this.$validations;
-  }
-
-  private getResponse() {
-    return this.$response;
-  }
-
-  private setResponse(value: ResponseType) {
-    this.$response = value;
-  }
-
-  public get response() {
-    return {
-      get: this.getResponse.bind(this),
-      set: this.setResponse.bind(this),
-    };
-  }
-
-  public get isRest() {
-    return this.$isRest;
+    // Aliases for broker
+    this.call = this.broker.call.bind(this.broker);
+    this.mcall = this.broker.mcall.bind(this.broker);
+    this.emit = this.broker.emit.bind(this.broker);
+    this.event = this.broker.event.bind(this.broker);
   }
 
   public get query() {

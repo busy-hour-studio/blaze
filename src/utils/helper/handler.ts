@@ -17,8 +17,7 @@ export async function eventHandler(
     if (!beforeHooksRes.ok) return beforeHooksRes;
   }
 
-  // eslint-disable-next-line prefer-const
-  let [result, err] = await resolvePromise(action.handler(blazeCtx));
+  const [result, err] = await resolvePromise(action.handler(blazeCtx));
 
   if (err) {
     return {
