@@ -33,8 +33,8 @@ export class Blaze<
   }
 
   public openapi(route: BlazeOpenAPIOption) {
-    let method = route.method ? route.method : 'post';
-    method = method === 'all' ? 'post' : method.toLowerCase();
+    let method = route.method ? route.method.toLowerCase() : 'post';
+    method = method === 'all' ? 'post' : method;
 
     const newRoute = {
       ...route,

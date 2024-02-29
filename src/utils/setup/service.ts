@@ -1,5 +1,4 @@
 import path from 'node:path';
-import { BlazeError } from '../../errors/BlazeError';
 import { BlazeContext } from '../../event/BlazeContext';
 import { BlazeEvent } from '../../event/BlazeEvent';
 import { Blaze } from '../../router';
@@ -33,10 +32,6 @@ export class BlazeService {
 
   constructor(options: ServiceConstructorOption) {
     const { service, blazeCtx, servicePath, app } = options;
-
-    if (typeof service.name === 'undefined' || service.name === null) {
-      throw new BlazeError('Service name is required');
-    }
 
     this.service = service;
     this.servicePath = servicePath;
