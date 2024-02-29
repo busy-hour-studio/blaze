@@ -138,3 +138,7 @@ assets/*
 # Test file
 test.ts
 test.js
+
+# Ignore folder with .gitkeep
+benchmarks/results/*
+!benchmarks/results/.gitkeep

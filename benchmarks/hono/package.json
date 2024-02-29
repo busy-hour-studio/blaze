@@ -1,7 +1,0 @@
-{
-  "type": "module",
-  "dependencies": {
-    "@hono/node-server": "*",
-    "hono": "~4.0.7"
-  }
-}

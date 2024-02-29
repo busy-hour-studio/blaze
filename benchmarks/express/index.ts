@@ -2,15 +2,15 @@ import express from 'express';
 
 const app = express();
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   res.send('');
 });
 
-app.get('/user/:id', function (req, res) {
+app.get('/user/:id', (req, res) => {
   res.send(req.params.id);
 });
 
-app.post('/user', function (req, res) {
+app.post('/user', (req, res) => {
   res.send('');
 });
 
