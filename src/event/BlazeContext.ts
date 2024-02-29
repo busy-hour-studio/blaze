@@ -28,9 +28,7 @@ export class BlazeContext<
   Params extends RecordUnknown = RecordUnknown,
   Headers extends RecordString = RecordString,
 > {
-  private $honoCtx: HonoCtx<{
-    Variables: Meta;
-  }> | null;
+  private readonly $honoCtx: HonoCtx | null;
   private $query: qs.ParsedUrlQuery | null;
   private $body: Body | null;
   private $params: (Body & Params) | null;

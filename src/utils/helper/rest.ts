@@ -1,5 +1,6 @@
-import { Hono } from 'hono';
+import type { StatusCode } from 'hono/utils/http-status';
 import { BlazeError } from '../../errors/BlazeError';
+import type { Blaze } from '../../router/Blaze';
 import type {
   Method,
   RestErrorHandlerOption,
@@ -25,10 +26,33 @@ export function extractRestParams(params: RestParam) {
   return [params.method ?? null, params.path] as const;
 }
 
-export function getRouteHandler(router: Hono, method: Method | null) {
+export function getRouteHandler(router: Blaze, method: Method | null) {
   if (!method) return router.all;
 
   return router[method.toLowerCase() as Lowercase<Method>];
+}
+
+export function getRestResponse(
+  options: Omit<RestResponseHandlerOption, 'honoCtx'>
+): readonly [
+  never,
+  StatusCode | undefined,
+  Record<string, string | string[]> | undefined,
+] {
+  const result = options.result as never;
+  const { status, headers } = options.ctx;
+
+  if (!status) {
+    return [result, undefined, undefined] as const;
+  }
+
+  if (headers.size === 0) {
+    return [result, status, undefined] as const;
+  }
+
+  const resHeaders = mapToObject(options.ctx.headers);
+
+  return [result, status, resHeaders] as const;
 }
 
 export function handleRestError(options: RestErrorHandlerOption) {
@@ -47,15 +71,8 @@ export function handleRestError(options: RestErrorHandlerOption) {
 }
 
 export function handleRestResponse(options: RestResponseHandlerOption) {
-  const { ctx, honoCtx, result } = options;
-  const status = ctx.status ?? undefined;
-  let headers: Record<string, string> | undefined;
-
-  if (status) {
-    headers = ctx.headers.size > 0 ? mapToObject(ctx.headers) : undefined;
-  }
-
-  const args = [result as never, status, headers] as const;
+  const { ctx, honoCtx } = options;
+  const args = getRestResponse(options);
 
   switch (ctx.response) {
     case 'text':

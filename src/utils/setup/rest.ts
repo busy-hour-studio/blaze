@@ -1,4 +1,5 @@
 import type { Context as HonoCtx } from 'hono';
+import type { StatusCode } from 'hono/utils/http-status';
 import { BlazeError } from '../../errors/BlazeError';
 import type { Action } from '../../types/action';
 import type { Method, RestHandlerOption } from '../../types/rest';
@@ -52,15 +53,13 @@ export class BlazeServiceRest {
     });
 
     if (!contextRes.ok) {
-      let status: number = 500;
+      let status: StatusCode = 500;
 
       if (contextRes.error instanceof BlazeError) {
-        status = contextRes.error.status;
+        status = contextRes.error.status as StatusCode;
       }
 
-      return honoCtx.json(contextRes.error, {
-        status,
-      });
+      return honoCtx.json(contextRes.error, status);
     }
 
     const { result: blazeCtx } = contextRes;

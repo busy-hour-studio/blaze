@@ -6,7 +6,7 @@ import type { Action, ActionHandler, Actions } from './action';
 import type { Event, EventActionHandler, Events } from './event';
 
 export interface Service {
-  name: string;
+  name?: string | null;
   version?: number | null;
   actions?: Actions | null;
   events?: Events | null;

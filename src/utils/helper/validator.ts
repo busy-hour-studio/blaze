@@ -1,6 +1,7 @@
 import type { ZodObject, ZodRawShape } from 'zod';
 import { BlazeError } from '../../errors/BlazeError';
 import type { DataValidatorOption } from '../../types/helper';
+import type { Method } from '../../types/rest';
 import { getReqBody } from './context';
 
 export function validateInput<T extends ZodObject<ZodRawShape>>(
@@ -61,7 +62,18 @@ export async function validateBody(options: DataValidatorOption) {
     options;
 
   if (!data.body && honoCtx) {
-    data.body = await getReqBody(honoCtx);
+    const method = honoCtx.req.method.toUpperCase() as Method;
+
+    switch (method) {
+      case 'GET':
+      case 'DELETE':
+      case 'USE':
+        return;
+
+      default:
+        data.body = await getReqBody(honoCtx);
+        break;
+    }
   }
 
   const result = validateInput(data.body, schema);

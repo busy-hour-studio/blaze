@@ -33,7 +33,7 @@ export function getRestPath(service: Service) {
   const version = service.version ? `v${service.version}` : '';
 
   return [version, service.name]
-    .map((val) => removeTrailingSlash(val))
+    .map((val) => (typeof val === 'string' ? removeTrailingSlash(val) : null))
     .filter(Boolean)
     .join('/');
 }
