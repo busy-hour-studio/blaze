@@ -1,17 +1,17 @@
-import type { Env, Schema } from 'hono';
+import type { Env, Schema } from 'hono/types';
 import fs from 'node:fs';
 import { BlazeError } from '../errors/BlazeError';
 import type { CreateBlazeOption } from '../types/router';
 import type { LoadServicesOption } from '../types/service';
 import { loadServices } from '../utils/setup';
 import type { BlazeService } from '../utils/setup/service';
-import { BaseBlaze } from './BaseBlaze';
+import { BlazeRouter } from './BlazeRouter';
 
 export class Blaze<
   E extends Env = Env,
   S extends Schema = NonNullable<unknown>,
   BasePath extends string = '/',
-> extends BaseBlaze<E, S, BasePath> {
+> extends BlazeRouter<E, S, BasePath> {
   public readonly services: BlazeService[] = [];
 
   constructor(options: CreateBlazeOption = {}) {

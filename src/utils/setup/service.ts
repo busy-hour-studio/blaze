@@ -1,7 +1,7 @@
 import path from 'node:path';
 import { BlazeContext } from '../../event/BlazeContext';
 import { BlazeEvent } from '../../event/BlazeEvent';
-import { BaseBlaze } from '../../router/BaseBlaze';
+import { BlazeRouter } from '../../router/BlazeRouter';
 import type { Action } from '../../types/action';
 import type { EventActionHandler } from '../../types/event';
 import type { Method } from '../../types/rest';
@@ -20,12 +20,12 @@ export class BlazeService {
   public readonly servicePath: string;
   public readonly serviceName: string;
   public readonly restPath: string;
-  public readonly mainRouter: BaseBlaze;
+  public readonly mainRouter: BlazeRouter;
   public readonly actions: BlazeServiceAction[];
   public readonly events: BlazeServiceEvent[];
   public readonly rests: BlazeServiceRest[];
   public readonly handlers: EventActionHandler[];
-  public router: BaseBlaze | null;
+  public router: BlazeRouter | null;
 
   private readonly blazeCtx: BlazeContext;
   private readonly service: Service;
@@ -55,7 +55,7 @@ export class BlazeService {
 
   private loadRest(action: Action) {
     if (!this.router) {
-      this.router = new BaseBlaze({
+      this.router = new BlazeRouter({
         router: this.service.router,
       });
     }

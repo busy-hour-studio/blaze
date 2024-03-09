@@ -14,13 +14,13 @@ import {
   OpenApiGeneratorV31,
 } from '@asteasolutions/zod-to-openapi';
 import type { OpenAPIObjectConfig } from '@asteasolutions/zod-to-openapi/dist/v3.0/openapi-generator';
-import type { Env, Schema } from 'hono';
+import type { OpenAPIObjectConfigV31 } from '@asteasolutions/zod-to-openapi/dist/v3.1/openapi-generator';
 import { Hono } from 'hono';
-import type { MergePath, MergeSchemaPath } from 'hono/types';
+import type { Env, MergePath, MergeSchemaPath, Schema } from 'hono/types';
 import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router';
 import { assignOpenAPIRegistry } from '../utils/helper/router';
 
-export class BaseBlaze<
+export class BlazeRouter<
   E extends Env = Env,
   S extends Schema = NonNullable<unknown>,
   BasePath extends string = '/',
@@ -55,7 +55,7 @@ export class BaseBlaze<
   }
 
   public getOpenAPI31Document(
-    config: OpenAPIObjectConfig
+    config: OpenAPIObjectConfigV31
   ): ReturnType<OpenApiGeneratorV31['generateDocument']> {
     const generator = new OpenApiGeneratorV31(this.openAPIRegistry.definitions);
     const document = generator.generateDocument(config);
@@ -85,7 +85,7 @@ export class BaseBlaze<
     });
   }
 
-  public doc31(path: string, config: OpenAPIObjectConfig) {
+  public doc31(path: string, config: OpenAPIObjectConfigV31) {
     this.get(path, (ctx) => {
       try {
         const document = this.getOpenAPI31Document(config);
@@ -104,15 +104,15 @@ export class BaseBlaze<
     SubBasePath extends string,
   >(
     path: SubPath,
-    app?: BaseBlaze<SubEnv, SubSchema, SubBasePath>
-  ): BaseBlaze<
+    app?: BlazeRouter<SubEnv, SubSchema, SubBasePath>
+  ): BlazeRouter<
     E,
     MergeSchemaPath<SubSchema, MergePath<BasePath, SubPath>> & S,
     BasePath
   > {
     super.route(path, app);
 
-    if (!(app instanceof BaseBlaze)) {
+    if (!(app instanceof BlazeRouter)) {
       return this;
     }
 
