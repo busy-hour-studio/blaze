@@ -7,11 +7,11 @@ import type {
   CreateContextOption,
 } from '../types/context';
 import type {
-  ContextData,
+  ContextDataMap,
   ContextValidation,
   RecordString,
   RecordUnknown,
-  ValidationResult,
+  ValidationResultMap,
 } from '../types/helper';
 import type { ResponseType } from '../types/rest';
 import { getReqBody } from '../utils/helper/context';
@@ -39,7 +39,7 @@ export class BlazeContext<
   public status: StatusCode | null;
   public readonly meta: Map<keyof Meta, Meta[keyof Meta]>;
   public readonly headers: Map<string, string | string[]>;
-  public readonly validations: ValidationResult | null;
+  public readonly validations: ValidationResultMap | null;
   public readonly isRest: boolean;
   public readonly broker: BlazeBroker;
 
@@ -172,17 +172,12 @@ export class BlazeContext<
     >
   ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
     const { honoCtx, validator, throwOnValidationError } = options;
-    const data: ContextData<Body, Params, Headers> = {
-      body: null,
-      params: null,
-      headers: null,
-    };
-
-    const validations: ValidationResult = {
-      body: true,
-      params: true,
-      header: true,
-    };
+    const data: ContextDataMap = new Map();
+    const validations: ValidationResultMap = new Map([
+      ['body', true],
+      ['params', true],
+      ['header', true],
+    ]);
 
     if (validator?.header) {
       validateHeader({
@@ -215,9 +210,9 @@ export class BlazeContext<
     }
 
     const ctx = new BlazeContext<Meta, Body, Params, Headers>({
-      body: data.body,
-      params: data.params,
-      headers: data.headers,
+      body: data.get('body') as Body | null,
+      params: data.get('params') as Params | null,
+      headers: data.get('headers') as Headers | null,
       honoCtx,
       validations,
     });

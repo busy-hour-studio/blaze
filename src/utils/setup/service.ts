@@ -69,51 +69,52 @@ export class BlazeService {
   }
 
   private loadServiceActions() {
-    if (!this.service.actions) return [];
+    if (!this.service.actions) return this.actions;
 
-    const actions = Object.entries(this.service.actions).map(
-      ([actionAlias, action]) => {
-        if (action.rest) this.loadRest(action);
+    // eslint-disable-next-line guard-for-in
+    for (const alias in this.service.actions) {
+      const action = this.service.actions[alias];
+      if (action.rest) this.loadRest(action);
 
-        const actionInstace = new BlazeServiceAction({
-          action,
-          actionAlias,
-          serviceName: this.serviceName,
-        });
+      const actionInstance = new BlazeServiceAction({
+        action,
+        actionAlias: alias,
+        serviceName: this.serviceName,
+      });
 
-        this.handlers.push({
-          name: actionInstace.actionName,
-          handler: actionInstace.actionHandler,
-        });
+      this.handlers.push({
+        name: actionInstance.actionName,
+        handler: actionInstance.actionHandler,
+      });
 
-        return actionInstace;
-      }
-    );
+      this.actions.push(actionInstance);
+    }
 
-    return this.actions.concat(actions);
+    return this.actions;
   }
 
   private loadServiceEvents() {
-    if (!this.service.events) return;
+    if (!this.service.events) return this.events;
 
-    const events = Object.entries(this.service.events).map(
-      ([eventAlias, event]) => {
-        const eventInstance = new BlazeServiceEvent({
-          event,
-          eventAlias,
-          serviceName: this.serviceName,
-        });
+    // eslint-disable-next-line guard-for-in
+    for (const alias in this.service.events) {
+      const event = this.service.events[alias];
 
-        this.handlers.push({
-          name: eventInstance.eventName,
-          handler: eventInstance.eventHandler,
-        });
+      const eventInstance = new BlazeServiceEvent({
+        event,
+        eventAlias: alias,
+        serviceName: this.serviceName,
+      });
 
-        return eventInstance;
-      }
-    );
+      this.handlers.push({
+        name: eventInstance.eventName,
+        handler: eventInstance.eventHandler,
+      });
 
-    return this.events.concat(events);
+      this.events.push(eventInstance);
+    }
+
+    return this.events;
   }
 
   private assignRestRoute() {
