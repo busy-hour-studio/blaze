@@ -34,7 +34,7 @@ export async function loadServices(options: LoadServiceOption) {
 
 /**
  * @deprecated use `app.load` instead from the `Blaze` instance
- * will be removed in v1.3.0
+ * will be removed in v3.0.0
  * @param options LoadServiceOption
  */
 export async function initializeServices(options: LoadServiceOption) {
