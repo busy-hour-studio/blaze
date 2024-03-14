@@ -6,11 +6,11 @@ export class BlazeError extends Error {
   public errors: RecordUnknown | unknown | null;
 
   constructor(err: BlazeErrorOption);
-  constructor(message: string, status: number);
-  constructor(err: BlazeErrorOption | string, status?: number) {
+  constructor(message: string, status?: number);
+  constructor(err: BlazeErrorOption | string, status: number = 500) {
     if (typeof err === 'string') {
       super(err);
-      this.status = status ?? 500;
+      this.status = status;
       this.name = 'BlazeError';
       this.errors = null;
     } else {
