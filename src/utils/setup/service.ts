@@ -1,6 +1,6 @@
 import path from 'node:path';
 import { BlazeContext } from '../../event/BlazeContext';
-import { BlazeEvent } from '../../event/BlazeEvent';
+import { BlazeEvent } from '../../event/BlazeEventEmitter';
 import { Blaze } from '../../router';
 import type { Action } from '../../types/action';
 import type { EventActionHandler } from '../../types/event';

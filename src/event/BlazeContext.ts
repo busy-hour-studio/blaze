@@ -41,13 +41,13 @@ export class BlazeContext<
   public readonly headers: Map<string, string | string[]>;
   public readonly validations: ValidationResultMap | null;
   public readonly isRest: boolean;
-  public readonly broker: BlazeBroker;
 
   // Aliases for broker
-  public readonly call: BlazeBroker['call'];
-  public readonly mcall: BlazeBroker['mcall'];
-  public readonly emit: BlazeBroker['emit'];
-  public readonly event: BlazeBroker['event'];
+  public readonly broker = BlazeBroker;
+  public readonly call = BlazeBroker.call.bind(BlazeBroker);
+  public readonly mcall = BlazeBroker.mcall.bind(BlazeBroker);
+  public readonly emit = BlazeBroker.emit.bind(BlazeBroker);
+  public readonly event = BlazeBroker.event.bind(BlazeBroker);
 
   constructor(options: ContextConstructorOption<Body, Params, Headers>) {
     const { honoCtx, body, params, headers, validations } = options;
@@ -65,13 +65,6 @@ export class BlazeContext<
     this.headers = new Map<string, string | string[]>();
     this.isRest = !!options.honoCtx;
     this.validations = validations;
-    this.broker = new BlazeBroker();
-
-    // Aliases for broker
-    this.call = this.broker.call.bind(this.broker);
-    this.mcall = this.broker.mcall.bind(this.broker);
-    this.emit = this.broker.emit.bind(this.broker);
-    this.event = this.broker.event.bind(this.broker);
   }
 
   public get query() {
@@ -170,7 +163,11 @@ export class BlazeContext<
   ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
     const { honoCtx, validator, throwOnValidationError } = options;
 
-    const data: ContextDataMap<Body, Params, Headers> = new Map();
+    const data: ContextDataMap<Body, Params, Headers> = new Map([
+      ['body', options.body],
+      ['params', options.params],
+      ['headers', options.headers],
+    ] as never);
     const validations: ValidationResultMap = new Map([
       ['body', true],
       ['params', true],
