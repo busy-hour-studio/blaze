@@ -41,7 +41,7 @@ export const onCreateUser = BlazeCreator.action({
 
       // Throw error when user already exists
       if (USER_DB.has(user.email)) {
-        throw new BlazeError('User already exists');
+        throw new BlazeError('User already exists', 409);
       }
     },
     async after(ctx, res: UserSchema) {
