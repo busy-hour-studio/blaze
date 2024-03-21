@@ -1,4 +1,4 @@
-import { BlazeEvent } from '../../event/BlazeEvent';
+import { BlazeEvent } from '../../event';
 import type { Action } from '../../types/action';
 import type { RecordString, RecordUnknown } from '../../types/helper';
 import type { CreateActionOption } from '../../types/service';

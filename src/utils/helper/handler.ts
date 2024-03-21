@@ -1,4 +1,4 @@
-import { BlazeContext } from '../../event/BlazeContext';
+import { BlazeContext } from '../../event';
 import { Action, ActionCallResult } from '../../types/action';
 import { resolvePromise } from '../common';
 import { afterActionHookHandler, beforeActionHookHandler } from './hooks';

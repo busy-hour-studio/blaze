@@ -1,6 +1,6 @@
 import type { ResponseConfig } from '@asteasolutions/zod-to-openapi';
 import type { ZodObject, ZodRawShape } from 'zod';
-import type { BlazeContext } from '../event/BlazeContext';
+import type { BlazeContext } from '../event';
 import type { Random, RecordString, RecordUnknown } from './helper';
 import type { ActionHook } from './hooks';
 import type { RestParam } from './rest';

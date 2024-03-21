@@ -2,6 +2,8 @@ import type { Context as HonoCtx } from 'hono';
 import type { StatusCode } from 'hono/utils/http-status';
 import qs from 'node:querystring';
 import type { ZodObject, ZodRawShape } from 'zod';
+// eslint-disable-next-line import/no-cycle
+import { BlazeBroker } from '.';
 import type {
   ContextConstructorOption,
   CreateContextOption,
@@ -20,7 +22,6 @@ import {
   validateHeader,
   validateParams,
 } from '../utils/helper/validator';
-import { BlazeBroker } from './BlazeBroker';
 
 export class BlazeContext<
   Meta extends RecordUnknown = RecordUnknown,
@@ -41,13 +42,13 @@ export class BlazeContext<
   public readonly headers: Map<string, string | string[]>;
   public readonly validations: ValidationResult | null;
   public readonly isRest: boolean;
-  public readonly broker: BlazeBroker;
+  public readonly broker = BlazeBroker;
 
   // Aliases for broker
-  public readonly call: BlazeBroker['call'];
-  public readonly mcall: BlazeBroker['mcall'];
-  public readonly emit: BlazeBroker['emit'];
-  public readonly event: BlazeBroker['event'];
+  public readonly call = BlazeBroker.call.bind(BlazeBroker);
+  public readonly mcall = BlazeBroker.mcall.bind(BlazeBroker);
+  public readonly emit = BlazeBroker.emit.bind(BlazeBroker);
+  public readonly event = BlazeBroker.event.bind(BlazeBroker);
 
   constructor(options: ContextConstructorOption<Body, Params, Headers>) {
     const { honoCtx, body, params, headers, validations } = options;
@@ -65,7 +66,6 @@ export class BlazeContext<
     this.headers = new Map<string, string | string[]>();
     this.isRest = !!options.honoCtx;
     this.validations = validations;
-    this.broker = new BlazeBroker();
 
     // Aliases for broker
     this.call = this.broker.call.bind(this.broker);

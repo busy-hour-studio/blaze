@@ -1,4 +1,5 @@
-import { BlazeContext } from '../event/BlazeContext';
+import { createRequire } from 'module';
+import { BlazeContext } from '../event';
 import type { ActionCallResult } from '../types/action';
 import type { CreateContextOption } from '../types/context';
 import type { Random } from '../types/helper';
@@ -83,3 +84,5 @@ export async function createContext(
     ok: true,
   };
 }
+
+export const require = createRequire(import.meta.url);

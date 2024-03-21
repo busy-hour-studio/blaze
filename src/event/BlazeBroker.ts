@@ -1,8 +1,9 @@
+/* eslint-disable import/no-cycle */
+import { BlazeEvent } from '.';
 import { BlazeError } from '../errors/BlazeError';
 import type { ActionCallResult as Result } from '../types/action';
 import type { EventName } from '../types/event';
 import { RESERVED_KEYWORD } from '../utils/constant';
-import { BlazeEvent } from './BlazeEvent';
 
 export class BlazeBroker {
   public hasListener(eventName: EventName) {
