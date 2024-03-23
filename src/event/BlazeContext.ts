@@ -62,43 +62,43 @@ export class BlazeContext<
 
     this.response = null;
     this.status = null;
-    this.meta = new Map<keyof Meta, Meta[keyof Meta]>();
-    this.headers = new Map<string, string | string[]>();
+    this.meta = new Map();
+    this.headers = new Map();
     this.isRest = !!options.honoCtx;
     this.validations = validations;
-
-    // Aliases for broker
-    this.call = this.broker.call.bind(this.broker);
-    this.mcall = this.broker.mcall.bind(this.broker);
-    this.emit = this.broker.emit.bind(this.broker);
-    this.event = this.broker.event.bind(this.broker);
   }
 
   public get query() {
     if (this.$query) return this.$query;
-    if (!this.$honoCtx) return {};
+    if (!this.$honoCtx) {
+      this.$query = {} as qs.ParsedUrlQuery;
+    } else {
+      const url = new URL(this.$honoCtx.req.url).searchParams;
 
-    const url = new URL(this.$honoCtx.req.url).searchParams;
-
-    this.$query = qs.parse(url.toString());
+      this.$query = qs.parse(url.toString());
+    }
 
     return this.$query;
   }
 
   private get reqParams(): Params {
     if (this.$reqParams) return this.$reqParams;
-    if (!this.$honoCtx) return {} as Params;
-
-    this.$reqParams = this.$honoCtx.req.param() as Params;
+    if (!this.$honoCtx) {
+      this.$reqParams = {} as Params;
+    } else {
+      this.$reqParams = this.$honoCtx.req.param() as Params;
+    }
 
     return this.$reqParams;
   }
 
   private get reqHeaders(): Headers {
     if (this.$reqHeaders) return this.$reqHeaders;
-    if (!this.$honoCtx) return {} as Headers;
-
-    this.$reqHeaders = this.$honoCtx.req.header() as Headers;
+    if (!this.$honoCtx) {
+      this.$reqHeaders = {} as Headers;
+    } else {
+      this.$reqHeaders = this.$honoCtx.req.header() as Headers;
+    }
 
     return this.$reqHeaders;
   }
@@ -119,9 +119,11 @@ export class BlazeContext<
 
   private async getBody(): Promise<Body> {
     if (this.$body) return this.$body;
-    if (!this.$honoCtx) return {} as Body;
-
-    this.$body = (await getReqBody(this.$honoCtx)) ?? ({} as Body);
+    if (!this.$honoCtx) {
+      this.$body = {} as Body;
+    } else {
+      this.$body = (await getReqBody(this.$honoCtx)) ?? ({} as Body);
+    }
 
     return this.$body as Body;
   }
