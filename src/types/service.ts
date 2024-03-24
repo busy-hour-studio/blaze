@@ -1,6 +1,6 @@
 import type { Router } from 'hono/router';
 import type { RouterRoute } from 'hono/types';
-import type { BlazeContext } from '../event/BlazeContext';
+import type { BlazeContext } from '../event';
 import type { Blaze } from '../router';
 import type { Action, ActionHandler, Actions } from './action';
 import type { Event, EventActionHandler, Events } from './event';

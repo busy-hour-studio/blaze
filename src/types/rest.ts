@@ -1,5 +1,5 @@
 import type { Context as HonoCtx } from 'hono';
-import type { BlazeContext } from '../event/BlazeContext';
+import type { BlazeContext } from '../event';
 import type { Blaze } from '../router';
 import type { Action } from './action';
 

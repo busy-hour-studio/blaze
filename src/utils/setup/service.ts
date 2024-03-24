@@ -1,6 +1,5 @@
 import path from 'node:path';
-import { BlazeContext } from '../../event/BlazeContext';
-import { BlazeEvent } from '../../event/BlazeEvent';
+import { BlazeContext, BlazeEvent } from '../../event';
 import { Blaze } from '../../router';
 import type { Action } from '../../types/action';
 import type { EventActionHandler } from '../../types/event';
@@ -67,51 +66,43 @@ export class BlazeService {
   }
 
   private loadServiceActions() {
-    if (!this.service.actions) return [];
+    if (!this.service.actions) return this.actions;
 
-    const actions = Object.entries(this.service.actions).map(
-      ([actionAlias, action]) => {
-        if (action.rest) this.loadRest(action);
+    // eslint-disable-next-line guard-for-in
+    for (const actionAlias in this.service.actions) {
+      const action = this.service.actions[actionAlias];
 
-        const actionInstace = new BlazeServiceAction({
-          action,
-          actionAlias,
-          serviceName: this.serviceName,
-        });
+      if (action.rest) this.loadRest(action);
 
-        this.handlers.push({
-          name: actionInstace.actionName,
-          handler: actionInstace.actionHandler,
-        });
+      const instance = new BlazeServiceAction({
+        action,
+        actionAlias,
+        serviceName: this.serviceName,
+      });
 
-        return actionInstace;
-      }
-    );
+      this.actions.push(instance);
+    }
 
-    return this.actions.concat(actions);
+    return this.actions;
   }
 
   private loadServiceEvents() {
-    if (!this.service.events) return;
+    if (!this.service.events) return this.events;
 
-    const events = Object.entries(this.service.events).map(
-      ([eventAlias, event]) => {
-        const eventInstance = new BlazeServiceEvent({
-          event,
-          eventAlias,
-          serviceName: this.serviceName,
-        });
+    // eslint-disable-next-line guard-for-in
+    for (const eventAlias in this.service.events) {
+      const event = this.service.events[eventAlias];
 
-        this.handlers.push({
-          name: eventInstance.eventName,
-          handler: eventInstance.eventHandler,
-        });
+      const instance = new BlazeServiceEvent({
+        event,
+        eventAlias,
+        serviceName: this.serviceName,
+      });
 
-        return eventInstance;
-      }
-    );
+      this.events.push(instance);
+    }
 
-    return this.events.concat(events);
+    return this.events;
   }
 
   private assignRestRoute() {
@@ -160,9 +151,9 @@ export class BlazeService {
     this.service.onStarted?.(this.blazeCtx);
   }
 
-  public static async create(options: CreateServiceOption) {
+  public static create(options: CreateServiceOption) {
     const servicePath = path.resolve(options.sourcePath, options.servicePath);
-    const serviceFile = await loadService(servicePath);
+    const serviceFile = loadService(servicePath);
 
     const service = new BlazeService({
       app: options.app,

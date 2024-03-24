@@ -1,4 +1,4 @@
-import { BlazeEvent } from '../../event/BlazeEvent';
+import { BlazeEvent } from '../../event';
 import type { Event } from '../../types/event';
 import type {
   ContextValidation,
