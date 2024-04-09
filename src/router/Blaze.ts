@@ -16,6 +16,7 @@ export class Blaze {
   public readonly doc31: BlazeRouter['doc31'];
 
   private readonly blazeCtx: BlazeContext;
+  public readonly fetch: BlazeFetch;
 
   constructor(options: CreateBlazeOption) {
     this.services = [];
@@ -29,6 +30,7 @@ export class Blaze {
       honoCtx: null,
       validations: null,
     });
+    this.fetch = this.router.fetch.bind(this.router) as BlazeFetch;
 
     if (options.path) {
       this.load({
@@ -129,7 +131,7 @@ export class Blaze {
 
       if (
         BlazeDependency.runTime === 'node' &&
-        BlazeDependency.nodeAdapterExist
+        BlazeDependency.moduleExist['node-adapter']
       ) {
         BlazeDependency.nodeAdapter.serve(...args);
       }

@@ -4,13 +4,15 @@ import { require } from '../utils/common';
 export class BlazeDependency {
   private $runTime: 'node' | 'other';
   private $nodeAdapter: typeof import('@hono/node-server') | null;
-  public nodeAdapterExist: boolean;
+  public readonly moduleExist: Record<'node-adapter', boolean>;
 
   constructor() {
     const node = this.loadNodeAdapter();
 
     this.$nodeAdapter = node.adapter;
-    this.nodeAdapterExist = node.isExist;
+    this.moduleExist = {
+      'node-adapter': node.isExist,
+    };
     this.$runTime = this.getRunTime();
   }
 
