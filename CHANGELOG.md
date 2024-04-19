@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.0.2](https://github.com/Busy-Hour-Studio/blaze/compare/v2.0.1...v2.0.2) (2024-04-19)
+
+
+### Bug Fixes
+
+* esm exports ([e308fc4](https://github.com/Busy-Hour-Studio/blaze/commit/e308fc48738c10eda4f39230700f50cc594aa085))
+
 ## [2.0.1](https://github.com/Busy-Hour-Studio/blaze/compare/v2.0.0...v2.0.1) (2024-04-19)
 
 
