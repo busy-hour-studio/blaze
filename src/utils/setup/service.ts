@@ -156,9 +156,9 @@ export class BlazeService {
     this.isStarted = true;
   }
 
-  public static create(options: CreateServiceOption) {
+  public static async create(options: CreateServiceOption) {
     const servicePath = path.resolve(options.sourcePath, options.servicePath);
-    const serviceFile = loadService(servicePath);
+    const serviceFile = await loadService(servicePath);
 
     const service = new BlazeService({
       app: options.app,

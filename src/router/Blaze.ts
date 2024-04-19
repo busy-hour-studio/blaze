@@ -64,7 +64,7 @@ export class Blaze {
    * `autoStart` options will start all the services when all the services are loaded
    */
 
-  public load(options: LoadServicesOption) {
+  public async load(options: LoadServicesOption) {
     // Load all the services
     if (!fs.existsSync(options.path)) {
       throw new BlazeError("Service path doesn't exist");
@@ -72,16 +72,18 @@ export class Blaze {
 
     const serviceFiles = fs.readdirSync(options.path);
 
-    const services = serviceFiles.map((servicePath) => {
-      const service = BlazeService.create({
-        app: this.router,
-        servicePath,
-        blazeCtx: this.blazeCtx,
-        sourcePath: options.path,
-      });
+    const services = await Promise.all(
+      serviceFiles.map((servicePath) => {
+        const service = BlazeService.create({
+          app: this.router,
+          servicePath,
+          blazeCtx: this.blazeCtx,
+          sourcePath: options.path,
+        });
 
-      return service;
-    });
+        return service;
+      })
+    );
 
     this.services.push(...services);
 
