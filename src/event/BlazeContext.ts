@@ -22,6 +22,7 @@ import {
   validateHeader,
   validateParams,
 } from '../utils/helper/validator';
+import { BlazeBroker as Broker } from './BlazeBroker';
 
 export class BlazeContext<
   Meta extends RecordUnknown = RecordUnknown,
@@ -42,13 +43,12 @@ export class BlazeContext<
   public readonly headers: Map<string, string | string[]>;
   public readonly validations: ValidationResult | null;
   public readonly isRest: boolean;
-  public readonly broker = BlazeBroker;
+  public readonly broker: Broker;
 
   // Aliases for broker
-  public readonly call = BlazeBroker.call.bind(BlazeBroker);
-  public readonly mcall = BlazeBroker.mcall.bind(BlazeBroker);
-  public readonly emit = BlazeBroker.emit.bind(BlazeBroker);
-  public readonly event = BlazeBroker.event.bind(BlazeBroker);
+  public readonly call: Broker['call'];
+  public readonly emit: Broker['emit'];
+  public readonly event: Broker['event'];
 
   constructor(options: ContextConstructorOption<Body, Params, Headers>) {
     const { honoCtx, body, params, headers, validations } = options;
@@ -66,6 +66,11 @@ export class BlazeContext<
     this.headers = new Map();
     this.isRest = !!options.honoCtx;
     this.validations = validations;
+
+    this.broker = BlazeBroker;
+    this.call = BlazeBroker.call.bind(BlazeBroker);
+    this.emit = BlazeBroker.emit.bind(BlazeBroker);
+    this.event = BlazeBroker.event.bind(BlazeBroker);
   }
 
   public get query() {
