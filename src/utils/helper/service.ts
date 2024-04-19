@@ -17,6 +17,11 @@ export function loadService(filePath: string) {
     hasOwnProperty<Service>(file, 'default')
   ) {
     service = file.default;
+
+    // In case it exports default twice
+    if (hasOwnProperty<Service>(service, 'default')) {
+      service = service.default;
+    }
   } else {
     service = file;
   }
