@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.0.1](https://github.com/Busy-Hour-Studio/blaze/compare/v2.0.0...v2.0.1) (2024-04-19)
+
+
+### Bug Fixes
+
+* cjs types build ([4ad2f69](https://github.com/Busy-Hour-Studio/blaze/commit/4ad2f697dd13d3be0b485d36cf798720344b87b6))
+* remove redundant binding ([2d3c550](https://github.com/Busy-Hour-Studio/blaze/commit/2d3c550ecd8577bb07cf94d3b462f0a0e4955e93))
+
 ## [2.0.0](https://github.com/Busy-Hour-Studio/blaze/compare/v1.2.2...v2.0.0) (2024-02-28)
 
 
