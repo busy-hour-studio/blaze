@@ -77,7 +77,7 @@ const esmBuild = () =>
     ...commonOptions,
     bundle: true,
     outbase: './src',
-    outdir: './dist',
+    outdir: './dist/esm',
     format: 'esm',
     plugins: [addExtension('.js')],
   });
