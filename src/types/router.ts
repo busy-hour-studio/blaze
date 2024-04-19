@@ -17,7 +17,7 @@ export interface CreateBlazeOption {
 export interface OpenAPIRequest {
   body?: ZodRequestBody;
   params?: AnyZodObject;
-  headers?: AnyZodObject;
+  header?: AnyZodObject;
 }
 
 export interface BlazeOpenAPIOption

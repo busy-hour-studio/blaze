@@ -116,7 +116,7 @@ export class BlazeServiceRest {
     }
 
     if (validator?.header) {
-      request.headers = validator.header;
+      request.header = validator.header;
     }
 
     return {
