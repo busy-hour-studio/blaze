@@ -10,6 +10,9 @@ export type {
   ActionCallRecord,
   ActionEventCallRequest,
   EventCallRecord,
+  ExtractActionHandler,
+  ExtractActionValidator,
+  ExtractEventValidator,
 } from './types/common';
 export type { Event, Events } from './types/event';
 export type {
