@@ -75,6 +75,43 @@ export type ActionEventCallRequest<
   result: Result;
 };
 
+export type ServiceNameExtractor<T extends Service> =
+  NonNullable<T['version']> extends number
+    ? NonNullable<T['name']> extends string
+      ? `v${T['version']}.${T['name']}`
+      : `v${T['version']}`
+    : NonNullable<T['name']> extends string
+      ? `${T['name']}`
+      : never;
+
+export type ActionExtractor<T extends Service> =
+  NonNullable<T['actions']> extends Actions
+    ? {
+        [A in keyof T['actions'] as `${ServiceNameExtractor<T>}.${A extends string ? A : never}`]: ActionEventCallRequest<
+          // @ts-ignore
+          ExtractActionValidator<T, A, 'header'>,
+          ExtractActionValidator<T, A, 'params'>,
+          ExtractActionValidator<T, A, 'body'>,
+          ExtractActionHandler<T, A>
+        >;
+      }
+    : never;
+
+export type EventsExtractor<
+  T extends Service,
+  U extends NonNullable<T['events']> extends Events
+    ? T['events']
+    : never = T['events'],
+> = {
+  [E in keyof U as `${ServiceNameExtractor<T>}.${E extends string ? E : never}`]: ActionEventCallRequest<
+    Record<string, unknown>,
+    Record<string, unknown>,
+    // @ts-ignore
+    ExtractEventValidator<U, E>,
+    unknown
+  >;
+};
+
 export interface ActionCallRecord {
   // Extend the interface with other modules
   // [key: string]: ActionEventCallRequest<
