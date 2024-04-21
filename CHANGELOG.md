@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [2.0.4](https://github.com/Busy-Hour-Studio/blaze/compare/v2.0.3...v2.0.4) (2024-04-21)
+
+
+### Bug Fixes
+
+* esm/cjs service loader ([056f921](https://github.com/Busy-Hour-Studio/blaze/commit/056f921e6bd40cadba17ca9bd5ff2ac7fcc9a6a8))
+
 ## [2.0.3](https://github.com/Busy-Hour-Studio/blaze/compare/v2.0.2...v2.0.3) (2024-04-19)
 
 
