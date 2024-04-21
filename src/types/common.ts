@@ -84,30 +84,22 @@ export type ServiceNameExtractor<T extends Service> =
       ? `${T['name']}`
       : never;
 
-export type ActionsExtractor<T extends Service> =
-  NonNullable<T['actions']> extends Actions
-    ? {
-        [A in keyof T['actions'] as `${ServiceNameExtractor<T>}.${A extends string ? A : never}`]: ActionEventCallRequest<
-          // @ts-ignore
-          ExtractActionValidator<T, A, 'header'>,
-          ExtractActionValidator<T, A, 'params'>,
-          ExtractActionValidator<T, A, 'body'>,
-          ExtractActionHandler<T, A>
-        >;
-      }
-    : never;
+export type ActionsExtractor<T extends Service> = {
+  [A in keyof T['actions'] as `${ServiceNameExtractor<T>}.${A extends string ? A : never}`]: ActionEventCallRequest<
+    // @ts-ignore
+    ExtractActionValidator<T, A, 'header'>,
+    ExtractActionValidator<T, A, 'params'>,
+    ExtractActionValidator<T, A, 'body'>,
+    ExtractActionHandler<T, A>
+  >;
+};
 
-export type EventsExtractor<
-  T extends Service,
-  U extends NonNullable<T['events']> extends Events
-    ? T['events']
-    : never = T['events'],
-> = {
-  [E in keyof U as `${ServiceNameExtractor<T>}.${E extends string ? E : never}`]: ActionEventCallRequest<
+export type EventsExtractor<T extends Service> = {
+  [E in keyof T['events'] as `${ServiceNameExtractor<T>}.${E extends string ? E : never}`]: ActionEventCallRequest<
     Record<string, unknown>,
     Record<string, unknown>,
     // @ts-ignore
-    ExtractEventValidator<U, E>,
+    ExtractEventValidator<T, E>,
     unknown
   >;
 };
