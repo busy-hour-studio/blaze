@@ -96,21 +96,6 @@ export class BlazeBroker {
     U extends ActionEventCallRequest = EventCallRecord[T],
   >(eventName: T, body: U['body']): boolean;
   public event<
-    T extends keyof EventCallRecord | (string & NonNullable<unknown>),
-    // @ts-ignore
-    U extends ActionEventCallRequest = EventCallRecord[T],
-  >(eventName: T, body: U['body'], params: U['params']): boolean;
-  public event<
-    T extends keyof EventCallRecord | (string & NonNullable<unknown>),
-    // @ts-ignore
-    U extends ActionEventCallRequest = EventCallRecord[T],
-  >(
-    eventName: T,
-    body: U['body'],
-    params: U['params'],
-    headers: U['headers']
-  ): boolean;
-  public event<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
   >(eventName: T, ...values: unknown[]) {
     const evtName = [RESERVED_KEYWORD.PREFIX.EVENT, eventName].join('.');
