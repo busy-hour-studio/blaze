@@ -1,4 +1,3 @@
-import { createRequire } from 'module';
 import { BlazeContext } from '../event';
 import type { ActionCallResult } from '../types/action';
 import type { CreateContextOption } from '../types/context';
@@ -85,4 +84,10 @@ export async function createContext(
   };
 }
 
-export const require = createRequire(import.meta.url);
+export function loadFile(id: string): Promise<Random> {
+  if (IS_CJS) {
+    return require(id);
+  }
+
+  return import(id);
+}
