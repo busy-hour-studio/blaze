@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.0-1](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.0-0...v3.0.0-1) (2024-04-21)
+
+
+### Bug Fixes
+
+* v3 event extractor types ([1065587](https://github.com/Busy-Hour-Studio/blaze/commit/1065587a0f480a2bf5fe74176e60511d0741721e))
+
 ## [3.0.0-0](https://github.com/Busy-Hour-Studio/blaze/compare/v2.0.3...v3.0.0-0) (2024-04-21)
 
 
