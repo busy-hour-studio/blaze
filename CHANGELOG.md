@@ -2,6 +2,32 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.0-2](https://github.com/Busy-Hour-Studio/blaze/compare/v2.0.4...v3.0.0-2) (2024-04-21)
+
+
+### ⚠ BREAKING CHANGES
+
+* blaze router flow
+
+* blaze router flow ([9a55c38](https://github.com/Busy-Hour-Studio/blaze/commit/9a55c38efa7397f1bb8a5bfcadd6ffaa733c14d1))
+
+
+### Features
+
+* custom definitions supports ([029c306](https://github.com/Busy-Hour-Studio/blaze/commit/029c30676bb2a4f60976bad6270e633b90d54ab8))
+* exposed fetch method ([acf51a7](https://github.com/Busy-Hour-Studio/blaze/commit/acf51a7e2aba911694f0f24bf9734f2595a15a71))
+* typescript plugin type helper ([1968a1f](https://github.com/Busy-Hour-Studio/blaze/commit/1968a1fa95a7966594710d6085298b4b7d78559c))
+
+
+### Bug Fixes
+
+* esm service loader ([1a4c8d5](https://github.com/Busy-Hour-Studio/blaze/commit/1a4c8d5dec3430b29530d67ae1526e2123a3dca3))
+* exports validator/handler type extractor ([f6439dd](https://github.com/Busy-Hour-Studio/blaze/commit/f6439dd89bdd62f6e1f85b99402d80252a5b10e8))
+* type definitions reference errors ([a9215e5](https://github.com/Busy-Hour-Studio/blaze/commit/a9215e53a39e730f064b8865996aa3e588f9cd37))
+* typos on type names ([752a86c](https://github.com/Busy-Hour-Studio/blaze/commit/752a86c7c5fe0b62dd8daac67fb9552d801ed748))
+* v3 event extractor types ([1f31213](https://github.com/Busy-Hour-Studio/blaze/commit/1f3121340f202b14a904b8c69dbac87268debb3f))
+* wrong imported module ([f856c95](https://github.com/Busy-Hour-Studio/blaze/commit/f856c9597f54f70688d237d1ea81efacd751f2d4))
+
 ## [3.0.0-1](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.0-0...v3.0.0-1) (2024-04-21)
 
 ### Bug Fixes
