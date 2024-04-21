@@ -1,5 +1,5 @@
 import { BlazeError } from '../errors/BlazeError';
-import { require } from '../utils/common';
+import { crossRequire } from '../utils/common';
 
 export class BlazeDependency {
   private $runTime: 'node' | 'other';
@@ -17,7 +17,7 @@ export class BlazeDependency {
   }
 
   public load<T>(pkg: string) {
-    return require(pkg) as T;
+    return crossRequire(pkg) as T;
   }
 
   private getRunTime() {

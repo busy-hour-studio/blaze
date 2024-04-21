@@ -1,3 +1,4 @@
+import { createRequire } from 'node:module';
 import { BlazeContext } from '../event';
 import type { ActionCallResult } from '../types/action';
 import type { CreateContextOption } from '../types/context';
@@ -90,4 +91,14 @@ export function loadFile(id: string): Promise<Random> {
   }
 
   return import(id);
+}
+
+export function crossRequire(id: string): Promise<Random> {
+  if (IS_CJS) {
+    return require(id);
+  }
+
+  const esmRequire = createRequire(import.meta.url);
+
+  return esmRequire(id);
 }
