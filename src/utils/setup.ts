@@ -4,6 +4,10 @@ import { BlazeContext } from '../event';
 import type { LoadServiceOption } from '../types/service';
 import { BlazeService } from './setup/service';
 
+/**
+ * Load all the services from the given path
+ * @deprecated use Blaze.load instead
+ */
 export async function initializeServices(options: LoadServiceOption) {
   const { app, path: sourcePath } = options;
 

@@ -7,17 +7,22 @@
     The main difference is that we don't validate user request 
     immediately, since we will validate it in the BlazeContext instead
 */
-import type { RouteConfig } from '@asteasolutions/zod-to-openapi';
-import {
+import type {
   OpenAPIRegistry,
   OpenApiGeneratorV3,
   OpenApiGeneratorV31,
+  RouteConfig,
 } from '@asteasolutions/zod-to-openapi';
 import type { OpenAPIObjectConfig } from '@asteasolutions/zod-to-openapi/dist/v3.0/openapi-generator';
 import type { Env, Schema } from 'hono';
 import { Hono } from 'hono';
 import type { MergePath, MergeSchemaPath } from 'hono/types';
+import { BlazeDependency } from '../config';
+import { BlazeError } from '../errors/BlazeError';
+import { Logger } from '../errors/Logger';
+import { DependencyModule } from '../types/config';
 import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router';
+import { ExternalModule } from '../utils/constant';
 import { assignOpenAPIRegistry } from '../utils/helper/router';
 
 export class BlazeRouter<
@@ -25,11 +30,20 @@ export class BlazeRouter<
   S extends Schema = NonNullable<unknown>,
   BasePath extends string = '/',
 > extends Hono<E, S, BasePath> {
-  public readonly openAPIRegistry: OpenAPIRegistry;
+  public readonly openAPIRegistry: OpenAPIRegistry | null;
+  private zodApi: DependencyModule[ExternalModule.ZodApi];
 
   constructor(options: CreateBlazeOption) {
     super({ strict: false, router: options.router });
-    this.openAPIRegistry = new OpenAPIRegistry();
+
+    this.zodApi = BlazeDependency.modules[ExternalModule.ZodApi];
+
+    if (!this.zodApi) {
+      this.openAPIRegistry = null;
+      return;
+    }
+
+    this.openAPIRegistry = new this.zodApi.OpenAPIRegistry();
   }
 
   public openapi(route: BlazeOpenAPIOption) {
@@ -41,14 +55,27 @@ export class BlazeRouter<
       method,
     } as RouteConfig;
 
-    this.openAPIRegistry.registerPath(newRoute);
     this.on(route.method, route.path, route.handler);
+
+    if (!this.openAPIRegistry) {
+      Logger.warn(`Please install "${ExternalModule.ZodApi}" to use OpenAPI.`);
+      return;
+    }
+
+    this.openAPIRegistry.registerPath(newRoute);
   }
 
   public getOpenAPIDocument(
     config: OpenAPIObjectConfig
   ): ReturnType<OpenApiGeneratorV3['generateDocument']> {
-    const generator = new OpenApiGeneratorV3(this.openAPIRegistry.definitions);
+    if (!this.zodApi || !this.openAPIRegistry) {
+      Logger.error(`${ExternalModule.ZodApi} is not installed`);
+      throw new BlazeError(`${ExternalModule.ZodApi} is not installed`);
+    }
+
+    const generator = new this.zodApi.OpenApiGeneratorV3(
+      this.openAPIRegistry.definitions
+    );
     const document = generator.generateDocument(config);
 
     return document;
@@ -57,7 +84,14 @@ export class BlazeRouter<
   public getOpenAPI31Document(
     config: OpenAPIObjectConfig
   ): ReturnType<OpenApiGeneratorV31['generateDocument']> {
-    const generator = new OpenApiGeneratorV31(this.openAPIRegistry.definitions);
+    if (!this.zodApi || !this.openAPIRegistry) {
+      Logger.error(`${ExternalModule.ZodApi} is not installed`);
+      throw new BlazeError(`${ExternalModule.ZodApi} is not installed`);
+    }
+
+    const generator = new this.zodApi.OpenApiGeneratorV31(
+      this.openAPIRegistry.definitions
+    );
     const document = generator.generateDocument(config);
 
     return document;
@@ -112,7 +146,7 @@ export class BlazeRouter<
   > {
     super.route(path, app);
 
-    if (!(app instanceof BlazeRouter)) {
+    if (!(app instanceof BlazeRouter) || !app.openAPIRegistry) {
       return this;
     }
 

@@ -12,6 +12,8 @@ export function assignOpenAPIRegistry<
   docPath: string,
   def: OpenAPIDefinitions
 ) {
+  if (!router.openAPIRegistry) return;
+
   switch (def.type) {
     case 'component':
       return router.openAPIRegistry.registerComponent(
