@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.0-3](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.0-2...v3.0.0-3) (2024-04-21)
+
+
+### Bug Fixes
+
+* cross module require ([db4a608](https://github.com/Busy-Hour-Studio/blaze/commit/db4a6089fae7d3815d7d2e1abdc4a9e59110f0d8))
+
 ## [3.0.0-2](https://github.com/Busy-Hour-Studio/blaze/compare/v2.0.4...v3.0.0-2) (2024-04-21)
 
 
