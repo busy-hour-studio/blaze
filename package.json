@@ -4,7 +4,7 @@
   "types": "dist/types/index.d.ts",
   "module": "dist/esm/index.js",
   "type": "module",
-  "version": "2.0.4",
+  "version": "3.0.0-3",
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/index.js",
@@ -23,6 +23,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
+    "@asteasolutions/zod-to-openapi": "^6.3.1",
     "@commitlint/cli": "^17.8.1",
     "@commitlint/config-conventional": "^17.8.1",
     "@hono/node-server": "^1.8.1",
@@ -30,7 +31,6 @@
     "@types/node": "^20.11.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
-    "arg": "^5.0.2",
     "commit-and-tag-version": "^12.2.0",
     "esbuild": "^0.20.1",
     "eslint": "^8.56.0",
@@ -51,7 +51,6 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "@asteasolutions/zod-to-openapi": "^6.3.1",
     "hono": "^4.0.5",
     "zod": "^3.22.4"
   },
@@ -83,6 +82,86 @@
       "types": "./dist/types/index.d.ts",
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
+    },
+    "./event": {
+      "types": "./dist/types/event/index.d.ts",
+      "import": "./dist/esm/event/index.js",
+      "require": "./dist/cjs/event/index.js"
+    },
+    "./event/BlazeBroker": {
+      "types": "./dist/types/event/BlazeBroker.d.ts",
+      "import": "./dist/esm/event/BlazeBroker.js",
+      "require": "./dist/cjs/event/BlazeBroker.js"
+    },
+    "./event/BlazeContext": {
+      "types": "./dist/types/event/BlazeContext.d.ts",
+      "import": "./dist/esm/event/BlazeContext.js",
+      "require": "./dist/cjs/event/BlazeContext.js"
+    },
+    "./event/BlazeEventEmitter": {
+      "types": "./dist/types/event/BlazeEventEmitter.d.ts",
+      "import": "./dist/esm/event/BlazeEventEmitter.js",
+      "require": "./dist/cjs/event/BlazeEventEmitter.js"
+    },
+    "./types": {
+      "types": "./dist/types/types/index.d.ts",
+      "import": "./dist/esm/types/index.js",
+      "require": "./dist/cjs/types/index.js"
+    },
+    "./types/action": {
+      "types": "./dist/types/types/action.d.ts",
+      "import": "./dist/esm/types/action.js",
+      "require": "./dist/cjs/types/action.js"
+    },
+    "./types/common": {
+      "types": "./dist/types/types/common.d.ts",
+      "import": "./dist/esm/types/common.js",
+      "require": "./dist/cjs/types/common.js"
+    },
+    "./types/context": {
+      "types": "./dist/types/types/context.d.ts",
+      "import": "./dist/esm/types/context.js",
+      "require": "./dist/cjs/types/context.js"
+    },
+    "./types/creator": {
+      "types": "./dist/types/types/creator.d.ts",
+      "import": "./dist/esm/types/creator.js",
+      "require": "./dist/cjs/types/creator.js"
+    },
+    "./types/error": {
+      "types": "./dist/types/types/error.d.ts",
+      "import": "./dist/esm/types/error.js",
+      "require": "./dist/cjs/types/error.js"
+    },
+    "./types/event": {
+      "types": "./dist/types/types/event.d.ts",
+      "import": "./dist/esm/types/event.js",
+      "require": "./dist/cjs/types/event.js"
+    },
+    "./types/helper": {
+      "types": "./dist/types/types/helper.d.ts",
+      "import": "./dist/esm/types/helper.js",
+      "require": "./dist/cjs/types/helper.js"
+    },
+    "./types/hooks": {
+      "types": "./dist/types/types/hooks.d.ts",
+      "import": "./dist/esm/types/hooks.js",
+      "require": "./dist/cjs/types/hooks.js"
+    },
+    "./types/rest": {
+      "types": "./dist/types/types/rest.d.ts",
+      "import": "./dist/esm/types/rest.js",
+      "require": "./dist/cjs/types/rest.js"
+    },
+    "./types/router": {
+      "types": "./dist/types/types/router.d.ts",
+      "import": "./dist/esm/types/router.js",
+      "require": "./dist/cjs/types/router.js"
+    },
+    "./types/service": {
+      "types": "./dist/types/types/service.d.ts",
+      "import": "./dist/esm/types/service.js",
+      "require": "./dist/cjs/types/service.js"
     }
   }
 }

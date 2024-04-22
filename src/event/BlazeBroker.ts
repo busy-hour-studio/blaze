@@ -1,7 +1,13 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable import/no-cycle */
 import { BlazeEvent } from '.';
 import { BlazeError } from '../errors/BlazeError';
 import type { ActionCallResult as Result } from '../types/action';
+import type {
+  ActionCallRecord,
+  ActionEventCallRequest,
+  EventCallRecord,
+} from '../types/common';
 import type { EventName } from '../types/event';
 import { RESERVED_KEYWORD } from '../utils/constant';
 
@@ -22,30 +28,78 @@ export class BlazeBroker {
     });
   }
 
-  // eslint-disable-next-line no-use-before-define, @typescript-eslint/no-shadow
-  public async call<T, U = T extends Array<infer T> ? Result<T> : Result<T>>(
-    eventName: EventName,
-    ...values: unknown[]
-  ) {
+  public async call<
+    T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
+    // @ts-ignore
+    U extends ActionEventCallRequest = ActionCallRecord[T],
+    V = Result<U['result']>,
+  >(eventName: T, body: U['body']): Promise<V>;
+  public async call<
+    T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
+    // @ts-ignore
+    U extends ActionEventCallRequest = ActionCallRecord[T],
+    V = Result<U['result']>,
+  >(eventName: T, body: U['body'], params: U['params']): Promise<V>;
+  public async call<
+    T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
+    // @ts-ignore
+    U extends ActionEventCallRequest = ActionCallRecord[T],
+    V = Result<U['result']>,
+  >(
+    eventName: T,
+    body: U['body'],
+    params: U['params'],
+    headers: U['headers']
+  ): Promise<V>;
+  public async call<
+    T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
+    // @ts-ignore
+    U extends ActionEventCallRequest = ActionCallRecord[T],
+    V = Result<U['result']>,
+  >(eventName: T, ...values: unknown[]) {
     this.validateEventName(eventName);
 
-    return BlazeEvent.emitAsync<T, U>(eventName, ...values) as Promise<U[]>;
+    const results = await BlazeEvent.emitAsync<never, V>(eventName, ...values);
+
+    return results[0];
   }
 
-  // eslint-disable-next-line no-use-before-define, @typescript-eslint/no-shadow
-  public async mcall<T, U = T extends Array<infer T> ? Result<T> : Result<T>>(
-    ...args: [eventName: EventName, ...values: unknown[]][]
-  ) {
-    return Promise.all(args.map((values) => this.call<T, U>(...values)));
-  }
-
-  public emit(eventName: EventName, ...values: unknown[]) {
+  public emit<
+    T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
+    // @ts-ignore
+    U extends ActionEventCallRequest = ActionCallRecord[T],
+  >(eventName: T, body: U['body']): boolean;
+  public emit<
+    T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
+    // @ts-ignore
+    U extends ActionEventCallRequest = ActionCallRecord[T],
+  >(eventName: T, body: U['body'], params: U['params']): boolean;
+  public emit<
+    T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
+    // @ts-ignore
+    U extends ActionEventCallRequest = ActionCallRecord[T],
+  >(
+    eventName: T,
+    body: U['body'],
+    params: U['params'],
+    headers: U['headers']
+  ): boolean;
+  public emit<
+    T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
+  >(eventName: T, ...values: unknown[]) {
     return BlazeEvent.emit(eventName, ...values);
   }
 
-  public event(eventName: EventName, ...values: unknown[]) {
+  public event<
+    T extends keyof EventCallRecord | (string & NonNullable<unknown>),
+    // @ts-ignore
+    U extends ActionEventCallRequest = EventCallRecord[T],
+  >(eventName: T, body: U['body']): boolean;
+  public event<
+    T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
+  >(eventName: T, ...values: unknown[]) {
     const evtName = [RESERVED_KEYWORD.PREFIX.EVENT, eventName].join('.');
 
-    return this.emit(evtName, ...values);
+    return BlazeEvent.emit(evtName, ...values);
   }
 }

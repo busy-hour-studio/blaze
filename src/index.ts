@@ -1,3 +1,5 @@
+import './types/validator';
+
 export type {
   Action,
   ActionHandler,
@@ -6,6 +8,14 @@ export type {
   Actions,
   OpenAPIBody,
 } from './types/action';
+export type {
+  ActionCallRecord,
+  ActionEventCallRequest,
+  EventCallRecord,
+  ExtractActionHandler,
+  ExtractActionValidator,
+  ExtractEventValidator,
+} from './types/common';
 export type { Event, Events } from './types/event';
 export type {
   AcceptedAfterHook,
@@ -17,5 +27,5 @@ export type { Service } from './types/service';
 
 export { BlazeCreator } from './creator';
 export { BlazeError } from './errors/BlazeError';
-export * from './router';
+export { Blaze, z } from './router';
 export { initializeServices } from './utils/setup';

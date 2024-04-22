@@ -20,3 +20,8 @@ export const FORM_CONTENT_TYPE = [
   REST_CONTENT_TYPE.FORM,
   REST_CONTENT_TYPE.MULTIPART,
 ] as const;
+
+export enum ExternalModule {
+  NodeAdapter = '@hono/node-server',
+  ZodApi = '@asteasolutions/zod-to-openapi',
+}

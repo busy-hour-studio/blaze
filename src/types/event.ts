@@ -1,7 +1,7 @@
 import type { ZodObject, ZodRawShape } from 'zod';
 import type { BlazeContext } from '../event';
 import type { ActionHandler } from './action';
-import type { Random, RecordString, RecordUnknown } from './helper';
+import type { Random, RecordUnknown } from './helper';
 
 export interface EventActionHandler {
   name: string;
@@ -17,11 +17,8 @@ export type EventName = string;
 export interface EventHandler<
   Meta extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
-  Header extends RecordString = RecordString,
 > {
-  (
-    ctx: BlazeContext<Meta, Params, RecordUnknown, Header>
-  ): Promise<void> | void;
+  (ctx: BlazeContext<Meta, Params>): Promise<void> | void;
 }
 
 export interface Event<
