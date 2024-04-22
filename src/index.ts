@@ -1,3 +1,5 @@
+import './types/validator';
+
 export type {
   Action,
   ActionHandler,

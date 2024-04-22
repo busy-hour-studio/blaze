@@ -1,23 +1,17 @@
-import { BlazeError } from '../errors/BlazeError';
+import { DependencyModule } from '../types/config';
 import { crossRequire } from '../utils/common';
+import { ExternalModule } from '../utils/constant';
 
 export class BlazeDependency {
-  private $runTime: 'node' | 'other';
-  private $nodeAdapter: typeof import('@hono/node-server') | null;
-  public readonly moduleExist: Record<'node-adapter', boolean>;
+  private readonly $runTime: 'node' | 'other';
+  public readonly modules: DependencyModule;
 
   constructor() {
-    const node = this.loadNodeAdapter();
-
-    this.$nodeAdapter = node.adapter;
-    this.moduleExist = {
-      'node-adapter': node.isExist,
+    this.modules = {
+      [ExternalModule.NodeAdapter]: this.loadNodeAdapter(),
+      [ExternalModule.ZodApi]: this.loadZodApi(),
     };
     this.$runTime = this.getRunTime();
-  }
-
-  public load<T>(pkg: string) {
-    return crossRequire<T>(pkg);
   }
 
   private getRunTime() {
@@ -28,25 +22,18 @@ export class BlazeDependency {
 
   private loadNodeAdapter() {
     try {
-      return {
-        isExist: true,
-        adapter:
-          this.load<typeof import('@hono/node-server')>('@hono/node-server'),
-      } as const;
+      return crossRequire(ExternalModule.NodeAdapter);
     } catch {
-      return {
-        isExist: false,
-        adapter: null,
-      } as const;
+      return null;
     }
   }
 
-  public get nodeAdapter() {
-    if (!this.$nodeAdapter) {
-      throw new BlazeError('Node Adapter is not installed');
+  private loadZodApi() {
+    try {
+      return crossRequire(ExternalModule.ZodApi);
+    } catch {
+      return null;
     }
-
-    return this.$nodeAdapter;
   }
 
   public get runTime() {

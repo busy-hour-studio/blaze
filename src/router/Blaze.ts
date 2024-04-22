@@ -3,9 +3,11 @@ import { AddressInfo } from 'node:net';
 import { BlazeDependency } from '../config';
 import { BlazeError } from '../errors/BlazeError';
 import { BlazeContext } from '../event';
+import { DependencyModule } from '../types/config';
 import type { BlazeFetch, CreateBlazeOption } from '../types/router';
 import { LoadServicesOption } from '../types/service';
 import { isNil } from '../utils/common';
+import { ExternalModule } from '../utils/constant';
 import { BlazeService } from '../utils/setup/service';
 import { BlazeRouter } from './BlazeRouter';
 
@@ -14,8 +16,9 @@ export class Blaze {
   public readonly router: BlazeRouter;
   public readonly doc: BlazeRouter['doc'];
   public readonly doc31: BlazeRouter['doc31'];
-
   private readonly blazeCtx: BlazeContext;
+  private readonly adapter: DependencyModule[ExternalModule.NodeAdapter];
+
   public readonly fetch: BlazeFetch;
 
   constructor(options: CreateBlazeOption) {
@@ -30,6 +33,7 @@ export class Blaze {
       honoCtx: null,
       validations: null,
     });
+    this.adapter = BlazeDependency.modules[ExternalModule.NodeAdapter];
     this.fetch = this.router.fetch.bind(this.router) as BlazeFetch;
 
     if (options.path) {
@@ -131,11 +135,8 @@ export class Blaze {
     if (!isNil(port)) {
       const args = this.getServeConfig(port, listener);
 
-      if (
-        BlazeDependency.runTime === 'node' &&
-        BlazeDependency.moduleExist['node-adapter']
-      ) {
-        BlazeDependency.nodeAdapter.serve(...args);
+      if (BlazeDependency.runTime === 'node' && this.adapter) {
+        this.adapter.serve(...args);
       }
 
       if (isNil(listener)) {
