@@ -1,4 +1,7 @@
+import fs from 'node:fs';
 import { createRequire } from 'node:module';
+import path from 'node:path';
+import { BlazeError } from '../errors/BlazeError';
 import { BlazeContext } from '../event';
 import type { ActionCallResult } from '../types/action';
 import type { CreateContextOption } from '../types/context';
@@ -26,6 +29,7 @@ export function mapToObject(
   );
 }
 
+// eslint-disable-next-line @typescript-eslint/no-shadow
 export function removeTrailingSlash(path: string) {
   return path.replace(/^\/+/, '');
 }
@@ -85,16 +89,39 @@ export async function createContext(
   };
 }
 
-export function loadFile(id: string): Promise<Random> {
-  if (IS_CJS) {
+export function isOnCjs() {
+  return typeof module !== 'undefined' && typeof exports !== 'undefined';
+}
+
+export function loadFile<T = Random>(id: string): Promise<T> {
+  if (isOnCjs()) {
     return require(id);
+  }
+
+  if (!fs.existsSync(id)) {
+    throw new BlazeError(`${id} doesn't exist`);
+  }
+
+  if (fs.statSync(id).isDirectory()) {
+    const infos = fs.readdirSync(id);
+    const index = infos.find((info) =>
+      info.match(/index\.[jt]s$|index.[cm][jt]s$/)
+    );
+
+    if (!index) {
+      throw new BlazeError(
+        `No index file found in directory ${id} (expected to find index.[jt]s or index.[cm][jt]s)`
+      );
+    }
+
+    return import(path.join(id, index));
   }
 
   return import(id);
 }
 
-export function crossRequire(id: string): Promise<Random> {
-  if (IS_CJS) {
+export function crossRequire<T = Random>(id: string): T {
+  if (isOnCjs()) {
     return require(id);
   }
 

@@ -71,7 +71,7 @@ const cjsBuild = () =>
     outdir: './dist/cjs',
     format: 'cjs',
     banner: {
-      js: 'const IS_CJS = true',
+      // js: 'const IS_CJS = true',
     },
   });
 
@@ -83,7 +83,7 @@ const esmBuild = () =>
     outdir: './dist/esm',
     format: 'esm',
     banner: {
-      js: 'const IS_CJS = false',
+      // js: 'const IS_CJS = false',
     },
     plugins: [addExtension('.js')],
   });

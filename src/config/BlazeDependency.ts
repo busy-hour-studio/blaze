@@ -17,7 +17,7 @@ export class BlazeDependency {
   }
 
   public load<T>(pkg: string) {
-    return crossRequire(pkg) as T;
+    return crossRequire<T>(pkg);
   }
 
   private getRunTime() {
