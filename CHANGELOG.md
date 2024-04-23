@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.1](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.0...v3.0.1) (2024-04-23)
+
+
+### Bug Fixes
+
+* node serve without port ([9b1d405](https://github.com/Busy-Hour-Studio/blaze/commit/9b1d4058f0551a4fbd32d23dd5a0855eeb0a75ac))
+
 ## [3.0.0](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.0-3...v3.0.0) (2024-04-23)
 
 
