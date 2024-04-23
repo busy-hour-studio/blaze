@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.0](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.0-3...v3.0.0) (2024-04-23)
+
+
+### Features
+
+* optional dependencies ([3383b48](https://github.com/Busy-Hour-Studio/blaze/commit/3383b487e3882547524950b075d9ff0d0838b80b))
+* simplified cjs/esm loader ([5508978](https://github.com/Busy-Hour-Studio/blaze/commit/5508978078ece4870e3122b104d4ef265caebd17))
+
 ## [3.0.0-3](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.0-2...v3.0.0-3) (2024-04-21)
 
 
