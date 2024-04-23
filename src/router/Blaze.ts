@@ -7,7 +7,7 @@ import { DependencyModule } from '../types/config';
 import type { BlazeFetch, CreateBlazeOption } from '../types/router';
 import { LoadServicesOption } from '../types/service';
 import { isNil } from '../utils/common';
-import { ExternalModule } from '../utils/constant';
+import { ExternalModule, PossibleRunTime } from '../utils/constant';
 import { BlazeService } from '../utils/setup/service';
 import { BlazeRouter } from './BlazeRouter';
 
@@ -97,7 +97,7 @@ export class Blaze {
   }
 
   private getServeConfig(
-    port: number,
+    port?: number,
     listener?: (addressInfo: AddressInfo) => void
   ) {
     const config = {
@@ -132,10 +132,10 @@ export class Blaze {
     listener: Listener
   ): [{ fetch: BlazeFetch; port: number }, Listener];
   public serve(port?: number, listener?: (addressInfo: AddressInfo) => void) {
-    if (!isNil(port)) {
-      const args = this.getServeConfig(port, listener);
+    const args = this.getServeConfig(port, listener);
 
-      if (BlazeDependency.runTime === 'node' && this.adapter) {
+    if (!isNil(port)) {
+      if (BlazeDependency.runTime === PossibleRunTime.Node && this.adapter) {
         this.adapter.serve(...args);
       }
 
@@ -144,6 +144,10 @@ export class Blaze {
       }
 
       return args;
+    }
+
+    if (BlazeDependency.runTime === PossibleRunTime.Node && this.adapter) {
+      this.adapter.serve(...args);
     }
 
     return this.router.fetch as BlazeFetch;

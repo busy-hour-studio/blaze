@@ -1,9 +1,9 @@
 import { DependencyModule } from '../types/config';
 import { crossRequire } from '../utils/common';
-import { ExternalModule } from '../utils/constant';
+import { ExternalModule, PossibleRunTime } from '../utils/constant';
 
 export class BlazeDependency {
-  private readonly $runTime: 'node' | 'other';
+  private readonly $runTime: PossibleRunTime;
   public readonly modules: DependencyModule;
 
   constructor() {
@@ -15,9 +15,9 @@ export class BlazeDependency {
   }
 
   private getRunTime() {
-    if (process.versions.node) return 'node';
+    if (process.versions.node) return PossibleRunTime.Node;
 
-    return 'other';
+    return PossibleRunTime.Other;
   }
 
   private loadNodeAdapter() {
