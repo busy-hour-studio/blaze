@@ -1,4 +1,9 @@
-import { BlazeCreator, BlazeError } from '../../../../src';
+import {
+  Action,
+  ActionOpenAPI,
+  ActionValidator,
+  BlazeError,
+} from '../../../../src';
 import { validateUserHeader } from '../hooks/users.validate.header';
 import { validateUserParam } from '../hooks/users.validate.params';
 import { USER_DB } from '../utils/constants';
@@ -9,12 +14,12 @@ import {
   userParamSchema,
 } from '../utils/schemas';
 
-export const getUserValidator = BlazeCreator.action.validator({
+export const getUserValidator = {
   header: userHeaderSchema,
   params: userParamSchema,
-});
+} satisfies ActionValidator;
 
-export const getUserOpenApi = BlazeCreator.action.openapi({
+export const getUserOpenApi = {
   responses: {
     200: {
       description: 'Get user with email N',
@@ -23,9 +28,9 @@ export const getUserOpenApi = BlazeCreator.action.openapi({
       description: 'Bad Request',
     },
   },
-});
+} satisfies ActionOpenAPI;
 
-export const onFindUser = BlazeCreator.action({
+export const onFindUser = {
   // Set the rest route
   rest: 'GET /:email',
   openapi: getUserOpenApi,
@@ -58,4 +63,4 @@ export const onFindUser = BlazeCreator.action({
 
     return user;
   },
-});
+} satisfies Action;

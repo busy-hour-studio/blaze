@@ -1,9 +1,14 @@
-import { BlazeCreator, BlazeError } from '../../../../src';
+import {
+  Action,
+  ActionOpenAPI,
+  ActionValidator,
+  BlazeError,
+} from '../../../../src';
 import { Logger } from '../../../utils/Logger';
 import { USER_DB } from '../utils/constants';
 import { UserSchema, userSchema } from '../utils/schemas';
 
-export const userOpenApi = BlazeCreator.action.openapi({
+export const userOpenApi = {
   body: {
     type: 'application/json',
     description: 'Create a new user',
@@ -17,13 +22,13 @@ export const userOpenApi = BlazeCreator.action.openapi({
       description: 'Bad Request',
     },
   },
-});
+} satisfies ActionOpenAPI;
 
-export const createUserValidator = BlazeCreator.action.validator({
+export const createUserValidator = {
   body: userSchema,
-});
+} satisfies ActionValidator;
 
-export const onCreateUser = BlazeCreator.action({
+export const onCreateUser = {
   // Set the rest route
   rest: 'POST /',
   openapi: userOpenApi,
@@ -65,4 +70,4 @@ export const onCreateUser = BlazeCreator.action({
 
     return user;
   },
-});
+} satisfies Action;
