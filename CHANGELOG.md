@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.2](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.1...v3.0.2) (2024-05-01)
+
+
+### Bug Fixes
+
+* remove utility types ([87b00e0](https://github.com/Busy-Hour-Studio/blaze/commit/87b00e01632062fc79d3a03f2ee6d6fd286286d6))
+
 ## [3.0.1](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.0...v3.0.1) (2024-04-23)
 
 
