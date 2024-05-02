@@ -11,10 +11,11 @@ export function createActionValidator<
 }
 
 export function createAction<
+  Result,
   Meta extends RecordUnknown = RecordUnknown,
   Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
->(action: Action<Meta, Header, Body, Params>) {
+>(action: Action<Result, Meta, Header, Body, Params>) {
   return action;
 }

@@ -26,7 +26,6 @@ ServiceCreator.event = EventCreator;
 
 /**
  * Create Blaze service, action, event, etc.
- * @deprecated use "satifies Service, Action, Event, etc." instead to support type safe code with "@busy-hour/blaze-type"
  */
 export const BlazeCreator = {
   service: ServiceCreator,

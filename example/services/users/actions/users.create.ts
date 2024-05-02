@@ -1,14 +1,9 @@
-import {
-  Action,
-  ActionOpenAPI,
-  ActionValidator,
-  BlazeError,
-} from '../../../../src';
+import { BlazeCreator, BlazeError } from '../../../../src';
 import { Logger } from '../../../utils/Logger';
 import { USER_DB } from '../utils/constants';
 import { UserSchema, userSchema } from '../utils/schemas';
 
-export const userOpenApi = {
+export const userOpenApi = BlazeCreator.action.openapi({
   body: {
     type: 'application/json',
     description: 'Create a new user',
@@ -22,13 +17,13 @@ export const userOpenApi = {
       description: 'Bad Request',
     },
   },
-} satisfies ActionOpenAPI;
+});
 
-export const createUserValidator = {
+export const createUserValidator = BlazeCreator.action.validator({
   body: userSchema,
-} satisfies ActionValidator;
+});
 
-export const onCreateUser = {
+export const onCreateUser = BlazeCreator.action({
   // Set the rest route
   rest: 'POST /',
   openapi: userOpenApi,
@@ -40,7 +35,7 @@ export const onCreateUser = {
       // Validate request
       //   Use type case since we already know that it's already being validated
       //     if not, it will throw an error, keep in mind we use `throwOnValidationError` option
-      const user = (await ctx.request.body()) as UserSchema;
+      const user = await ctx.request.body();
 
       Logger.info('User Payload', user);
 
@@ -64,10 +59,10 @@ export const onCreateUser = {
     },
   },
   async handler(ctx) {
-    const user = (await ctx.request.body()) as UserSchema;
+    const user = await ctx.request.body();
 
     USER_DB.set(user.email, user);
 
     return user;
   },
-} satisfies Action;
+});

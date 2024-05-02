@@ -19,13 +19,14 @@ export interface BlazeActionCreator {
    * ```
    */
   <
+    Result = unknown | void,
     Meta extends RecordUnknown = RecordUnknown,
     Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
     Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
     Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   >(
-    action: Action<Meta, Header, Body, Params>
-  ): Action<Meta, Header, Body, Params>;
+    action: Action<Result, Meta, Header, Body, Params>
+  ): Action<Result, Meta, Header, Body, Params>;
   /**
    * Create a reuseable validator for actions body, params and headers.
    * @example
@@ -158,7 +159,7 @@ export interface BlazeServiceCreator {
    *  })
    * ```
    */
-  (service: Service): Service;
+  <T extends Service>(service: T): Readonly<T>;
   action: BlazeActionCreator;
   event: BlazeEventCreator;
 }

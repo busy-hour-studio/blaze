@@ -1,10 +1,10 @@
-import { Action, ActionOpenAPI, ActionValidator } from '../../../../src';
+import { BlazeCreator } from '../../../../src';
 import { validateUserHeader } from '../hooks/users.validate.header';
 import { USER_DB } from '../utils/constants';
 import { parseLimitPageQuery } from '../utils/helper';
 import { userHeaderSchema } from '../utils/schemas';
 
-export const listUserOpenApi = {
+export const listUserOpenApi = BlazeCreator.action.openapi({
   responses: {
     200: {
       description: 'Get N users',
@@ -13,13 +13,13 @@ export const listUserOpenApi = {
       description: 'Bad Request',
     },
   },
-} satisfies ActionOpenAPI;
+});
 
-export const listUserValidator = {
+export const listUserValidator = BlazeCreator.action.validator({
   header: userHeaderSchema,
-} satisfies ActionValidator;
+});
 
-export const onListUser = {
+export const onListUser = BlazeCreator.action({
   // Set the rest route
   rest: 'GET /',
   openapi: listUserOpenApi,
@@ -47,4 +47,4 @@ export const onListUser = {
       },
     };
   },
-} satisfies Action;
+});

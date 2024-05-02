@@ -20,10 +20,9 @@ export interface ActionHandler<
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Header extends RecordString = RecordString,
+  Result = unknown | void,
 > {
-  (
-    ctx: BlazeContext<Meta, Body, Params, Header>
-  ): Promise<unknown | void> | unknown | void;
+  (ctx: BlazeContext<Meta, Body, Params, Header>): Promise<Result> | Result;
 }
 
 export interface OpenAPIBody {
@@ -41,6 +40,7 @@ export interface ActionOpenAPI {
 }
 
 export interface Action<
+  Result = unknown | void,
   Meta extends RecordUnknown = RecordUnknown,
   Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
@@ -51,7 +51,7 @@ export interface Action<
 > {
   openapi?: ActionOpenAPI | null;
   validator?: ActionValidator<Body, Params, Header> | null;
-  handler: ActionHandler<Meta, FinalBody, FinalParams, FinalHeader>;
+  handler: ActionHandler<Meta, FinalBody, FinalParams, FinalHeader, Result>;
   rest?: RestParam | null;
   hooks?: ActionHook<Meta, FinalBody, FinalParams, FinalHeader, never> | null;
   throwOnValidationError?: boolean | null;
@@ -62,5 +62,5 @@ export type ActionCallResult<U> =
   | { ok: true; result: U };
 
 export interface Actions {
-  [key: string]: Action<RecordUnknown, Random, Random, Random>;
+  [key: string]: Action<Random, RecordUnknown, Random, Random, Random>;
 }

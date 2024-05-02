@@ -1,8 +1,8 @@
-import { Event } from '../../../../src';
+import { BlazeCreator } from '../../../../src';
 import { Logger } from '../../../utils/Logger';
 import { USER_DB } from '../../users/utils/constants';
 
-export const onUserCreated = {
+export const onUserCreated = BlazeCreator.event({
   async handler(ctx) {
     const user = await ctx.request.body();
 
@@ -17,4 +17,4 @@ export const onUserCreated = {
       Logger.warn('User not created successfully', user);
     }
   },
-} satisfies Event;
+});
