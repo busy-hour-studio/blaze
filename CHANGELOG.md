@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.0.3](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.2...v3.0.3) (2024-05-03)
+
+
+### Bug Fixes
+
+* creator handler return type ([f426789](https://github.com/Busy-Hour-Studio/blaze/commit/f4267898c958a01bf8cbf5b3c1762c3011e679dc))
+
 ## [3.0.2](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.1...v3.0.2) (2024-05-01)
 
 
