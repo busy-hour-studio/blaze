@@ -1,25 +1,19 @@
-import {
-  Action,
-  ActionOpenAPI,
-  ActionValidator,
-  BlazeError,
-} from '../../../../src';
+import { BlazeCreator, BlazeError } from '../../../../src';
 import { validateUserHeader } from '../hooks/users.validate.header';
 import { validateUserParam } from '../hooks/users.validate.params';
 import { USER_DB } from '../utils/constants';
 import {
-  UserParamSchema,
   UserSchema,
   userHeaderSchema,
   userParamSchema,
 } from '../utils/schemas';
 
-export const getUserValidator = {
+export const getUserValidator = BlazeCreator.action.validator({
   header: userHeaderSchema,
   params: userParamSchema,
-} satisfies ActionValidator;
+});
 
-export const getUserOpenApi = {
+export const getUserOpenApi = BlazeCreator.action.openapi({
   responses: {
     200: {
       description: 'Get user with email N',
@@ -28,9 +22,9 @@ export const getUserOpenApi = {
       description: 'Bad Request',
     },
   },
-} satisfies ActionOpenAPI;
+});
 
-export const onFindUser = {
+export const onFindUser = BlazeCreator.action({
   // Set the rest route
   rest: 'GET /:email',
   openapi: getUserOpenApi,
@@ -49,7 +43,7 @@ export const onFindUser = {
     },
   },
   async handler(ctx) {
-    const { email } = ctx.request.params as UserParamSchema;
+    const { email } = ctx.request.params;
 
     const user = USER_DB.get(email);
 
@@ -63,4 +57,4 @@ export const onFindUser = {
 
     return user;
   },
-} satisfies Action;
+});
