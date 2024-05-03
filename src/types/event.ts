@@ -24,7 +24,7 @@ export interface EventHandler<
 export interface Event<
   Meta extends RecordUnknown = RecordUnknown,
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  FinalParams extends RecordUnknown = Params['_output'] & RecordUnknown,
+  FinalParams extends RecordUnknown = Params['_output'],
 > {
   validator?: Params | null;
   handler: EventHandler<Meta, FinalParams>;

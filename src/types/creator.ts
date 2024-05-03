@@ -19,11 +19,11 @@ export interface BlazeActionCreator {
    * ```
    */
   <
-    Result = unknown | void,
-    Meta extends RecordUnknown = RecordUnknown,
-    Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-    Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-    Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+    Result,
+    Meta extends RecordUnknown,
+    Header extends ZodObject<ZodRawShape>,
+    Body extends ZodObject<ZodRawShape>,
+    Params extends ZodObject<ZodRawShape>,
   >(
     action: Action<Result, Meta, Header, Body, Params>
   ): Action<Result, Meta, Header, Body, Params>;
@@ -39,9 +39,9 @@ export interface BlazeActionCreator {
    * ```
    */
   validator<
-    Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-    Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-    Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+    Header extends ZodObject<ZodRawShape>,
+    Body extends ZodObject<ZodRawShape>,
+    Params extends ZodObject<ZodRawShape>,
   >(
     validator: ActionValidator<Header, Body, Params>
   ): ActionValidator<Header, Body, Params>;
@@ -79,11 +79,11 @@ export interface BlazeActionCreator {
      * ```
      */
     after<
-      Meta extends RecordUnknown = RecordUnknown,
-      Body extends RecordUnknown = RecordUnknown,
-      Params extends RecordUnknown = RecordUnknown,
-      Header extends RecordString = RecordString,
-      Result = never,
+      Meta extends RecordUnknown,
+      Body extends RecordUnknown,
+      Params extends RecordUnknown,
+      Header extends RecordString,
+      Result,
     >(
       hook: AfterHookHandler<Meta, Body, Params, Header, Result>
     ): AfterHookHandler<Meta, Body, Params, Header, never>;
@@ -100,10 +100,10 @@ export interface BlazeActionCreator {
      * ```
      */
     before<
-      Meta extends RecordUnknown = RecordUnknown,
-      Body extends RecordUnknown = RecordUnknown,
-      Params extends RecordUnknown = RecordUnknown,
-      Header extends RecordString = RecordString,
+      Meta extends RecordUnknown,
+      Body extends RecordUnknown,
+      Params extends RecordUnknown,
+      Header extends RecordString,
     >(
       hook: BeforeHookHandler<Meta, Body, Params, Header>
     ): BeforeHookHandler<Meta, Body, Params, Header>;
@@ -124,10 +124,7 @@ export interface BlazeEventCreator {
    *  })
    * ```
    */
-  <
-    Meta extends RecordUnknown = RecordUnknown,
-    Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  >(
+  <Meta extends RecordUnknown, Params extends ZodObject<ZodRawShape>>(
     event: Event<Meta, Params>
   ): Event<Meta, Params>;
   /**
@@ -140,9 +137,7 @@ export interface BlazeEventCreator {
    *  })
    * ```
    */
-  validator<Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>>(
-    validator: Params
-  ): Params;
+  validator<Params extends ZodObject<ZodRawShape>>(validator: Params): Params;
 }
 
 export interface BlazeServiceCreator {

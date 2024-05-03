@@ -16,11 +16,11 @@ export interface ActionValidator<
 }
 
 export interface ActionHandler<
+  Result = unknown | void,
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Header extends RecordString = RecordString,
-  Result = unknown | void,
 > {
   (ctx: BlazeContext<Meta, Body, Params, Header>): Promise<Result> | Result;
 }
@@ -45,13 +45,13 @@ export interface Action<
   Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  FinalHeader extends RecordString = Header['_output'] & RecordString,
-  FinalBody extends RecordUnknown = Body['_output'] & RecordUnknown,
-  FinalParams extends RecordUnknown = Params['_output'] & RecordUnknown,
+  FinalHeader extends RecordString = Header['_output'],
+  FinalBody extends RecordUnknown = Body['_output'],
+  FinalParams extends RecordUnknown = Params['_output'],
 > {
   openapi?: ActionOpenAPI | null;
   validator?: ActionValidator<Body, Params, Header> | null;
-  handler: ActionHandler<Meta, FinalBody, FinalParams, FinalHeader, Result>;
+  handler: ActionHandler<Result, Meta, FinalBody, FinalParams, FinalHeader>;
   rest?: RestParam | null;
   hooks?: ActionHook<Meta, FinalBody, FinalParams, FinalHeader, never> | null;
   throwOnValidationError?: boolean | null;
