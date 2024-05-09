@@ -52,6 +52,7 @@ export interface Action<
   openapi?: ActionOpenAPI | null;
   validator?: ActionValidator<Body, Params, Header> | null;
   handler: ActionHandler<Result, Meta, FinalBody, FinalParams, FinalHeader>;
+  meta?: Meta | null;
   rest?: RestParam | null;
   hooks?: ActionHook<Meta, FinalBody, FinalParams, FinalHeader, never> | null;
   throwOnValidationError?: boolean | null;

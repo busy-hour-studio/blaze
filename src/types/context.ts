@@ -8,6 +8,7 @@ import type {
 } from './helper';
 
 export interface CreateContextOption<
+  Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Headers extends RecordString = RecordString,
@@ -21,6 +22,7 @@ export interface CreateContextOption<
   > = ContextValidation<BodyValidation, ParamsValidation, HeaderValidation>,
 > {
   honoCtx: HonoCtx | null;
+  meta: Meta | null;
   body: Body | null;
   params: Params | null;
   headers: Headers | null;
@@ -29,11 +31,12 @@ export interface CreateContextOption<
 }
 
 export interface ContextConstructorOption<
+  Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Headers extends RecordString = RecordString,
 > extends Omit<
-    CreateContextOption<Body, Params, Headers>,
+    CreateContextOption<Meta, Body, Params, Headers>,
     'validator' | 'throwOnValidationError'
   > {
   validations: ValidationResult | null;

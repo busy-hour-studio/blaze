@@ -31,6 +31,7 @@ export class BlazeContext<
   Headers extends RecordString = RecordString,
 > {
   private readonly $honoCtx: HonoCtx | null;
+  private readonly $meta: Map<keyof Meta, Meta[keyof Meta]>;
   private $query: qs.ParsedUrlQuery | null;
   private $body: Body | null;
   private $params: (Body & Params) | null;
@@ -39,7 +40,6 @@ export class BlazeContext<
 
   public response: ResponseType | null;
   public status: StatusCode | null;
-  public readonly meta: Map<keyof Meta, Meta[keyof Meta]>;
   public readonly headers: Map<string, string | string[]>;
   public readonly validations: ValidationResult | null;
   public readonly isRest: boolean;
@@ -50,8 +50,8 @@ export class BlazeContext<
   public readonly emit: Broker['emit'];
   public readonly event: Broker['event'];
 
-  constructor(options: ContextConstructorOption<Body, Params, Headers>) {
-    const { honoCtx, body, params, headers, validations } = options;
+  constructor(options: ContextConstructorOption<Meta, Body, Params, Headers>) {
+    const { honoCtx, body, params, headers, validations, meta } = options;
 
     this.$honoCtx = honoCtx;
     this.$reqHeaders = headers;
@@ -62,15 +62,33 @@ export class BlazeContext<
 
     this.response = null;
     this.status = null;
-    this.meta = new Map();
+    this.$meta = meta ? new Map(Object.entries(meta)) : new Map();
     this.headers = new Map();
-    this.isRest = !!options.honoCtx;
+    this.isRest = !!honoCtx;
     this.validations = validations;
 
     this.broker = BlazeBroker;
     this.call = BlazeBroker.call.bind(BlazeBroker);
     this.emit = BlazeBroker.emit.bind(BlazeBroker);
     this.event = BlazeBroker.event.bind(BlazeBroker);
+  }
+
+  public get meta() {
+    const meta = this.$meta;
+
+    return {
+      set<K extends keyof Meta, V extends Meta[K]>(key: K, value: V) {
+        meta.set(key, value);
+
+        return this;
+      },
+      get<K extends keyof Meta, V extends Meta[K]>(key: K) {
+        return meta.get(key) as V;
+      },
+      values: meta.values.bind(meta),
+      forEach: meta.forEach.bind(meta),
+      keys: meta.keys.bind(meta),
+    };
   }
 
   public get query() {
@@ -157,6 +175,7 @@ export class BlazeContext<
     >,
   >(
     options: CreateContextOption<
+      Meta,
       Body,
       Params,
       Headers,
@@ -166,7 +185,7 @@ export class BlazeContext<
       Validator
     >
   ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
-    const { honoCtx, validator, throwOnValidationError } = options;
+    const { honoCtx, validator, throwOnValidationError, meta } = options;
     const data: ContextData<Body, Params, Headers> = {
       body: null,
       params: null,
@@ -214,6 +233,7 @@ export class BlazeContext<
       params: data.params,
       headers: data.headers,
       honoCtx,
+      meta,
       validations,
     });
 
