@@ -62,6 +62,8 @@ export type ActionCallResult<U> =
   | { error: Error; ok: false }
   | { ok: true; result: U };
 
+export type AnyAction = Action<Random, RecordUnknown, Random, Random, Random>;
+
 export interface Actions {
-  [key: string]: Action<Random, RecordUnknown, Random, Random, Random>;
+  [key: string]: AnyAction;
 }

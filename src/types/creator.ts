@@ -1,9 +1,9 @@
 import type { ZodObject, ZodRawShape } from 'zod';
-import type { Action, ActionOpenAPI, ActionValidator } from './action';
-import type { Event } from './event';
+import type { Action, ActionOpenAPI, Actions, ActionValidator } from './action';
+import type { Event, Events } from './event';
 import type { RecordString, RecordUnknown } from './helper';
 import type { AfterHookHandler, BeforeHookHandler } from './hooks';
-import type { Service } from './service';
+import { Service } from './service';
 
 export interface BlazeActionCreator {
   /**
@@ -154,7 +154,14 @@ export interface BlazeServiceCreator {
    *  })
    * ```
    */
-  <T extends Service>(service: T): Readonly<T>;
+  <
+    N extends string,
+    A extends Actions,
+    E extends Events,
+    S extends Service<N, A, E>,
+  >(
+    service: S
+  ): Readonly<S>;
   action: BlazeActionCreator;
   event: BlazeEventCreator;
 }
