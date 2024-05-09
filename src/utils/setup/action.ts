@@ -29,6 +29,7 @@ export class BlazeServiceAction {
       headers,
       params,
       validator: this.action.validator ?? null,
+      meta: this.action.meta ?? null,
       throwOnValidationError: this.action.throwOnValidationError ?? false,
     });
 

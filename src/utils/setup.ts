@@ -20,6 +20,7 @@ export async function initializeServices(options: LoadServiceOption) {
     params: null,
     headers: null,
     honoCtx: null,
+    meta: null,
     validations: null,
   });
 
