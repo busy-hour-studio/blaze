@@ -5,11 +5,15 @@ import type { BlazeRouter } from '../router';
 import type { Action, ActionHandler, Actions } from './action';
 import type { Event, EventActionHandler, Events } from './event';
 
-export interface Service {
-  name?: string | null;
+export interface Service<
+  N extends string = string,
+  A extends Actions = Actions,
+  E extends Events = Events,
+> {
+  name?: N | null;
   version?: number | null;
-  actions?: Actions | null;
-  events?: Events | null;
+  actions?: A | null;
+  events?: E | null;
   onCreated?: ActionHandler | null;
   onStarted?: ActionHandler | null;
   onStopped?(handlers: EventActionHandler[]): void;

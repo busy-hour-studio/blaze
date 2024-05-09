@@ -31,6 +31,8 @@ export interface Event<
   throwOnValidationError?: boolean | null;
 }
 
+export type AnyEvent = Event<RecordUnknown, Random>;
+
 export interface Events {
-  [key: string]: Event<RecordUnknown, Random>;
+  [key: string]: AnyEvent;
 }
