@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.0](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.3...v3.1.0) (2024-05-09)
+
+
+### Features
+
+* action meta initializer ([ba88d21](https://github.com/Busy-Hour-Studio/blaze/commit/ba88d21bd37e3e06a76b4251961f37dd85f95866))
+
+
+### Bug Fixes
+
+* service creator type definitions ([d5d93a5](https://github.com/Busy-Hour-Studio/blaze/commit/d5d93a5a3f7277a00e8ed57d73ea9872c61cc3fc))
+
 ## [3.0.3](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.2...v3.0.3) (2024-05-03)
 
 
