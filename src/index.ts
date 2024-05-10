@@ -24,5 +24,5 @@ export type { Service } from './types/service';
 
 export { BlazeCreator } from './creator';
 export { BlazeError } from './errors/BlazeError';
-export { Blaze, z } from './router';
+export { Blaze, BlazeRouter, z } from './router';
 export { initializeServices } from './utils/setup';

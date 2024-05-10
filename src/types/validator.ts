@@ -22,8 +22,6 @@ interface ZodOpenApiFullMetadata<T = Random> {
 
 declare module 'zod' {
   interface ZodTypeDef {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
     openapi?: ZodOpenApiFullMetadata;
   }
 

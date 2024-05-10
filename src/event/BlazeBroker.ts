@@ -9,6 +9,7 @@ import type {
   EventCallRecord,
 } from '../types/common';
 import type { EventName } from '../types/event';
+import type { Random, RecordString, RecordUnknown } from '../types/helper';
 import { RESERVED_KEYWORD } from '../utils/constant';
 
 export class BlazeBroker {
@@ -30,20 +31,35 @@ export class BlazeBroker {
 
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-ignore
-    U extends ActionEventCallRequest = ActionCallRecord[T],
+    U extends ActionEventCallRequest<
+      RecordString,
+      RecordUnknown,
+      Random,
+      Random
+      // @ts-expect-error
+    > = ActionCallRecord[T],
     V = Result<U['result']>,
   >(eventName: T, body: U['body']): Promise<V>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-ignore
-    U extends ActionEventCallRequest = ActionCallRecord[T],
+    U extends ActionEventCallRequest<
+      RecordString,
+      RecordUnknown,
+      Random,
+      Random
+      // @ts-expect-error
+    > = ActionCallRecord[T],
     V = Result<U['result']>,
   >(eventName: T, body: U['body'], params: U['params']): Promise<V>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-ignore
-    U extends ActionEventCallRequest = ActionCallRecord[T],
+    U extends ActionEventCallRequest<
+      RecordString,
+      RecordUnknown,
+      Random,
+      Random
+      // @ts-expect-error
+    > = ActionCallRecord[T],
     V = Result<U['result']>,
   >(
     eventName: T,
@@ -53,8 +69,13 @@ export class BlazeBroker {
   ): Promise<V>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-ignore
-    U extends ActionEventCallRequest = ActionCallRecord[T],
+    U extends ActionEventCallRequest<
+      RecordString,
+      RecordUnknown,
+      Random,
+      Random
+      // @ts-expect-error
+    > = ActionCallRecord[T],
     V = Result<U['result']>,
   >(eventName: T, ...values: unknown[]) {
     this.validateEventName(eventName);
@@ -66,18 +87,33 @@ export class BlazeBroker {
 
   public emit<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-ignore
-    U extends ActionEventCallRequest = ActionCallRecord[T],
+    U extends ActionEventCallRequest<
+      RecordString,
+      RecordUnknown,
+      Random,
+      Random
+      // @ts-expect-error
+    > = ActionCallRecord[T],
   >(eventName: T, body: U['body']): boolean;
   public emit<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-ignore
-    U extends ActionEventCallRequest = ActionCallRecord[T],
+    U extends ActionEventCallRequest<
+      RecordString,
+      RecordUnknown,
+      Random,
+      Random
+      // @ts-expect-error
+    > = ActionCallRecord[T],
   >(eventName: T, body: U['body'], params: U['params']): boolean;
   public emit<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-ignore
-    U extends ActionEventCallRequest = ActionCallRecord[T],
+    U extends ActionEventCallRequest<
+      RecordString,
+      RecordUnknown,
+      Random,
+      Random
+      // @ts-expect-error
+    > = ActionCallRecord[T],
   >(
     eventName: T,
     body: U['body'],
@@ -92,8 +128,13 @@ export class BlazeBroker {
 
   public event<
     T extends keyof EventCallRecord | (string & NonNullable<unknown>),
-    // @ts-ignore
-    U extends ActionEventCallRequest = EventCallRecord[T],
+    U extends ActionEventCallRequest<
+      RecordString,
+      RecordUnknown,
+      Random,
+      Random
+      // @ts-expect-error
+    > = EventCallRecord[T],
   >(eventName: T, body: U['body']): boolean;
   public event<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),

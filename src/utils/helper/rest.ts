@@ -67,7 +67,7 @@ export function handleRestError(options: RestErrorHandlerOption) {
   // eslint-disable-next-line prefer-destructuring
   const status = ctx.status ?? 500;
 
-  return honoCtx.json(err, status);
+  return honoCtx.json(err as Error, status);
 }
 
 export function handleRestResponse(options: RestResponseHandlerOption) {

@@ -15,6 +15,7 @@ export class BlazeDependency {
   }
 
   private getRunTime() {
+    if (process.versions.bun) return PossibleRunTime.Other;
     if (process.versions.node) return PossibleRunTime.Node;
 
     return PossibleRunTime.Other;

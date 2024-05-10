@@ -57,10 +57,7 @@ export class BlazeRouter<
 
     this.on(route.method, route.path, route.handler);
 
-    if (!this.openAPIRegistry) {
-      Logger.warn(`Please install "${ExternalModule.ZodApi}" to use OpenAPI.`);
-      return;
-    }
+    if (!this.openAPIRegistry) return;
 
     this.openAPIRegistry.registerPath(newRoute);
   }
@@ -114,7 +111,7 @@ export class BlazeRouter<
 
         return ctx.json(document);
       } catch (e) {
-        return ctx.json(e, 500);
+        return ctx.json(e as Error, 500);
       }
     });
   }
@@ -126,7 +123,7 @@ export class BlazeRouter<
 
         return ctx.json(document);
       } catch (e) {
-        return ctx.json(e, 500);
+        return ctx.json(e as Error, 500);
       }
     });
   }
