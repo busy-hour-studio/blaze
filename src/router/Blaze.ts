@@ -37,12 +37,12 @@ export class Blaze {
     this.adapter = BlazeDependency.modules[ExternalModule.NodeAdapter];
     this.fetch = this.router.fetch.bind(this.router) as BlazeFetch;
 
-    if (options.path) {
-      this.load({
-        path: options.path,
-        autoStart: options.autoStart,
-      });
-    }
+    if (!options.path) return;
+
+    this.load({
+      path: options.path,
+      autoStart: options.autoStart,
+    });
   }
 
   /**
@@ -102,7 +102,7 @@ export class Blaze {
     listener?: (addressInfo: AddressInfo) => void
   ) {
     const config = {
-      fetch: this.router.fetch as BlazeFetch,
+      fetch: this.fetch,
       port,
     };
 
@@ -151,6 +151,6 @@ export class Blaze {
       this.adapter.serve(...args);
     }
 
-    return this.router.fetch as BlazeFetch;
+    return this.fetch as BlazeFetch;
   }
 }
