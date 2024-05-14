@@ -3,19 +3,20 @@ import type { Action, ActionValidator } from '../types/action';
 import type { RecordUnknown } from '../types/helper';
 
 export function createActionValidator<
-  Header extends ZodObject<ZodRawShape>,
-  Body extends ZodObject<ZodRawShape>,
-  Params extends ZodObject<ZodRawShape>,
->(validator: ActionValidator<Header, Body, Params>) {
+  H extends ZodObject<ZodRawShape>,
+  B extends ZodObject<ZodRawShape>,
+  P extends ZodObject<ZodRawShape>,
+>(validator: ActionValidator<H, B, P>) {
   return validator;
 }
 
 export function createAction<
-  Result,
-  Meta extends RecordUnknown,
-  Header extends ZodObject<ZodRawShape>,
-  Body extends ZodObject<ZodRawShape>,
-  Params extends ZodObject<ZodRawShape>,
->(action: Action<Result, Meta, Header, Body, Params>) {
+  R,
+  HR,
+  M extends RecordUnknown,
+  H extends ZodObject<ZodRawShape>,
+  B extends ZodObject<ZodRawShape>,
+  P extends ZodObject<ZodRawShape>,
+>(action: Action<R, HR, M, H, B, P>) {
   return action;
 }

@@ -9,8 +9,8 @@ export function createEventValidator<Params extends ZodObject<ZodRawShape>>(
 }
 
 export function createEvent<
-  Meta extends RecordUnknown,
-  Params extends ZodObject<ZodRawShape>,
->(event: Event<Meta, Params>) {
+  M extends RecordUnknown,
+  P extends ZodObject<ZodRawShape>,
+>(event: Event<M, P>) {
   return event;
 }

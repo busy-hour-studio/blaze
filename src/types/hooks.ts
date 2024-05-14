@@ -1,5 +1,5 @@
 import type { BlazeContext } from '../event';
-import type { RecordString, RecordUnknown } from './helper';
+import type { Random, RecordString, RecordUnknown } from './helper';
 
 export interface BeforeHookHandler<
   Meta extends RecordUnknown = RecordUnknown,
@@ -10,18 +10,33 @@ export interface BeforeHookHandler<
   (ctx: BlazeContext<Meta, Body, Params, Header>): Promise<void> | void;
 }
 
+export type AnyBeforeHookHandler = BeforeHookHandler<
+  Random,
+  Random,
+  Random,
+  Random
+>;
+
 export interface AfterHookHandler<
+  Result = unknown | void,
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Header extends RecordString = RecordString,
-  Result = never,
 > {
   (
     ctx: BlazeContext<Meta, Body, Params, Header>,
-    res: Result
-  ): Promise<unknown | void> | unknown | void;
+    res: never
+  ): Promise<Result> | Result;
 }
+
+export type AnyAfterHookHandler = AfterHookHandler<
+  Random,
+  Random,
+  Random,
+  Random,
+  Random
+>;
 
 export type AcceptedBeforeHook<
   Meta extends RecordUnknown = RecordUnknown,
@@ -32,36 +47,56 @@ export type AcceptedBeforeHook<
   | BeforeHookHandler<Meta, Body, Params, Header>
   | BeforeHookHandler<Meta, Body, Params, Header>[];
 
+export type AnyBeforeHook = AcceptedBeforeHook<Random, Random, Random, Random>;
+
 export type AcceptedAfterHook<
+  Result = unknown | void,
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Header extends RecordString = RecordString,
-  Result = never,
 > =
-  | AfterHookHandler<Meta, Body, Params, Header, Result>
-  | AfterHookHandler<Meta, Body, Params, Header, Result>[];
+  | AfterHookHandler<Result, Meta, Body, Params, Header>
+  | AfterHookHandler<Result, Meta, Body, Params, Header>[];
+
+export type AnyAfterHook = AcceptedAfterHook<
+  Random,
+  Random,
+  Random,
+  Random,
+  Random
+>;
 
 export interface ActionHook<
-  Meta extends RecordUnknown = RecordUnknown,
-  Body extends RecordUnknown = RecordUnknown,
-  Params extends RecordUnknown = RecordUnknown,
-  Header extends RecordString = RecordString,
-  Result = never,
+  BeforeHook extends AcceptedBeforeHook<
+    Random,
+    Random,
+    Random,
+    Random
+  > = AcceptedBeforeHook,
+  AfterHook extends AcceptedAfterHook<
+    Random,
+    Random,
+    Random,
+    Random,
+    Random
+  > = AcceptedAfterHook,
 > {
-  before?: AcceptedBeforeHook<Meta, Body, Params, Header> | null;
-  after?: AcceptedAfterHook<Meta, Body, Params, Header, Result> | null;
+  before?: BeforeHook | null;
+  after?: AfterHook | null;
 }
 
+export type AnyActionHook = ActionHook<Random, Random>;
+
 export interface AfterHookHandlerOption<
+  Result = unknown | void,
   Meta extends RecordUnknown = RecordUnknown,
   Body extends RecordUnknown = RecordUnknown,
   Params extends RecordUnknown = RecordUnknown,
   Header extends RecordString = RecordString,
-  Result = never,
 > {
   result: unknown;
-  hooks: AcceptedAfterHook<Meta, Body, Params, Header, Result>;
+  hooks: AcceptedAfterHook<Result, Meta, Body, Params, Header>;
   blazeCtx: BlazeContext<Meta, Body, Params, Header>;
 }
 
