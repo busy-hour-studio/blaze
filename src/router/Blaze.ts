@@ -4,7 +4,11 @@ import { BlazeDependency } from '../config';
 import { BlazeError } from '../errors/BlazeError';
 import { BlazeContext } from '../event';
 import { DependencyModule } from '../types/config';
-import type { BlazeFetch, CreateBlazeOption } from '../types/router';
+import type {
+  BlazeFetch,
+  CreateBlazeOption,
+  ServeConfig,
+} from '../types/router';
 import { LoadServicesOption } from '../types/service';
 import { isNil } from '../utils/common';
 import { ExternalModule, PossibleRunTime } from '../utils/constant';
@@ -103,6 +107,7 @@ export class Blaze {
   ) {
     const config = {
       fetch: this.fetch,
+      reusePort: true,
       port,
     };
 
@@ -123,15 +128,11 @@ export class Blaze {
    * })
    * ```
    */
-  public serve(): BlazeFetch;
-  public serve(port: number): {
-    fetch: BlazeFetch;
-    port: number;
-  };
+  public serve(port?: number): ServeConfig;
   public serve<Listener extends (addressInfo: AddressInfo) => void>(
     port: number,
     listener: Listener
-  ): [{ fetch: BlazeFetch; port: number }, Listener];
+  ): [ServeConfig, Listener];
   public serve(port?: number, listener?: (addressInfo: AddressInfo) => void) {
     const args = this.getServeConfig(port, listener);
 
