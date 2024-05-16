@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.3](https://github.com/Busy-Hour-Studio/blaze/compare/v3.1.2...v3.1.3) (2024-05-16)
+
+
+### Bug Fixes
+
+* action service meta types ([72a24b7](https://github.com/Busy-Hour-Studio/blaze/commit/72a24b7b4e24351623611e53ebca5c60d5a08d2c))
+* port conflict on bun ([7a788f1](https://github.com/Busy-Hour-Studio/blaze/commit/7a788f1b9540954997c0249a5252b8b6107495e2))
+
 ## [3.1.2](https://github.com/Busy-Hour-Studio/blaze/compare/v3.1.1...v3.1.2) (2024-05-16)
 
 
