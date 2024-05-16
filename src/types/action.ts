@@ -94,7 +94,7 @@ export type ActionCallResult<U> =
 export type AnyAction = Action<
   Random,
   Random,
-  RecordUnknown,
+  Random,
   Random,
   Random,
   Random,
