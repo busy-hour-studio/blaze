@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.2](https://github.com/Busy-Hour-Studio/blaze/compare/v3.1.1...v3.1.2) (2024-05-16)
+
+
+### Bug Fixes
+
+* openapi error ([a4d7c08](https://github.com/Busy-Hour-Studio/blaze/commit/a4d7c081ed732cfc9ea7fb8aa5fa57b3e6540d4d))
+
 ## [3.1.1](https://github.com/Busy-Hour-Studio/blaze/compare/v3.1.0...v3.1.1) (2024-05-16)
 
 
