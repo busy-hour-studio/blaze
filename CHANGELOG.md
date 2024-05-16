@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.1](https://github.com/Busy-Hour-Studio/blaze/compare/v3.1.0...v3.1.1) (2024-05-16)
+
+
+### Bug Fixes
+
+* action after hooks return type ([4267789](https://github.com/Busy-Hour-Studio/blaze/commit/4267789bff55069e30159289c4c123285655c8a0))
+* remove zod open api warning ([ad64fde](https://github.com/Busy-Hour-Studio/blaze/commit/ad64fde275517178d9efd962c4344568b80eb2f2))
+
 ## [3.1.0](https://github.com/Busy-Hour-Studio/blaze/compare/v3.0.3...v3.1.0) (2024-05-09)
 
 
