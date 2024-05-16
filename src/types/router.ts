@@ -34,3 +34,9 @@ export interface BlazeFetch<E extends Env = Env> {
     executionCtx?: RecordUnknown
   ): Response | Promise<Response>;
 }
+
+export interface ServeConfig {
+  fetch: BlazeFetch;
+  port: number;
+  reusePort: boolean;
+}
