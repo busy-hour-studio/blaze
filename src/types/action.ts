@@ -1,8 +1,12 @@
 import type { ResponseConfig } from '@asteasolutions/zod-to-openapi';
-import type { ZodObject, ZodRawShape } from 'zod';
+import type { z, ZodObject, ZodRawShape } from 'zod';
 import type { BlazeContext } from '../event';
 import type { Random, RecordString, RecordUnknown } from './helper';
-import type { ActionHook } from './hooks';
+import type {
+  AcceptedAfterHook,
+  AcceptedBeforeHook,
+  ActionHook,
+} from './hooks';
 import type { RestParam } from './rest';
 
 export interface ActionValidator<
@@ -41,10 +45,35 @@ export interface ActionOpenAPI {
 
 export interface Action<
   Result = unknown | void,
+  HookResult = unknown | void,
   Meta extends RecordUnknown = RecordUnknown,
   Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
   Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  AfterHook extends AcceptedAfterHook<
+    HookResult,
+    Meta,
+    Body['_output'],
+    Params['_output'],
+    Header['_output']
+  > = AcceptedAfterHook<
+    HookResult,
+    Meta,
+    Body['_output'],
+    Params['_output'],
+    Header['_output']
+  >,
+  BeforeHook extends AcceptedBeforeHook<
+    Meta,
+    Body['_output'],
+    Params['_output'],
+    Header['_output']
+  > = AcceptedBeforeHook<
+    Meta,
+    Body['_output'],
+    Params['_output'],
+    Header['_output']
+  >,
   FinalHeader extends RecordString = Header['_output'],
   FinalBody extends RecordUnknown = Body['_output'],
   FinalParams extends RecordUnknown = Params['_output'],
@@ -54,7 +83,7 @@ export interface Action<
   handler: ActionHandler<Result, Meta, FinalBody, FinalParams, FinalHeader>;
   meta?: Meta | null;
   rest?: RestParam | null;
-  hooks?: ActionHook<Meta, FinalBody, FinalParams, FinalHeader, never> | null;
+  hooks?: ActionHook<BeforeHook, AfterHook> | null;
   throwOnValidationError?: boolean | null;
 }
 
@@ -62,7 +91,20 @@ export type ActionCallResult<U> =
   | { error: Error; ok: false }
   | { ok: true; result: U };
 
-export type AnyAction = Action<Random, RecordUnknown, Random, Random, Random>;
+export type AnyAction = Action<
+  Random,
+  Random,
+  RecordUnknown,
+  Random,
+  Random,
+  Random
+>;
+
+export type AnyValidator = ActionValidator<
+  z.ZodObject<z.ZodRawShape>,
+  z.ZodObject<z.ZodRawShape>,
+  z.ZodObject<z.ZodRawShape>
+>;
 
 export interface Actions {
   [key: string]: AnyAction;
