@@ -1,4 +1,5 @@
 import type { ResponseConfig } from '@asteasolutions/zod-to-openapi';
+import type { MiddlewareHandler } from 'hono';
 import type { ZodObject, ZodRawShape } from 'zod';
 import type { BlazeContext } from '../event';
 import type { Random, RecordString, RecordUnknown } from './helper';
@@ -7,7 +8,7 @@ import type {
   AcceptedBeforeHook,
   ActionHook,
 } from './hooks';
-import type { RestParam } from './rest';
+import type { ExposedMethod, RestParam } from './rest';
 
 export interface ActionValidator<
   B extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
@@ -64,6 +65,7 @@ export interface Action<
     H['_output']
   > = AcceptedBeforeHook<M, B['_output'], P['_output'], H['_output']>,
 > {
+  middleware?: [ExposedMethod, MiddlewareHandler][] | MiddlewareHandler[];
   openapi?: ActionOpenAPI | null;
   validator?: ActionValidator<B, P, H> | null;
   handler: ActionHandler<R, M, B['_output'], P['_output'], H['_output']>;

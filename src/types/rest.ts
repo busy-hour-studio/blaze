@@ -13,6 +13,8 @@ export type Method =
   | 'DELETE'
   | 'USE';
 
+export type ExposedMethod = Exclude<Method, 'USE'> | NonNullable<unknown>;
+
 export type ResponseType = 'body' | 'text' | 'json' | 'html';
 
 export type RestRoute = `${Method} /${string}` | `/${string}`;
