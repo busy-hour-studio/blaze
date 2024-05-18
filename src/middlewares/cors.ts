@@ -1,12 +1,12 @@
 /*
-    This Blaze class are heavily inspired by hono/cors
+    This cors implementation are modified a version of hono/cors so it can be used with Blaze
     https://github.com/honojs/hono/blob/main/src/middleware/cors/index.ts
     MIT License
     Copyright (c) 2022 Yusuke Wada
-    The main difference is that we use `BlazeContext` instead of `HonoCtx`
 */
 import type { Context as HonoCtx, Next as HonoNext } from 'hono';
 import { BlazeContext } from '../event';
+import type { AnyContext } from '../types/context';
 import { ExposedMethod } from '../types/rest';
 
 export interface CORSOptions {
@@ -48,16 +48,16 @@ function set(honoCtx: HonoCtx) {
   };
 }
 
-export function cors(options?: CORSOptions) {
+export function cors(options: CORSOptions = defaults) {
   const opts = {
     ...defaults,
     ...options,
   };
 
-  // eslint-disable-next-line func-names
-  return async function (honoCtx: HonoCtx, next: HonoNext) {
+  // eslint-disable-next-line @typescript-eslint/no-shadow
+  return async function cors(honoCtx: HonoCtx, next: HonoNext) {
     const setRes = set(honoCtx);
-    const ctx: BlazeContext =
+    const ctx: AnyContext =
       honoCtx.get('blaze') ??
       new BlazeContext({
         body: null,

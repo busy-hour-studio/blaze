@@ -1,4 +1,5 @@
 import type { StatusCode } from 'hono/utils/http-status';
+import { BlazeError } from '../../errors/BlazeError';
 import type { BlazeRouter } from '../../router';
 import type {
   Method,
@@ -57,7 +58,11 @@ export function getRestResponse(
 export function handleRestError(options: RestErrorHandlerOption) {
   const { err, ctx, honoCtx } = options;
 
-  const status = ctx.status ?? 500;
+  let status = ctx.status ?? 500;
+
+  if (err instanceof BlazeError) {
+    status = err.status as StatusCode;
+  }
 
   return honoCtx.json(err as Error, status);
 }
