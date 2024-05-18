@@ -2,7 +2,7 @@ import type { Context as HonoCtx } from 'hono';
 import type { StatusCode } from 'hono/utils/http-status';
 import { BlazeError } from '../../errors/BlazeError';
 import type { Action } from '../../types/action';
-import type { Method, RestHandlerOption } from '../../types/rest';
+import type { Method, Middleware, RestHandlerOption } from '../../types/rest';
 import type { OpenAPIRequest } from '../../types/router';
 import { createContext, isNil } from '../common';
 import { eventHandler } from '../helper/handler';
@@ -32,12 +32,18 @@ export class BlazeServiceRest {
 
     const { request, responses } = this.openAPIConfig;
 
+    const middlewares: Middleware[] = [
+      ...options.middlewares,
+      ...(action.middlewares ?? []),
+    ];
+
     router.openapi({
       method: method || 'ALL',
       handler: this.restHandler.bind(this),
       path,
       request,
       responses,
+      middlewares,
     });
   }
 
