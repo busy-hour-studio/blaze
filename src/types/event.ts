@@ -18,7 +18,7 @@ export interface EventHandler<
   M extends RecordUnknown = RecordUnknown,
   P extends RecordUnknown = RecordUnknown,
 > {
-  (ctx: BlazeContext<M, P>): Promise<void> | void;
+  (ctx: BlazeContext<M, P>): Promise<void>;
 }
 
 export interface Event<

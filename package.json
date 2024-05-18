@@ -163,42 +163,42 @@
       "import": "./dist/esm/types/service.js",
       "require": "./dist/cjs/types/service.js"
     },
-    "./helpers/css": {
+    "./css": {
       "types": "./dist/types/helpers/css.d.ts",
       "import": "./dist/esm/helpers/css.js",
       "require": "./dist/cjs/helpers/css.js"
     },
-    "./helpers/html": {
+    "./html": {
       "types": "./dist/types/helpers/html.d.ts",
       "import": "./dist/esm/helpers/html.js",
       "require": "./dist/cjs/helpers/html.js"
     },
-    "./helpers/dev": {
+    "./dev": {
       "types": "./dist/types/helpers/dev.d.ts",
       "import": "./dist/esm/helpers/dev.js",
       "require": "./dist/cjs/helpers/dev.js"
     },
-    "./helpers/jsx": {
+    "./jsx": {
       "types": "./dist/types/helpers/jsx.d.ts",
       "import": "./dist/esm/helpers/jsx.js",
       "require": "./dist/cjs/helpers/jsx.js"
     },
-    "./middlewares/body-limit": {
+    "./body-limit": {
       "types": "./dist/types/middlewares/body-limit.d.ts",
       "import": "./dist/esm/middlewares/body-limit.js",
       "require": "./dist/cjs/middlewares/body-limit.js"
     },
-    "./middlewares/compress": {
+    "./compress": {
       "types": "./dist/types/middlewares/compress.d.ts",
       "import": "./dist/esm/middlewares/compress.js",
       "require": "./dist/cjs/middlewares/compress.js"
     },
-    "./middlewares/cors": {
+    "./cors": {
       "types": "./dist/types/middlewares/cors.d.ts",
       "import": "./dist/esm/middlewares/cors.js",
       "require": "./dist/cjs/middlewares/cors.js"
     },
-    "./middlewares/jsx-renderer": {
+    "./jsx-renderer": {
       "types": "./dist/types/middlewares/jsx-renderer.d.ts",
       "import": "./dist/esm/middlewares/jsx-renderer.js",
       "require": "./dist/cjs/middlewares/jsx-renderer.js"
