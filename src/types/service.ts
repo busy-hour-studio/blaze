@@ -4,6 +4,7 @@ import type { BlazeContext } from '../event';
 import type { BlazeRouter } from '../router';
 import type { Action, ActionHandler, Actions } from './action';
 import type { Event, EventActionHandler, Events } from './event';
+import type { Middleware } from './rest';
 
 export interface Service<
   N extends string = string,
@@ -16,6 +17,7 @@ export interface Service<
   events?: E | null;
   onCreated?: ActionHandler | null;
   onStarted?: ActionHandler | null;
+  middlewares?: Middleware[] | null;
   onStopped?(handlers: EventActionHandler[]): void;
   router?: Router<[never, RouterRoute]>;
 }
@@ -28,11 +30,13 @@ export interface LoadServiceOption {
 export interface LoadServicesOption {
   path: string;
   autoStart?: boolean | null;
+  middlewares?: Middleware[] | null;
 }
 
 export interface CreateServiceOption {
   sourcePath: string;
   servicePath: string;
+  middlewares?: Middleware[] | null;
   blazeCtx: BlazeContext;
   app: BlazeRouter;
 }

@@ -25,7 +25,7 @@ export class Blaze {
 
   public readonly fetch: BlazeFetch;
 
-  constructor(options: CreateBlazeOption) {
+  constructor(options: CreateBlazeOption = {}) {
     this.services = [];
     this.router = new BlazeRouter(options);
     this.doc = this.router.doc.bind(this.router);
@@ -46,6 +46,7 @@ export class Blaze {
     this.load({
       path: options.path,
       autoStart: options.autoStart,
+      middlewares: options.middlewares,
     });
   }
 

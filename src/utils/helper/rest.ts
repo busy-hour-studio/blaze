@@ -1,5 +1,4 @@
 import type { StatusCode } from 'hono/utils/http-status';
-import { BlazeError } from '../../errors/BlazeError';
 import type { BlazeRouter } from '../../router';
 import type {
   Method,
@@ -58,13 +57,6 @@ export function getRestResponse(
 export function handleRestError(options: RestErrorHandlerOption) {
   const { err, ctx, honoCtx } = options;
 
-  if (err instanceof BlazeError) {
-    return honoCtx.json(err, {
-      status: err.status,
-    });
-  }
-
-  // eslint-disable-next-line prefer-destructuring
   const status = ctx.status ?? 500;
 
   return honoCtx.json(err as Error, status);

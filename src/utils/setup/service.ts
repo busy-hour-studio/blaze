@@ -3,7 +3,7 @@ import { BlazeContext, BlazeEvent } from '../../event';
 import { BlazeRouter } from '../../router/BlazeRouter';
 import type { Action } from '../../types/action';
 import type { EventActionHandler } from '../../types/event';
-import type { Method } from '../../types/rest';
+import type { Method, Middleware } from '../../types/rest';
 import type {
   CreateServiceOption,
   Service,
@@ -24,6 +24,7 @@ export class BlazeService {
   public readonly events: BlazeServiceEvent[];
   public readonly rests: BlazeServiceRest[];
   public readonly handlers: EventActionHandler[];
+  public readonly middlewares: Middleware[];
   public router: BlazeRouter | null;
 
   private readonly blazeCtx: BlazeContext;
@@ -31,7 +32,7 @@ export class BlazeService {
   private isStarted: boolean;
 
   constructor(options: ServiceConstructorOption) {
-    const { service, blazeCtx, servicePath, app } = options;
+    const { service, blazeCtx, servicePath, app, middlewares } = options;
 
     this.service = service;
     this.servicePath = servicePath;
@@ -45,6 +46,9 @@ export class BlazeService {
     this.events = [];
     this.rests = [];
     this.handlers = [];
+    this.middlewares = service.middlewares ?? [];
+
+    if (middlewares) this.middlewares.unshift(...middlewares);
 
     this.router = null;
 
@@ -62,6 +66,7 @@ export class BlazeService {
     const restInstance = new BlazeServiceRest({
       action,
       router: this.router,
+      middlewares: this.middlewares,
     });
 
     this.rests.push(restInstance);
@@ -164,6 +169,7 @@ export class BlazeService {
       app: options.app,
       blazeCtx: options.blazeCtx,
       servicePath,
+      middlewares: options.middlewares,
       service: serviceFile,
     });
 
