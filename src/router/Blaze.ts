@@ -25,7 +25,7 @@ export class Blaze {
 
   public readonly fetch: BlazeFetch;
 
-  constructor(options: CreateBlazeOption) {
+  constructor(options: CreateBlazeOption = {}) {
     this.services = [];
     this.router = new BlazeRouter(options);
     this.doc = this.router.doc.bind(this.router);
@@ -46,6 +46,7 @@ export class Blaze {
     this.load({
       path: options.path,
       autoStart: options.autoStart,
+      middlewares: options.middlewares,
     });
   }
 
@@ -74,12 +75,14 @@ export class Blaze {
    */
 
   public async load(options: LoadServicesOption) {
+    const { autoStart, path: sourcePath, middlewares } = options;
+
     // Load all the services
-    if (!fs.existsSync(options.path)) {
+    if (!fs.existsSync(sourcePath)) {
       throw new BlazeError("Service path doesn't exist");
     }
 
-    const serviceFiles = fs.readdirSync(options.path);
+    const serviceFiles = fs.readdirSync(sourcePath);
 
     const services = await Promise.all(
       serviceFiles.map((servicePath) => {
@@ -87,7 +90,8 @@ export class Blaze {
           app: this.router,
           servicePath,
           blazeCtx: this.blazeCtx,
-          sourcePath: options.path,
+          sourcePath,
+          middlewares: middlewares ?? [],
         });
 
         return service;
@@ -96,7 +100,7 @@ export class Blaze {
 
     this.services.push(...services);
 
-    if (!options.autoStart) return;
+    if (!autoStart) return;
 
     this.start();
   }

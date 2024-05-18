@@ -5,6 +5,7 @@ import type { ZodObject, ZodRawShape } from 'zod';
 // eslint-disable-next-line import/no-cycle
 import { BlazeBroker } from '.';
 import type {
+  AnyContext,
   ContextConstructorOption,
   CreateContextOption,
 } from '../types/context';
@@ -176,10 +177,14 @@ export class BlazeContext<
     options: CreateContextOption<M, B, P, H, BV, PV, HV, Validator>
   ): Promise<BlazeContext<M, B, P, H>> {
     const { honoCtx, validator, throwOnValidationError, meta } = options;
+
+    const cachedCtx: AnyContext | null = honoCtx?.get?.('blaze');
+    const cachedData = cachedCtx?.meta?.get?.('isCached');
+
     const data: ContextData<B, P, H> = {
-      body: null,
-      params: null,
-      headers: null,
+      body: cachedData ? await cachedCtx?.request?.body?.() : null,
+      params: cachedData ? cachedCtx?.request?.params : null,
+      headers: cachedData ? cachedCtx?.request?.headers : null,
     };
 
     const validations: ValidationResult = {
@@ -218,14 +223,20 @@ export class BlazeContext<
       });
     }
 
-    const ctx = new BlazeContext<M, B, P, H>({
-      body: data.body,
-      params: data.params,
-      headers: data.headers,
-      honoCtx,
-      meta,
-      validations,
-    });
+    const ctx: BlazeContext<M, B, P, H> =
+      cachedCtx ??
+      new BlazeContext({
+        body: data.body,
+        params: data.params,
+        headers: data.headers,
+        honoCtx,
+        meta,
+        validations,
+      });
+
+    if (honoCtx && cachedCtx) {
+      Object.assign(ctx.headers, new Map(honoCtx.res.headers));
+    }
 
     return ctx;
   }

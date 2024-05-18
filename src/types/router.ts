@@ -6,12 +6,13 @@ import type { Router } from 'hono/router';
 import type { Env, MiddlewareHandler, RouterRoute } from 'hono/types';
 import type { AnyZodObject } from 'zod';
 import type { RecordUnknown } from './helper';
-import type { Method } from './rest';
+import type { Method, Middleware } from './rest';
 
 export interface CreateBlazeOption {
   router?: Router<[never, RouterRoute]>;
   path?: string | null;
   autoStart?: boolean | null;
+  middlewares?: Middleware[];
 }
 
 export interface OpenAPIRequest {
@@ -25,6 +26,7 @@ export interface BlazeOpenAPIOption
   request: OpenAPIRequest;
   method: Method;
   handler: MiddlewareHandler;
+  middlewares: Middleware[];
 }
 
 export interface BlazeFetch<E extends Env = Env> {

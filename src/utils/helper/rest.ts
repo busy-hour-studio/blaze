@@ -58,14 +58,11 @@ export function getRestResponse(
 export function handleRestError(options: RestErrorHandlerOption) {
   const { err, ctx, honoCtx } = options;
 
-  if (err instanceof BlazeError) {
-    return honoCtx.json(err, {
-      status: err.status,
-    });
-  }
+  let status = ctx.status ?? 500;
 
-  // eslint-disable-next-line prefer-destructuring
-  const status = ctx.status ?? 500;
+  if (err instanceof BlazeError) {
+    status = err.status as StatusCode;
+  }
 
   return honoCtx.json(err as Error, status);
 }

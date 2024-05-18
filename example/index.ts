@@ -1,17 +1,17 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Blaze } from '../src';
-
-const app = new Blaze({});
+import { cors } from '../src/middlewares/cors';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const servicePath = path.resolve(__dirname, 'services');
 
-app.load({
+const app = new Blaze({
   path: servicePath,
   autoStart: true,
+  middlewares: [['ALL', cors()]],
 });
 
 app.doc('/doc', {

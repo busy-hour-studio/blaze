@@ -25,6 +25,7 @@ export async function initializeServices(options: LoadServiceOption) {
   });
 
   const serviceFiles = fs.readdirSync(sourcePath);
+  const middlewares = options.middlewares ?? [];
   const pendingServices = await Promise.all(
     serviceFiles.map((servicePath) => {
       const service = BlazeService.create({
@@ -32,6 +33,7 @@ export async function initializeServices(options: LoadServiceOption) {
         servicePath,
         blazeCtx,
         sourcePath,
+        middlewares,
       });
 
       return service;

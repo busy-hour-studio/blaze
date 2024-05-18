@@ -7,7 +7,7 @@ import type {
   AcceptedBeforeHook,
   ActionHook,
 } from './hooks';
-import type { RestParam } from './rest';
+import type { Middleware, RestParam } from './rest';
 
 export interface ActionValidator<
   B extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
@@ -65,6 +65,7 @@ export interface Action<
   > = AcceptedBeforeHook<M, B['_output'], P['_output'], H['_output']>,
 > {
   openapi?: ActionOpenAPI | null;
+  middlewares?: Middleware[] | null;
   validator?: ActionValidator<B, P, H> | null;
   handler: ActionHandler<R, M, B['_output'], P['_output'], H['_output']>;
   meta?: M | null;

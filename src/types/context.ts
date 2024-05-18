@@ -1,7 +1,9 @@
 import type { Context as HonoCtx } from 'hono';
 import type { ZodObject, ZodRawShape } from 'zod';
+import type { BlazeContext } from '../event';
 import type {
   ContextValidation,
+  Random,
   RecordString,
   RecordUnknown,
   ValidationResult,
@@ -37,3 +39,5 @@ export interface ContextConstructorOption<
   > {
   validations: ValidationResult | null;
 }
+
+export type AnyContext = BlazeContext<Random, Random, Random, Random>;

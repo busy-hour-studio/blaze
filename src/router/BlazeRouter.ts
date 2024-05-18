@@ -47,15 +47,24 @@ export class BlazeRouter<
   }
 
   public openapi(route: BlazeOpenAPIOption) {
-    let method = route.method ? route.method.toLowerCase() : 'post';
-    method = method === 'all' ? 'post' : method;
+    const method = route.method === 'ALL' ? 'POST' : route.method;
+    const allMiddlewares = route.middlewares
+      .filter((middleware) => middleware[0] === 'ALL')
+      .map((middleware) => middleware[1]);
+    const methodMiddlewares = route.middlewares
+      .filter((middleware) => middleware[0] === method)
+      .map((middleware) => middleware[1]);
 
     const newRoute = {
       ...route,
-      method,
+      method: method.toLowerCase(),
     } as RouteConfig;
 
-    this.on(route.method, route.path, route.handler);
+    if (allMiddlewares.length) {
+      this.use(...allMiddlewares);
+    }
+
+    this.on(route.method, route.path, ...methodMiddlewares, route.handler);
 
     if (!this.openAPIRegistry) return;
 
