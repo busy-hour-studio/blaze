@@ -25,18 +25,18 @@ import {
 import { BlazeBroker as Broker } from './BlazeBroker';
 
 export class BlazeContext<
-  Meta extends RecordUnknown = RecordUnknown,
-  Body extends RecordUnknown = RecordUnknown,
-  Params extends RecordUnknown = RecordUnknown,
-  Headers extends RecordString = RecordString,
+  M extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
+  P extends RecordUnknown = RecordUnknown,
+  H extends RecordString = RecordString,
 > {
   private readonly $honoCtx: HonoCtx | null;
-  private readonly $meta: Map<keyof Meta, Meta[keyof Meta]>;
+  private readonly $meta: Map<keyof M, M[keyof M]>;
   private $query: qs.ParsedUrlQuery | null;
-  private $body: Body | null;
-  private $params: (Body & Params) | null;
-  private $reqParams: Params | null;
-  private $reqHeaders: Headers | null;
+  private $body: B | null;
+  private $params: (B & P) | null;
+  private $reqParams: P | null;
+  private $reqHeaders: H | null;
 
   public response: ResponseType | null;
   public status: StatusCode | null;
@@ -50,7 +50,7 @@ export class BlazeContext<
   public readonly emit: Broker['emit'];
   public readonly event: Broker['event'];
 
-  constructor(options: ContextConstructorOption<Meta, Body, Params, Headers>) {
+  constructor(options: ContextConstructorOption<M, B, P, H>) {
     const { honoCtx, body, params, headers, validations, meta } = options;
 
     this.$honoCtx = honoCtx;
@@ -77,12 +77,12 @@ export class BlazeContext<
     const meta = this.$meta;
 
     return {
-      set<K extends keyof Meta, V extends Meta[K]>(key: K, value: V) {
+      set<K extends keyof M, V extends M[K]>(key: K, value: V) {
         meta.set(key, value);
 
         return this;
       },
-      get<K extends keyof Meta, V extends Meta[K]>(key: K) {
+      get<K extends keyof M, V extends M[K]>(key: K) {
         return meta.get(key) as V;
       },
       values: meta.values.bind(meta),
@@ -104,23 +104,23 @@ export class BlazeContext<
     return this.$query;
   }
 
-  private get reqParams(): Params {
+  private get reqParams(): P {
     if (this.$reqParams) return this.$reqParams;
     if (!this.$honoCtx) {
-      this.$reqParams = {} as Params;
+      this.$reqParams = {} as P;
     } else {
-      this.$reqParams = this.$honoCtx.req.param() as Params;
+      this.$reqParams = this.$honoCtx.req.param() as P;
     }
 
     return this.$reqParams;
   }
 
-  private get reqHeaders(): Headers {
+  private get reqHeaders(): H {
     if (this.$reqHeaders) return this.$reqHeaders;
     if (!this.$honoCtx) {
-      this.$reqHeaders = {} as Headers;
+      this.$reqHeaders = {} as H;
     } else {
-      this.$reqHeaders = this.$honoCtx.req.header() as Headers;
+      this.$reqHeaders = this.$honoCtx.req.header() as H;
     }
 
     return this.$reqHeaders;
@@ -129,8 +129,8 @@ export class BlazeContext<
   public async params() {
     if (this.$params) return this.$params;
 
-    const body = (await this.getBody()) ?? ({} as Body);
-    const param = this.reqParams as Params;
+    const body = (await this.getBody()) ?? ({} as B);
+    const param = this.reqParams as P;
 
     this.$params = {
       ...body,
@@ -140,15 +140,16 @@ export class BlazeContext<
     return this.$params;
   }
 
-  private async getBody(): Promise<Body> {
+  private async getBody(): Promise<B> {
     if (this.$body) return this.$body;
+
     if (!this.$honoCtx) {
-      this.$body = {} as Body;
+      this.$body = {} as B;
     } else {
-      this.$body = (await getReqBody(this.$honoCtx)) ?? ({} as Body);
+      this.$body = (await getReqBody(this.$honoCtx)) ?? ({} as B);
     }
 
-    return this.$body as Body;
+    return this.$body as B;
   }
 
   public get request() {
@@ -161,32 +162,21 @@ export class BlazeContext<
   }
 
   public static async create<
-    Meta extends RecordUnknown = RecordUnknown,
-    Body extends RecordUnknown = RecordUnknown,
-    Params extends RecordUnknown = RecordUnknown,
-    Headers extends RecordString = RecordString,
-    BodyValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-    ParamsValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-    HeaderValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-    Validator extends Partial<
-      ContextValidation<BodyValidation, ParamsValidation, HeaderValidation>
-    > = Partial<
-      ContextValidation<BodyValidation, ParamsValidation, HeaderValidation>
+    M extends RecordUnknown = RecordUnknown,
+    B extends RecordUnknown = RecordUnknown,
+    P extends RecordUnknown = RecordUnknown,
+    H extends RecordString = RecordString,
+    BV extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+    PV extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+    HV extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+    Validator extends Partial<ContextValidation<BV, PV, HV>> = Partial<
+      ContextValidation<BV, PV, HV>
     >,
   >(
-    options: CreateContextOption<
-      Meta,
-      Body,
-      Params,
-      Headers,
-      BodyValidation,
-      ParamsValidation,
-      HeaderValidation,
-      Validator
-    >
-  ): Promise<BlazeContext<Meta, Body, Params, Headers>> {
+    options: CreateContextOption<M, B, P, H, BV, PV, HV, Validator>
+  ): Promise<BlazeContext<M, B, P, H>> {
     const { honoCtx, validator, throwOnValidationError, meta } = options;
-    const data: ContextData<Body, Params, Headers> = {
+    const data: ContextData<B, P, H> = {
       body: null,
       params: null,
       headers: null,
@@ -228,7 +218,7 @@ export class BlazeContext<
       });
     }
 
-    const ctx = new BlazeContext<Meta, Body, Params, Headers>({
+    const ctx = new BlazeContext<M, B, P, H>({
       body: data.body,
       params: data.params,
       headers: data.headers,
