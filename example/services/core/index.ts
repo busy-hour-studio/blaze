@@ -10,7 +10,7 @@ const service = BlazeCreator.service({
   events: {
     'users.created': onUserCreated,
   },
-  onStarted() {
+  async onStarted() {
     Logger.info(`Core Service started`);
   },
 });

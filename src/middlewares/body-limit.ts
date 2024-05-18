@@ -56,16 +56,19 @@ function errorHandler(onError: ActionHandler) {
  * ```ts
  * const action = BlazeCreator.action({
  *   rest: 'POST /',
- *   middleware: [
- *     bodyLimit({
- *       maxSize: 100 * 1024, // 100kb
- *       async onError() {
+ *   middlewares: [
+ *     [
+ *       'ALL',
+ *       bodyLimit({
+ *        maxSize: 100 * 1024, // 100kb
+ *        async onError() {
  *          throw new BlazeError('Payload too large', 413)
- *       }
- *     })
+ *         }
+ *       })
+ *     ]
  *   ],
  *   async handler(ctx) {
- *      /// Do something withe the request
+ *      /// Do something with the request
  *      /// when the request size is less than 100kb
  *   }
  * })

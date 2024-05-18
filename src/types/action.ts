@@ -20,13 +20,13 @@ export interface ActionValidator<
 }
 
 export interface ActionHandler<
-  Result = unknown | void,
+  R = unknown | void,
   M extends RecordUnknown = RecordUnknown,
   B extends RecordUnknown = RecordUnknown,
   P extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
 > {
-  (ctx: BlazeContext<M, B, P, H>): Promise<Result> | Result;
+  (ctx: BlazeContext<M, B, P, H>): Promise<R>;
 }
 
 export interface OpenAPIBody {

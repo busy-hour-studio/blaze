@@ -11,7 +11,7 @@ const service = BlazeCreator.service({
     find: onFindUser,
     list: onListUser,
   },
-  onStarted() {
+  async onStarted() {
     Logger.info(`Users Service started`);
   },
 });

@@ -48,6 +48,26 @@ function set(honoCtx: HonoCtx) {
   };
 }
 
+/**
+ * Enable CORS for specific services/routes
+ * @example
+ * ```ts
+ * const action = BlazeCreator.action({
+ *   rest: 'POST /',
+ *   middlewares: [
+ *     [
+ *       'ALL',
+ *       cors({
+ *         origin: '*',
+ *       })
+ *     ]
+ *   ],
+ *   async handler(ctx) {
+ *      /// Do something with the request
+ *   }
+ * })
+ * ```
+ */
 export function cors(options: CORSOptions = defaults) {
   const opts = {
     ...defaults,

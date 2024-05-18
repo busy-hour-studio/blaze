@@ -33,7 +33,7 @@ export const onFindUser = BlazeCreator.action({
     // Do validation manually
     //   We re-use the validations from other files
     before: [validateUserHeader, validateUserParam],
-    after(ctx, res: UserSchema) {
+    async after(ctx, res: UserSchema) {
       const result = {
         name: res.name,
         email: res.email,
