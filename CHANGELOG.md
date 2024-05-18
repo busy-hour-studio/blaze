@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.1.4](https://github.com/Busy-Hour-Studio/blaze/compare/v3.1.3...v3.1.4) (2024-05-16)
+
+
+### Bug Fixes
+
+* custom meta on action services ([19b2d9c](https://github.com/Busy-Hour-Studio/blaze/commit/19b2d9c7285d1456c878acf8b225cce9ad1c0303))
+
 ## [3.1.3](https://github.com/Busy-Hour-Studio/blaze/compare/v3.1.2...v3.1.3) (2024-05-16)
 
 
