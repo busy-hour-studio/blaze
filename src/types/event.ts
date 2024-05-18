@@ -15,19 +15,18 @@ export interface EventListener {
 export type EventName = string;
 
 export interface EventHandler<
-  Meta extends RecordUnknown = RecordUnknown,
-  Params extends RecordUnknown = RecordUnknown,
+  M extends RecordUnknown = RecordUnknown,
+  P extends RecordUnknown = RecordUnknown,
 > {
-  (ctx: BlazeContext<Meta, Params>): Promise<void> | void;
+  (ctx: BlazeContext<M, P>): Promise<void> | void;
 }
 
 export interface Event<
-  Meta extends RecordUnknown = RecordUnknown,
-  Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  FinalParams extends RecordUnknown = Params['_output'],
+  M extends RecordUnknown = RecordUnknown,
+  P extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
 > {
-  validator?: Params | null;
-  handler: EventHandler<Meta, FinalParams>;
+  validator?: P | null;
+  handler: EventHandler<M, P['_output']>;
   throwOnValidationError?: boolean | null;
 }
 

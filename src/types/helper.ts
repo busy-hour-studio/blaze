@@ -9,13 +9,13 @@ export type RecordString = Record<string, string>;
 export type Random = any;
 
 export interface ContextValidation<
-  Body extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  Params extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  Header extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  B extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  P extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  H extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
 > {
-  body?: Body | null;
-  params?: Params | null;
-  header?: Header | null;
+  body?: B | null;
+  params?: P | null;
+  header?: H | null;
 }
 
 export interface ValidationResult {
@@ -25,21 +25,21 @@ export interface ValidationResult {
 }
 
 export interface ContextData<
-  Body extends RecordUnknown = RecordUnknown,
-  Params extends RecordUnknown = RecordUnknown,
-  Headers extends RecordString = RecordString,
+  B extends RecordUnknown = RecordUnknown,
+  P extends RecordUnknown = RecordUnknown,
+  H extends RecordString = RecordString,
 > {
-  body: Body | null;
-  params: Params | null;
-  headers: Headers | null;
+  body: B | null;
+  params: P | null;
+  headers: H | null;
 }
 
 export interface DataValidatorOption<
-  Body extends RecordUnknown = RecordUnknown,
-  Params extends RecordUnknown = RecordUnknown,
-  Headers extends RecordString = RecordString,
+  B extends RecordUnknown = RecordUnknown,
+  P extends RecordUnknown = RecordUnknown,
+  H extends RecordString = RecordString,
 > {
-  data: ContextData<Body, Params, Headers>;
+  data: ContextData<B, P, H>;
   schema: ZodObject<ZodRawShape>;
   honoCtx: HonoContext | null;
   throwOnValidationError: boolean;

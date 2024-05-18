@@ -8,35 +8,31 @@ import type {
 } from './helper';
 
 export interface CreateContextOption<
-  Meta extends RecordUnknown = RecordUnknown,
-  Body extends RecordUnknown = RecordUnknown,
-  Params extends RecordUnknown = RecordUnknown,
-  Headers extends RecordString = RecordString,
-  BodyValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  ParamsValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  HeaderValidation extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  Validator extends ContextValidation<
-    BodyValidation,
-    ParamsValidation,
-    HeaderValidation
-  > = ContextValidation<BodyValidation, ParamsValidation, HeaderValidation>,
+  M extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
+  P extends RecordUnknown = RecordUnknown,
+  H extends RecordString = RecordString,
+  BV extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  PV extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  HV extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
+  V extends ContextValidation<BV, PV, HV> = ContextValidation<BV, PV, HV>,
 > {
   honoCtx: HonoCtx | null;
-  meta: Meta | null;
-  body: Body | null;
-  params: Params | null;
-  headers: Headers | null;
-  validator: Validator | null;
+  meta: M | null;
+  body: B | null;
+  params: P | null;
+  headers: H | null;
+  validator: V | null;
   throwOnValidationError: boolean;
 }
 
 export interface ContextConstructorOption<
-  Meta extends RecordUnknown = RecordUnknown,
-  Body extends RecordUnknown = RecordUnknown,
-  Params extends RecordUnknown = RecordUnknown,
-  Headers extends RecordString = RecordString,
+  M extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
+  P extends RecordUnknown = RecordUnknown,
+  H extends RecordString = RecordString,
 > extends Omit<
-    CreateContextOption<Meta, Body, Params, Headers>,
+    CreateContextOption<M, B, P, H>,
     'validator' | 'throwOnValidationError'
   > {
   validations: ValidationResult | null;
