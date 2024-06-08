@@ -123,8 +123,12 @@ export class BlazeServiceRest {
       request.params = validator.params;
     }
 
+    if (validator?.query) {
+      request.query = validator.query;
+    }
+
     if (validator?.header) {
-      request.header = validator.header;
+      request.headers = validator.header;
     }
 
     return {
