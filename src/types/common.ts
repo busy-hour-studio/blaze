@@ -1,8 +1,9 @@
-export interface ActionEventCallRequest<Headers, Params, Body, Result> {
+export interface ActionEventCallRequest<Headers, Params, Body, Result, Query> {
   headers: Headers;
   params: Params;
   body: Body;
   result: Result;
+  query: Query;
 }
 
 export interface ActionCallRecord {

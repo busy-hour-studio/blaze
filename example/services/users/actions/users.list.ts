@@ -1,8 +1,7 @@
 import { BlazeCreator } from '../../../../src';
 import { validateUserHeader } from '../hooks/users.validate.header';
 import { USER_DB } from '../utils/constants';
-import { parseLimitPageQuery } from '../utils/helper';
-import { userHeaderSchema } from '../utils/schemas';
+import { userHeaderSchema, userQuerySchema } from '../utils/schemas';
 
 export const listUserOpenApi = BlazeCreator.action.openapi({
   responses: {
@@ -17,6 +16,7 @@ export const listUserOpenApi = BlazeCreator.action.openapi({
 
 export const listUserValidator = BlazeCreator.action.validator({
   header: userHeaderSchema,
+  query: userQuerySchema,
 });
 
 export const onListUser = BlazeCreator.action({
@@ -28,7 +28,7 @@ export const onListUser = BlazeCreator.action({
     before: validateUserHeader,
   },
   async handler(ctx) {
-    const { limit, offset, page } = parseLimitPageQuery(ctx.request.query);
+    const { limit, offset, page } = ctx.request.query;
 
     const users = Array.from(USER_DB.values())
       .slice(offset, offset + limit)

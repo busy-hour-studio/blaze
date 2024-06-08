@@ -1,13 +1,14 @@
-import type { ZodObject, ZodRawShape } from 'zod';
+import { ZodEffects, ZodObject, ZodRawShape } from 'zod';
 import { BlazeError } from '../../errors/BlazeError';
 import type { DataValidatorOption } from '../../types/helper';
 import type { Method } from '../../types/rest';
 import { getReqBody } from './context';
 
-export function validateInput<T extends ZodObject<ZodRawShape>>(
-  input: unknown,
-  schema: T
-) {
+export function validateInput<
+  T extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+>(input: unknown, schema: T) {
+  if (schema instanceof ZodEffects) return schema.safeParse(input);
+
   const result = schema.passthrough().safeParse(input);
 
   return result;
@@ -54,6 +55,28 @@ export function validateParams(options: DataValidatorOption) {
       message: 'Invalid params',
       status: 400,
       name: 'Invalid params',
+    });
+}
+
+export function validateQuery(options: DataValidatorOption) {
+  const { data, honoCtx, schema, validations, throwOnValidationError } =
+    options;
+
+  if (!data.query && honoCtx) {
+    data.query = honoCtx.req.queries();
+  }
+
+  const result = validateInput(data.query, schema);
+
+  validations.query = result.success;
+
+  if (result.success) data.query = result.data;
+  else if (!result.success && throwOnValidationError)
+    throw new BlazeError({
+      errors: result.error,
+      message: 'Invalid query',
+      status: 400,
+      name: 'Invalid query',
     });
 }
 

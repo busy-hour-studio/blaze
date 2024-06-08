@@ -36,6 +36,7 @@ export class Blaze {
       headers: null,
       honoCtx: null,
       meta: null,
+      query: null,
       validations: null,
     });
     this.adapter = BlazeDependency.modules[ExternalModule.NodeAdapter];

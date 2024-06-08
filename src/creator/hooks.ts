@@ -7,7 +7,8 @@ export function createAfterHook<
   B extends RecordUnknown,
   P extends RecordUnknown,
   H extends RecordString,
->(hook: AfterHookHandler<R, M, B, P, H>) {
+  Q extends RecordUnknown,
+>(hook: AfterHookHandler<R, M, B, P, H, Q>) {
   return hook;
 }
 
@@ -16,6 +17,7 @@ export function createBeforeHook<
   B extends RecordUnknown,
   P extends RecordUnknown,
   H extends RecordString,
->(hook: BeforeHookHandler<M, B, P, H>) {
+  Q extends RecordUnknown,
+>(hook: BeforeHookHandler<M, B, P, H, Q>) {
   return hook;
 }
