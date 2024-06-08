@@ -3,12 +3,12 @@ import type { Random, RecordString, RecordUnknown } from './helper';
 
 export interface BeforeHookHandler<
   M extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-  P extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
 > {
-  (ctx: BlazeContext<M, B, P, H, Q>): Promise<void> | void;
+  (ctx: BlazeContext<M, H, P, Q, B>): Promise<void> | void;
 }
 
 export type AnyBeforeHookHandler = BeforeHookHandler<
@@ -22,12 +22,12 @@ export type AnyBeforeHookHandler = BeforeHookHandler<
 export interface AfterHookHandler<
   R = unknown | void,
   M extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-  P extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
 > {
-  (ctx: BlazeContext<M, B, P, H, Q>, res: never): Promise<R>;
+  (ctx: BlazeContext<M, H, P, Q, B>, res: never): Promise<R>;
 }
 
 export type AnyAfterHookHandler = AfterHookHandler<
@@ -41,11 +41,11 @@ export type AnyAfterHookHandler = AfterHookHandler<
 
 export type AcceptedBeforeHook<
   M extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-  P extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
-> = BeforeHookHandler<M, B, P, H, Q> | BeforeHookHandler<M, B, P, H, Q>[];
+  B extends RecordUnknown = RecordUnknown,
+> = BeforeHookHandler<M, H, P, Q, B> | BeforeHookHandler<M, H, P, Q, B>[];
 
 export type AnyBeforeHook = AcceptedBeforeHook<
   Random,
@@ -58,11 +58,11 @@ export type AnyBeforeHook = AcceptedBeforeHook<
 export type AcceptedAfterHook<
   R = unknown | void,
   M extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-  P extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
-> = AfterHookHandler<R, M, B, P, H, Q> | AfterHookHandler<R, M, B, P, H, Q>[];
+  B extends RecordUnknown = RecordUnknown,
+> = AfterHookHandler<R, M, H, P, Q, B> | AfterHookHandler<R, M, H, P, Q, B>[];
 
 export type AnyAfterHook = AcceptedAfterHook<
   Random,
@@ -74,13 +74,6 @@ export type AnyAfterHook = AcceptedAfterHook<
 >;
 
 export interface ActionHook<
-  BH extends AcceptedBeforeHook<
-    Random,
-    Random,
-    Random,
-    Random,
-    Random
-  > = AcceptedBeforeHook,
   AH extends AcceptedAfterHook<
     Random,
     Random,
@@ -89,9 +82,16 @@ export interface ActionHook<
     Random,
     Random
   > = AcceptedAfterHook,
+  BH extends AcceptedBeforeHook<
+    Random,
+    Random,
+    Random,
+    Random,
+    Random
+  > = AcceptedBeforeHook,
 > {
-  before?: BH | null;
   after?: AH | null;
+  before?: BH | null;
 }
 
 export type AnyActionHook = ActionHook<Random, Random>;
@@ -99,14 +99,14 @@ export type AnyActionHook = ActionHook<Random, Random>;
 export interface AfterHookHandlerOption<
   R = unknown | void,
   M extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-  P extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
 > {
   result: unknown;
-  hooks: AcceptedAfterHook<R, M, B, P, H, Q>;
-  blazeCtx: BlazeContext<M, B, P, H, Q>;
+  hooks: AcceptedAfterHook<R, M, H, P, Q, B>;
+  blazeCtx: BlazeContext<M, H, P, Q, B>;
 }
 
 export interface BeforeHookHandlerOption<
@@ -116,6 +116,6 @@ export interface BeforeHookHandlerOption<
   H extends RecordString = RecordString,
   Q extends RecordUnknown = RecordUnknown,
 > {
-  hooks: AcceptedBeforeHook<M, B, P, H, Q>;
-  blazeCtx: BlazeContext<M, B, P, H, Q>;
+  hooks: AcceptedBeforeHook<M, H, P, Q, B>;
+  blazeCtx: BlazeContext<M, H, P, Q, B>;
 }

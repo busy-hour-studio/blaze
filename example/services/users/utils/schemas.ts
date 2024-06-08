@@ -18,6 +18,8 @@ export const userParamSchema = z.object({
   email: z.string().email().openapi({ example: 'john@doe.com' }),
 });
 
+export type UserParamSchema = z.infer<typeof userParamSchema>;
+
 export const userQuerySchema = z
   .object({
     limit: z.coerce.number().default(10).openapi({ example: 10 }),
@@ -30,4 +32,4 @@ export const userQuerySchema = z
     return { ...params, offset };
   });
 
-export type UserParamSchema = z.infer<typeof userParamSchema>;
+export type UserQuerySchema = z.infer<typeof userQuerySchema>;

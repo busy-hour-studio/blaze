@@ -28,20 +28,27 @@ export interface BlazeActionCreator {
     HR,
     M extends RecordUnknown,
     H extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-    B extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
     P extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
     Q extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    B extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
     AH extends AcceptedAfterHook<
       HR,
       M,
       H['_output'],
-      B['_output'],
-      P['_output']
+      P['_output'],
+      Q['_output'],
+      B['_output']
     >,
-    BH extends AcceptedBeforeHook<M, H['_output'], B['_output'], P['_output']>,
+    BH extends AcceptedBeforeHook<
+      M,
+      H['_output'],
+      P['_output'],
+      Q['_output'],
+      B['_output']
+    >,
   >(
-    action: Action<R, HR, M, H, B, P, Q, AH, BH>
-  ): Action<R, HR, M, H, B, P, Q, AH, BH>;
+    action: Action<R, HR, M, H, P, Q, B, AH, BH>
+  ): Action<R, HR, M, H, P, Q, B, AH, BH>;
   /**
    * Create a reuseable validator for actions body, params and headers.
    * @example
@@ -55,12 +62,12 @@ export interface BlazeActionCreator {
    */
   validator<
     H extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-    B extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
     P extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
     Q extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    B extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
   >(
-    validator: ActionValidator<H, B, P, Q>
-  ): ActionValidator<H, B, P, Q>;
+    validator: ActionValidator<H, P, Q, B>
+  ): ActionValidator<H, P, Q, B>;
   /**
    * Create an openai spec for action.
    * @example
@@ -97,13 +104,13 @@ export interface BlazeActionCreator {
     after<
       R,
       M extends RecordUnknown,
-      B extends RecordUnknown,
-      P extends RecordUnknown,
       H extends RecordString,
+      P extends RecordUnknown,
       Q extends RecordUnknown,
+      B extends RecordUnknown,
     >(
-      hook: AfterHookHandler<R, M, B, P, H, Q>
-    ): AfterHookHandler<R, M, B, P, H, Q>;
+      hook: AfterHookHandler<R, M, H, P, Q, B>
+    ): AfterHookHandler<R, M, H, P, Q, B>;
     /**
      * Create a reuseable before hook for the service.
      * The hook will be called before the action handler called.
@@ -118,13 +125,13 @@ export interface BlazeActionCreator {
      */
     before<
       M extends RecordUnknown,
-      B extends RecordUnknown,
-      P extends RecordUnknown,
       H extends RecordString,
+      P extends RecordUnknown,
       Q extends RecordUnknown,
+      B extends RecordUnknown,
     >(
-      hook: BeforeHookHandler<M, B, P, H, Q>
-    ): BeforeHookHandler<M, B, P, H, Q>;
+      hook: BeforeHookHandler<M, H, P, Q, B>
+    ): BeforeHookHandler<M, H, P, Q, B>;
   };
 }
 

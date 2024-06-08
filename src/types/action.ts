@@ -10,34 +10,34 @@ import type {
 import type { Middleware, RestParam } from './rest';
 
 export interface ActionValidator<
-  B extends
+  H extends
     | ZodObject<ZodRawShape>
     | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
   P extends
     | ZodObject<ZodRawShape>
     | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  H extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
   Q extends
     | ZodObject<ZodRawShape>
     | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  B extends
+    | ZodObject<ZodRawShape>
+    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
 > {
-  body?: B | null;
-  params?: P | null;
   header?: H | null;
+  params?: P | null;
   query?: Q | null;
+  body?: B | null;
 }
 
 export interface ActionHandler<
   R = unknown | void,
   M extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-  P extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
 > {
-  (ctx: BlazeContext<M, B, P, H, Q>): Promise<R>;
+  (ctx: BlazeContext<M, H, P, Q, B>): Promise<R>;
 }
 
 export interface OpenAPIBody {
@@ -61,58 +61,58 @@ export interface Action<
   H extends
     | ZodObject<ZodRawShape>
     | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  B extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
   P extends
     | ZodObject<ZodRawShape>
     | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
   Q extends
     | ZodObject<ZodRawShape>
     | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  B extends
+    | ZodObject<ZodRawShape>
+    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
   AH extends AcceptedAfterHook<
     HR,
     M,
-    B['_output'],
-    P['_output'],
     H['_output'],
-    Q['_output']
+    P['_output'],
+    Q['_output'],
+    B['_output']
   > = AcceptedAfterHook<
     HR,
     M,
-    B['_output'],
-    P['_output'],
     H['_output'],
-    Q['_output']
+    P['_output'],
+    Q['_output'],
+    B['_output']
   >,
   BH extends AcceptedBeforeHook<
     M,
-    B['_output'],
-    P['_output'],
     H['_output'],
-    Q['_output']
+    P['_output'],
+    Q['_output'],
+    B['_output']
   > = AcceptedBeforeHook<
     M,
-    B['_output'],
-    P['_output'],
     H['_output'],
-    Q['_output']
+    P['_output'],
+    Q['_output'],
+    B['_output']
   >,
 > {
   openapi?: ActionOpenAPI | null;
   middlewares?: Middleware[] | null;
-  validator?: ActionValidator<B, P, H, Q> | null;
+  validator?: ActionValidator<H, P, Q, B> | null;
   handler: ActionHandler<
     R,
     M,
-    B['_output'],
-    P['_output'],
     H['_output'],
-    Q['_output']
+    P['_output'],
+    Q['_output'],
+    B['_output']
   >;
   meta?: M | null;
   rest?: RestParam | null;
-  hooks?: ActionHook<BH, AH> | null;
+  hooks?: ActionHook<AH, BH> | null;
   throwOnValidationError?: boolean | null;
 }
 
@@ -132,12 +132,7 @@ export type AnyAction = Action<
   Random
 >;
 
-export type AnyValidator = ActionValidator<
-  ZodObject<ZodRawShape>,
-  ZodObject<ZodRawShape>,
-  ZodObject<ZodRawShape>,
-  ZodObject<ZodRawShape>
->;
+export type AnyValidator = ActionValidator<Random, Random, Random, Random>;
 
 export interface Actions {
   [key: string]: AnyAction;
