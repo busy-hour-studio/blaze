@@ -27,6 +27,7 @@ function errorHandler(onError: ActionHandler) {
         headers: null,
         meta: null,
         params: null,
+        query: null,
         validations: null,
       });
 

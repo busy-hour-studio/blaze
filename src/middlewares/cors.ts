@@ -85,6 +85,7 @@ export function cors(options: CORSOptions = defaults) {
         headers: null,
         meta: null,
         params: null,
+        query: null,
         validations: null,
       });
 

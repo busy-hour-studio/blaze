@@ -1,4 +1,4 @@
-import type { ZodObject, ZodRawShape } from 'zod';
+import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
 import type { Action, ActionOpenAPI, Actions, ActionValidator } from './action';
 import type { Event, Events } from './event';
 import type { RecordString, RecordUnknown } from './helper';
@@ -27,9 +27,10 @@ export interface BlazeActionCreator {
     R,
     HR,
     M extends RecordUnknown,
-    H extends ZodObject<ZodRawShape>,
-    B extends ZodObject<ZodRawShape>,
-    P extends ZodObject<ZodRawShape>,
+    H extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    B extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    P extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    Q extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
     AH extends AcceptedAfterHook<
       HR,
       M,
@@ -39,8 +40,8 @@ export interface BlazeActionCreator {
     >,
     BH extends AcceptedBeforeHook<M, H['_output'], B['_output'], P['_output']>,
   >(
-    action: Action<R, HR, M, H, B, P, AH, BH>
-  ): Action<R, HR, M, H, B, P, AH, BH>;
+    action: Action<R, HR, M, H, B, P, Q, AH, BH>
+  ): Action<R, HR, M, H, B, P, Q, AH, BH>;
   /**
    * Create a reuseable validator for actions body, params and headers.
    * @example
@@ -53,12 +54,13 @@ export interface BlazeActionCreator {
    * ```
    */
   validator<
-    H extends ZodObject<ZodRawShape>,
-    B extends ZodObject<ZodRawShape>,
-    P extends ZodObject<ZodRawShape>,
+    H extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    B extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    P extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    Q extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
   >(
-    validator: ActionValidator<H, B, P>
-  ): ActionValidator<H, B, P>;
+    validator: ActionValidator<H, B, P, Q>
+  ): ActionValidator<H, B, P, Q>;
   /**
    * Create an openai spec for action.
    * @example
@@ -98,9 +100,10 @@ export interface BlazeActionCreator {
       B extends RecordUnknown,
       P extends RecordUnknown,
       H extends RecordString,
+      Q extends RecordUnknown,
     >(
-      hook: AfterHookHandler<R, M, B, P, H>
-    ): AfterHookHandler<R, M, B, P, H>;
+      hook: AfterHookHandler<R, M, B, P, H, Q>
+    ): AfterHookHandler<R, M, B, P, H, Q>;
     /**
      * Create a reuseable before hook for the service.
      * The hook will be called before the action handler called.
@@ -118,9 +121,10 @@ export interface BlazeActionCreator {
       B extends RecordUnknown,
       P extends RecordUnknown,
       H extends RecordString,
+      Q extends RecordUnknown,
     >(
-      hook: BeforeHookHandler<M, B, P, H>
-    ): BeforeHookHandler<M, B, P, H>;
+      hook: BeforeHookHandler<M, B, P, H, Q>
+    ): BeforeHookHandler<M, B, P, H, Q>;
   };
 }
 
@@ -138,7 +142,10 @@ export interface BlazeEventCreator {
    *  })
    * ```
    */
-  <M extends RecordUnknown, P extends ZodObject<ZodRawShape>>(
+  <
+    M extends RecordUnknown,
+    P extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+  >(
     event: Event<M, P>
   ): Event<M, P>;
   /**
@@ -151,7 +158,11 @@ export interface BlazeEventCreator {
    *  })
    * ```
    */
-  validator<Params extends ZodObject<ZodRawShape>>(validator: Params): Params;
+  validator<
+    Params extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+  >(
+    validator: Params
+  ): Params;
 }
 
 export interface BlazeServiceCreator {

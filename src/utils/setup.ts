@@ -21,6 +21,7 @@ export async function initializeServices(options: LoadServiceOption) {
     headers: null,
     honoCtx: null,
     meta: null,
+    query: null,
     validations: null,
   });
 

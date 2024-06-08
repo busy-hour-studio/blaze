@@ -18,16 +18,19 @@ export class BlazeServiceAction {
     BlazeEvent.on(this.actionName, this.actionHandler.bind(this));
   }
 
+  // eslint-disable-next-line max-params
   public async actionHandler(
     body: RecordUnknown,
     params: RecordUnknown,
-    headers: RecordString
+    headers: RecordString,
+    query: RecordUnknown
   ) {
     const contextRes = await createContext({
       honoCtx: null,
       body,
       headers,
       params,
+      query,
       validator: this.action.validator ?? null,
       meta: this.action.meta ?? null,
       throwOnValidationError: this.action.throwOnValidationError ?? false,

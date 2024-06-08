@@ -35,7 +35,8 @@ export class BlazeBroker {
       RecordString,
       RecordUnknown,
       Random,
-      Random
+      Random,
+      RecordUnknown
       // @ts-expect-error
     > = ActionCallRecord[T],
     V = Result<U['result']>,
@@ -46,7 +47,8 @@ export class BlazeBroker {
       RecordString,
       RecordUnknown,
       Random,
-      Random
+      Random,
+      RecordUnknown
       // @ts-expect-error
     > = ActionCallRecord[T],
     V = Result<U['result']>,
@@ -57,7 +59,8 @@ export class BlazeBroker {
       RecordString,
       RecordUnknown,
       Random,
-      Random
+      Random,
+      RecordUnknown
       // @ts-expect-error
     > = ActionCallRecord[T],
     V = Result<U['result']>,
@@ -73,7 +76,26 @@ export class BlazeBroker {
       RecordString,
       RecordUnknown,
       Random,
-      Random
+      Random,
+      RecordUnknown
+      // @ts-expect-error
+    > = ActionCallRecord[T],
+    V = Result<U['result']>,
+  >(
+    eventName: T,
+    body: U['body'],
+    params: U['params'],
+    headers: U['headers'],
+    query: U['query']
+  ): Promise<V>;
+  public async call<
+    T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
+    U extends ActionEventCallRequest<
+      RecordString,
+      RecordUnknown,
+      Random,
+      Random,
+      RecordUnknown
       // @ts-expect-error
     > = ActionCallRecord[T],
     V = Result<U['result']>,
@@ -91,7 +113,8 @@ export class BlazeBroker {
       RecordString,
       RecordUnknown,
       Random,
-      Random
+      Random,
+      RecordUnknown
       // @ts-expect-error
     > = ActionCallRecord[T],
   >(eventName: T, body: U['body']): boolean;
@@ -101,7 +124,8 @@ export class BlazeBroker {
       RecordString,
       RecordUnknown,
       Random,
-      Random
+      Random,
+      RecordUnknown
       // @ts-expect-error
     > = ActionCallRecord[T],
   >(eventName: T, body: U['body'], params: U['params']): boolean;
@@ -111,7 +135,8 @@ export class BlazeBroker {
       RecordString,
       RecordUnknown,
       Random,
-      Random
+      Random,
+      RecordUnknown
       // @ts-expect-error
     > = ActionCallRecord[T],
   >(
@@ -132,7 +157,8 @@ export class BlazeBroker {
       RecordString,
       RecordUnknown,
       Random,
-      Random
+      Random,
+      RecordUnknown
       // @ts-expect-error
     > = EventCallRecord[T],
   >(eventName: T, body: U['body']): boolean;
