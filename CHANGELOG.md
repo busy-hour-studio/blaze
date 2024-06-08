@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.2.0](https://github.com/Busy-Hour-Studio/blaze/compare/v3.1.4...v3.2.0) (2024-05-18)
+
+
+### Features
+
+* cors middleware ([d489c6d](https://github.com/Busy-Hour-Studio/blaze/commit/d489c6d6335b156f21adee438cd78d35a9d87f8c))
+* hono helper/middleware ([46ff5d0](https://github.com/Busy-Hour-Studio/blaze/commit/46ff5d020262c06a2c24e07a169483c17814c2ff))
+* middlewares handler ([948c99f](https://github.com/Busy-Hour-Studio/blaze/commit/948c99fde0698360ccb3a3aec15fc34b44c7eff0))
+
+
+### Bug Fixes
+
+* type definitions conflict with native ([e17061c](https://github.com/Busy-Hour-Studio/blaze/commit/e17061cbb34ee502229374e6a32b6517766219e2))
+
 ## [3.1.4](https://github.com/Busy-Hour-Studio/blaze/compare/v3.1.3...v3.1.4) (2024-05-16)
 
 
