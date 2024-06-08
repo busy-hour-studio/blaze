@@ -11,7 +11,6 @@ import type {
 } from '../types/context';
 import type {
   ContextData,
-  ContextValidation,
   RecordString,
   RecordUnknown,
   ValidationResult,
@@ -28,10 +27,10 @@ import { BlazeBroker as Broker } from './BlazeBroker';
 
 export class BlazeContext<
   M extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-  P extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
 > {
   private readonly $honoCtx: HonoCtx | null;
   private readonly $meta: Map<keyof M, M[keyof M]>;
@@ -53,7 +52,7 @@ export class BlazeContext<
   public readonly emit: Broker['emit'];
   public readonly event: Broker['event'];
 
-  constructor(options: ContextConstructorOption<M, B, P, H, Q>) {
+  constructor(options: ContextConstructorOption<M, H, P, Q, B>) {
     const { honoCtx, body, params, headers, query, validations, meta } =
       options;
 
@@ -166,35 +165,24 @@ export class BlazeContext<
   }
 
   public static async create<
-    M extends RecordUnknown = RecordUnknown,
-    B extends RecordUnknown = RecordUnknown,
-    P extends RecordUnknown = RecordUnknown,
-    H extends RecordString = RecordString,
-    Q extends RecordUnknown = RecordUnknown,
-    BV extends
-      | ZodObject<ZodRawShape>
-      | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-    PV extends
-      | ZodObject<ZodRawShape>
-      | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-    HV extends
-      | ZodObject<ZodRawShape>
-      | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-    QV extends
-      | ZodObject<ZodRawShape>
-      | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-    Validator extends Partial<ContextValidation<BV, PV, HV, QV>> = Partial<
-      ContextValidation<BV, PV, HV, QV>
-    >,
+    M extends RecordUnknown,
+    H extends RecordString,
+    P extends RecordUnknown,
+    Q extends RecordUnknown,
+    B extends RecordUnknown,
+    HV extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    PV extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    QV extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    BV extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
   >(
-    options: CreateContextOption<M, B, P, H, Q, BV, PV, HV, QV, Validator>
-  ): Promise<BlazeContext<M, B, P, H, Q>> {
+    options: CreateContextOption<M, H, P, Q, B, HV, PV, QV, BV>
+  ): Promise<BlazeContext<M, H, P, Q, B>> {
     const { honoCtx, validator, throwOnValidationError, meta } = options;
 
     const cachedCtx: AnyContext | null = honoCtx?.get?.('blaze');
     const cachedData = cachedCtx?.meta?.get?.('isCached');
 
-    const data: ContextData<B, P, H, Q> = {
+    const data: ContextData<H, P, Q, B> = {
       body: cachedData ? await cachedCtx?.request?.body?.() : null,
       params: cachedData ? cachedCtx?.request?.params : null,
       headers: cachedData ? cachedCtx?.request?.headers : null,
@@ -248,7 +236,7 @@ export class BlazeContext<
       });
     }
 
-    const ctx: BlazeContext<M, B, P, H, Q> =
+    const ctx: BlazeContext<M, H, P, Q, B> =
       cachedCtx ??
       new BlazeContext({
         body: data.body,

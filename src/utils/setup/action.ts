@@ -1,6 +1,6 @@
 import { BlazeEvent } from '../../event';
 import type { Action } from '../../types/action';
-import type { RecordString, RecordUnknown } from '../../types/helper';
+import { Random } from '../../types/helper';
 import type { CreateActionOption } from '../../types/service';
 import { createContext } from '../common';
 import { eventHandler } from '../helper/handler';
@@ -18,13 +18,9 @@ export class BlazeServiceAction {
     BlazeEvent.on(this.actionName, this.actionHandler.bind(this));
   }
 
-  // eslint-disable-next-line max-params
-  public async actionHandler(
-    body: RecordUnknown,
-    params: RecordUnknown,
-    headers: RecordString,
-    query: RecordUnknown
-  ) {
+  public async actionHandler(...values: Random[]) {
+    const [body, params, headers, query] = values;
+
     const contextRes = await createContext({
       honoCtx: null,
       body,

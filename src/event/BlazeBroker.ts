@@ -99,7 +99,7 @@ export class BlazeBroker {
       // @ts-expect-error
     > = ActionCallRecord[T],
     V = Result<U['result']>,
-  >(eventName: T, ...values: unknown[]) {
+  >(eventName: T, ...values: Random[]) {
     this.validateEventName(eventName);
 
     const results = await BlazeEvent.emitAsync<never, V>(eventName, ...values);
@@ -147,7 +147,7 @@ export class BlazeBroker {
   ): boolean;
   public emit<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-  >(eventName: T, ...values: unknown[]) {
+  >(eventName: T, ...values: Random[]) {
     return BlazeEvent.emit(eventName, ...values);
   }
 
@@ -164,7 +164,7 @@ export class BlazeBroker {
   >(eventName: T, body: U['body']): boolean;
   public event<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-  >(eventName: T, ...values: unknown[]) {
+  >(eventName: T, ...values: Random[]) {
     const evtName = [RESERVED_KEYWORD.PREFIX.EVENT, eventName].join('.');
 
     return BlazeEvent.emit(evtName, ...values);
