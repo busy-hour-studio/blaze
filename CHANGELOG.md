@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.3.0-0](https://github.com/Busy-Hour-Studio/blaze/compare/v3.2.0...v3.3.0-0) (2024-06-08)
+
+
+### Features
+
+* query validator/openapi ([94d241b](https://github.com/Busy-Hour-Studio/blaze/commit/94d241b5b60c0f24b26def4c0866580a3b244ab8))
+
+
+### Bug Fixes
+
+* open api config ([f84c35e](https://github.com/Busy-Hour-Studio/blaze/commit/f84c35ef0f2adc4488908b7a3251ca2c8997ef0c))
+
 ## [3.2.0](https://github.com/Busy-Hour-Studio/blaze/compare/v3.1.4...v3.2.0) (2024-05-18)
 
 
