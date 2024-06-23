@@ -1,4 +1,4 @@
-import type { BlazeContext } from '../event';
+import type { BlazeContext } from '../internal';
 import type { Random, RecordString, RecordUnknown } from './helper';
 
 export interface BeforeHookHandler<

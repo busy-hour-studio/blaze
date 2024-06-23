@@ -83,25 +83,25 @@
       "import": "./dist/esm/index.js",
       "require": "./dist/cjs/index.js"
     },
-    "./event": {
-      "types": "./dist/types/event/index.d.ts",
-      "import": "./dist/esm/event/index.js",
-      "require": "./dist/cjs/event/index.js"
+    "./internal": {
+      "types": "./dist/types/internal/index.d.ts",
+      "import": "./dist/esm/internal/index.js",
+      "require": "./dist/cjs/internal/index.js"
     },
-    "./event/BlazeBroker": {
-      "types": "./dist/types/event/BlazeBroker.d.ts",
-      "import": "./dist/esm/event/BlazeBroker.js",
-      "require": "./dist/cjs/event/BlazeBroker.js"
+    "./internal/BlazeBroker": {
+      "types": "./dist/types/internal/BlazeBroker.d.ts",
+      "import": "./dist/esm/internal/BlazeBroker.js",
+      "require": "./dist/cjs/internal/BlazeBroker.js"
     },
-    "./event/BlazeContext": {
-      "types": "./dist/types/event/BlazeContext.d.ts",
-      "import": "./dist/esm/event/BlazeContext.js",
-      "require": "./dist/cjs/event/BlazeContext.js"
+    "./internal/BlazeContext": {
+      "types": "./dist/types/internal/BlazeContext.d.ts",
+      "import": "./dist/esm/internal/BlazeContext.js",
+      "require": "./dist/cjs/internal/BlazeContext.js"
     },
-    "./event/BlazeEventEmitter": {
-      "types": "./dist/types/event/BlazeEventEmitter.d.ts",
-      "import": "./dist/esm/event/BlazeEventEmitter.js",
-      "require": "./dist/cjs/event/BlazeEventEmitter.js"
+    "./internal/BlazeEventEmitter": {
+      "types": "./dist/types/internal/BlazeEventEmitter.d.ts",
+      "import": "./dist/esm/internal/BlazeEventEmitter.js",
+      "require": "./dist/cjs/internal/BlazeEventEmitter.js"
     },
     "./types": {
       "types": "./dist/types/types/index.d.ts",

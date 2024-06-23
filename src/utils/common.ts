@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { BlazeError } from '../errors/BlazeError';
-import { BlazeContext } from '../event';
+import { BlazeContext } from '../internal';
 import type { ActionCallResult } from '../types/action';
 import type { CreateContextOption } from '../types/context';
 import type { Random } from '../types/helper';

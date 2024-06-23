@@ -1,4 +1,4 @@
-import { BlazeEvent } from '../../event';
+import { BlazeEvent } from '../../internal';
 import type { Action } from '../../types/action';
 import { Random } from '../../types/helper';
 import type { CreateActionOption } from '../../types/service';

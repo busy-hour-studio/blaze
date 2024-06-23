@@ -1,6 +1,6 @@
 import type { Context as HonoCtx } from 'hono';
 import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
-import type { BlazeContext } from '../event';
+import type { BlazeContext } from '../internal';
 import type {
   ContextValidation,
   Random,
