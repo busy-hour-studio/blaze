@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import { BlazeError } from '../errors/BlazeError';
-import { BlazeContext } from '../event';
+import { BlazeContext } from '../internal';
 import type { LoadServiceOption } from '../types/service';
 import { BlazeService } from './setup/service';
 
@@ -21,6 +21,7 @@ export async function initializeServices(options: LoadServiceOption) {
     headers: null,
     honoCtx: null,
     meta: null,
+    query: null,
     validations: null,
   });
 

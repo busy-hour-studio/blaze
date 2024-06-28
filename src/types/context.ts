@@ -1,6 +1,6 @@
 import type { Context as HonoCtx } from 'hono';
-import type { ZodObject, ZodRawShape } from 'zod';
-import type { BlazeContext } from '../event';
+import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
+import type { BlazeContext } from '../internal';
 import type {
   ContextValidation,
   Random,
@@ -11,33 +11,62 @@ import type {
 
 export interface CreateContextOption<
   M extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-  P extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
-  BV extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  PV extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  HV extends ZodObject<ZodRawShape> = ZodObject<ZodRawShape>,
-  V extends ContextValidation<BV, PV, HV> = ContextValidation<BV, PV, HV>,
+  P extends RecordUnknown = RecordUnknown,
+  Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
+  HV extends
+    | ZodObject<ZodRawShape>
+    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  PV extends
+    | ZodObject<ZodRawShape>
+    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  QV extends
+    | ZodObject<ZodRawShape>
+    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  BV extends
+    | ZodObject<ZodRawShape>
+    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  V extends ContextValidation<HV, PV, QV, BV> = ContextValidation<
+    HV,
+    PV,
+    QV,
+    BV
+  >,
 > {
   honoCtx: HonoCtx | null;
   meta: M | null;
-  body: B | null;
-  params: P | null;
   headers: H | null;
+  params: P | null;
+  query: Q | null;
+  body: B | null;
   validator: V | null;
   throwOnValidationError: boolean;
 }
 
 export interface ContextConstructorOption<
-  M extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-  P extends RecordUnknown = RecordUnknown,
-  H extends RecordString = RecordString,
+  M extends RecordUnknown,
+  H extends RecordString,
+  P extends RecordUnknown,
+  Q extends RecordUnknown,
+  B extends RecordUnknown,
+  HV extends
+    | ZodObject<ZodRawShape>
+    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  PV extends
+    | ZodObject<ZodRawShape>
+    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  QV extends
+    | ZodObject<ZodRawShape>
+    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  BV extends
+    | ZodObject<ZodRawShape>
+    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
 > extends Omit<
-    CreateContextOption<M, B, P, H>,
+    CreateContextOption<M, H, P, Q, B, HV, PV, QV, BV>,
     'validator' | 'throwOnValidationError'
   > {
   validations: ValidationResult | null;
 }
 
-export type AnyContext = BlazeContext<Random, Random, Random, Random>;
+export type AnyContext = BlazeContext<Random, Random, Random, Random, Random>;

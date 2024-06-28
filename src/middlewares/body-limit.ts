@@ -6,7 +6,7 @@
 */
 import type { Context as HonoContext, Next as HonoNext } from 'hono';
 import { BlazeError } from '../errors/BlazeError';
-import { BlazeContext } from '../event';
+import { BlazeContext } from '../internal';
 import type { ActionHandler } from '../types/action';
 import { resolvePromise } from '../utils/common';
 import { handleRestError, handleRestResponse } from '../utils/helper/rest';
@@ -27,6 +27,7 @@ function errorHandler(onError: ActionHandler) {
         headers: null,
         meta: null,
         params: null,
+        query: null,
         validations: null,
       });
 

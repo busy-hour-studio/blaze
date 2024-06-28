@@ -1,5 +1,5 @@
 import type { Context as HonoCtx, MiddlewareHandler } from 'hono';
-import type { BlazeContext } from '../event';
+import type { BlazeContext } from '../internal';
 import type { BlazeRouter } from '../router';
 import type { Action } from './action';
 

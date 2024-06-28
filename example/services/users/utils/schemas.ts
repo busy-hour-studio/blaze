@@ -19,3 +19,17 @@ export const userParamSchema = z.object({
 });
 
 export type UserParamSchema = z.infer<typeof userParamSchema>;
+
+export const userQuerySchema = z
+  .object({
+    limit: z.coerce.number().default(10).openapi({ example: 10 }),
+    page: z.coerce.number().default(1).openapi({ example: 1 }),
+    offset: z.number().default(0).openapi({ example: 0 }),
+  })
+  .transform((params) => {
+    const offset = (params.page - 1) * params.limit;
+
+    return { ...params, offset };
+  });
+
+export type UserQuerySchema = z.infer<typeof userQuerySchema>;

@@ -1,6 +1,6 @@
-import { BlazeEvent } from '../../event';
+import { BlazeEvent } from '../../internal';
 import type { Action } from '../../types/action';
-import type { RecordString, RecordUnknown } from '../../types/helper';
+import { Random } from '../../types/helper';
 import type { CreateActionOption } from '../../types/service';
 import { createContext } from '../common';
 import { eventHandler } from '../helper/handler';
@@ -18,16 +18,15 @@ export class BlazeServiceAction {
     BlazeEvent.on(this.actionName, this.actionHandler.bind(this));
   }
 
-  public async actionHandler(
-    body: RecordUnknown,
-    params: RecordUnknown,
-    headers: RecordString
-  ) {
+  public async actionHandler(...values: Random[]) {
+    const [body, params, headers, query] = values;
+
     const contextRes = await createContext({
       honoCtx: null,
       body,
       headers,
       params,
+      query,
       validator: this.action.validator ?? null,
       meta: this.action.meta ?? null,
       throwOnValidationError: this.action.throwOnValidationError ?? false,

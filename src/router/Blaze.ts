@@ -2,7 +2,7 @@ import fs from 'node:fs';
 import { AddressInfo } from 'node:net';
 import { BlazeDependency } from '../config';
 import { BlazeError } from '../errors/BlazeError';
-import { BlazeContext } from '../event';
+import { BlazeContext } from '../internal';
 import { DependencyModule } from '../types/config';
 import type {
   BlazeFetch,
@@ -16,10 +16,54 @@ import { BlazeService } from '../utils/setup/service';
 import { BlazeRouter } from './BlazeRouter';
 
 export class Blaze {
+  /**
+   * List of all the loaded services
+   * @see {@link BlazeService}
+   */
   public readonly services: BlazeService[];
   public readonly router: BlazeRouter;
+  /**
+   * Shorthand for `app.router.doc`.
+   * It allows you to generate OpenAPI documents and serve it at the given path.
+   * @example
+   * ```ts
+   *  app.doc('/doc', {
+   *    openapi: '3.0.0',
+   *    info: {
+   *      version: '1.0.0',
+   *      title: 'Blaze OpenAPI Example'
+   *    }
+   *  })
+   * ```
+   * @see {@link BlazeRouter.doc}
+   */
   public readonly doc: BlazeRouter['doc'];
+  /**
+   * Shorthand for `app.router.doc31`.
+   * It allows you to generate OpenAPI documents and serve it at the given path.
+   * @example
+   * ```ts
+   *  app.doc31('/doc', {
+   *    openapi: '3.1.0',
+   *    info: {
+   *      version: '1.0.0',
+   *      title: 'Blaze OpenAPI Example'
+   *    }
+   *  })
+   * ```
+   * @see {@link BlazeRouter.doc}
+   */
   public readonly doc31: BlazeRouter['doc31'];
+  /**
+   * Shorthand for `app.router.use`.
+   * It allows you to add middleware to the router
+   * @example
+   * ```ts
+   *  app.use(cors())
+   * ```
+   * @see {@link BlazeRouter.use}
+   */
+  public readonly use: BlazeRouter['use'];
   private readonly blazeCtx: BlazeContext;
   private readonly adapter: DependencyModule[ExternalModule.NodeAdapter];
 
@@ -36,10 +80,12 @@ export class Blaze {
       headers: null,
       honoCtx: null,
       meta: null,
+      query: null,
       validations: null,
     });
     this.adapter = BlazeDependency.modules[ExternalModule.NodeAdapter];
     this.fetch = this.router.fetch.bind(this.router) as BlazeFetch;
+    this.use = this.router.use.bind(this.router);
 
     if (!options.path) return;
 
@@ -73,7 +119,6 @@ export class Blaze {
    * ```
    * `autoStart` options will start all the services when all the services are loaded
    */
-
   public async load(options: LoadServicesOption) {
     const { autoStart, path: sourcePath, middlewares } = options;
 

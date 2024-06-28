@@ -5,7 +5,7 @@
     Copyright (c) 2022 Yusuke Wada
 */
 import type { Context as HonoCtx, Next as HonoNext } from 'hono';
-import { BlazeContext } from '../event';
+import { BlazeContext } from '../internal';
 import type { AnyContext } from '../types/context';
 import { ExposedMethod } from '../types/rest';
 
@@ -85,6 +85,7 @@ export function cors(options: CORSOptions = defaults) {
         headers: null,
         meta: null,
         params: null,
+        query: null,
         validations: null,
       });
 

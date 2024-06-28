@@ -1,10 +1,6 @@
-import { BlazeEvent } from '../../event';
+import { BlazeEvent } from '../../internal';
 import type { Event } from '../../types/event';
-import type {
-  ContextValidation,
-  RecordString,
-  RecordUnknown,
-} from '../../types/helper';
+import type { ContextValidation, RecordUnknown } from '../../types/helper';
 import type { CreateEventOption } from '../../types/service';
 import { createContext } from '../common';
 import { RESERVED_KEYWORD } from '../constant';
@@ -31,16 +27,13 @@ export class BlazeServiceEvent {
     BlazeEvent.on(this.eventName, this.eventHandler.bind(this));
   }
 
-  public async eventHandler(
-    body: RecordUnknown,
-    params: RecordUnknown,
-    headers: RecordString
-  ) {
+  public async eventHandler(body: RecordUnknown) {
     const contextRes = await createContext({
       honoCtx: null,
       body,
-      headers,
-      params,
+      params: null,
+      headers: null,
+      query: null,
       validator: this.validator ?? null,
       meta: null,
       throwOnValidationError: this.event.throwOnValidationError ?? false,

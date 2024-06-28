@@ -54,6 +54,7 @@ export class BlazeServiceRest {
       body: null,
       headers: null,
       params: null,
+      query: null,
       validator: this.action.validator ?? null,
       meta: this.action.meta ?? null,
       throwOnValidationError: this.action.throwOnValidationError ?? false,
@@ -122,8 +123,12 @@ export class BlazeServiceRest {
       request.params = validator.params;
     }
 
+    if (validator?.query) {
+      request.query = validator.query;
+    }
+
     if (validator?.header) {
-      request.header = validator.header;
+      request.headers = validator.header;
     }
 
     return {
