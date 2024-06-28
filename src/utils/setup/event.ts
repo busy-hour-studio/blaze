@@ -1,4 +1,4 @@
-import { BlazeEvent } from '../../event';
+import { BlazeEvent } from '../../internal';
 import type { Event } from '../../types/event';
 import type { ContextValidation, RecordUnknown } from '../../types/helper';
 import type { CreateEventOption } from '../../types/service';
