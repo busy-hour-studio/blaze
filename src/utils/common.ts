@@ -105,12 +105,12 @@ export function loadFile<T = Random>(id: string): Promise<T> {
   if (fs.statSync(id).isDirectory()) {
     const infos = fs.readdirSync(id);
     const index = infos.find((info) =>
-      info.match(/index\.[jt]s$|index.[cm][jt]s$/)
+      info.match(/index\.[jt]s$|index\.[jt]x|index\.[cm][jt]s$/)
     );
 
     if (!index) {
       throw new BlazeError(
-        `No index file found in directory ${id} (expected to find index.[jt]s or index.[cm][jt]s)`
+        `No index file found in directory ${id} (expected to find index.[jt]s or index.[jt]x or index.[cm][jt]s)`
       );
     }
 

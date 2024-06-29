@@ -8,11 +8,12 @@ import type { Middleware } from './rest';
 
 export interface Service<
   N extends string = string,
+  V extends number = number,
   A extends Actions = Actions,
   E extends Events = Events,
 > {
   name?: N | null;
-  version?: number | null;
+  version?: V | null;
   actions?: A | null;
   events?: E | null;
   middlewares?: Middleware[] | null;
