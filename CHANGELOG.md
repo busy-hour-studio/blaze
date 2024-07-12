@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.3.3](https://github.com/Busy-Hour-Studio/blaze/compare/v3.3.2...v3.3.3) (2024-07-12)
+
+
+### Bug Fixes
+
+* openapi params ([bd02056](https://github.com/Busy-Hour-Studio/blaze/commit/bd02056ea4593e4133ed97cba4dc80e551d07d5e))
+
 ## [3.3.2](https://github.com/Busy-Hour-Studio/blaze/compare/v3.3.1...v3.3.2) (2024-06-29)
 
 
