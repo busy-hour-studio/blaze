@@ -23,7 +23,7 @@
     "prepare": "husky install"
   },
   "devDependencies": {
-    "@asteasolutions/zod-to-openapi": "^6.3.1",
+    "@asteasolutions/zod-to-openapi": "^7.1.1",
     "@commitlint/cli": "^17.8.1",
     "@commitlint/config-conventional": "^17.8.1",
     "@hono/node-server": "^1.8.1",
@@ -51,7 +51,7 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "hono": "^4.0.5",
+    "hono": "^4.4.9",
     "zod": "^3.22.4"
   },
   "author": "Muhammad Firdaus Sati (https://github.com/krsbx)",

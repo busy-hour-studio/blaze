@@ -11,7 +11,6 @@ import type {
   OpenAPIRegistry,
   OpenApiGeneratorV3,
   OpenApiGeneratorV31,
-  RouteConfig,
 } from '@asteasolutions/zod-to-openapi';
 import type { OpenAPIObjectConfig } from '@asteasolutions/zod-to-openapi/dist/v3.0/openapi-generator';
 import type { Env, Schema } from 'hono';
@@ -21,9 +20,14 @@ import { BlazeDependency } from '../config';
 import { BlazeError } from '../errors/BlazeError';
 import { Logger } from '../errors/Logger';
 import { DependencyModule } from '../types/config';
+import type { Random } from '../types/helper';
 import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router';
 import { ExternalModule } from '../utils/constant';
-import { assignOpenAPIRegistry } from '../utils/helper/router';
+import {
+  assignOpenAPIRegistry,
+  createOpenApiRouter,
+  fixOpenApiPath,
+} from '../utils/helper/router';
 
 export class BlazeRouter<
   E extends Env = Env,
@@ -55,10 +59,7 @@ export class BlazeRouter<
       .filter((middleware) => middleware[0] === method)
       .map((middleware) => middleware[1]);
 
-    const newRoute = {
-      ...route,
-      method: method.toLowerCase(),
-    } as RouteConfig;
+    const newRoute = createOpenApiRouter(route);
 
     if (allMiddlewares.length) {
       this.use(...allMiddlewares);
@@ -144,19 +145,21 @@ export class BlazeRouter<
     SubBasePath extends string,
   >(
     path: SubPath,
-    app?: BlazeRouter<SubEnv, SubSchema, SubBasePath> | undefined
+    app?:
+      | Hono<SubEnv, SubSchema, SubBasePath>
+      | BlazeRouter<SubEnv, SubSchema, SubBasePath>
   ): BlazeRouter<
     E,
     MergeSchemaPath<SubSchema, MergePath<BasePath, SubPath>> & S,
     BasePath
   > {
-    super.route(path, app);
+    super.route(path, app as Random);
 
     if (!(app instanceof BlazeRouter) || !app.openAPIRegistry) {
       return this;
     }
 
-    const docPath = path.replaceAll(/:([^/]+)/g, '{$1}');
+    const docPath = fixOpenApiPath(path);
 
     app.openAPIRegistry.definitions.forEach((def) => {
       assignOpenAPIRegistry(this, docPath, def);
