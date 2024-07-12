@@ -1,7 +1,11 @@
-import type { OpenAPIDefinitions } from '@asteasolutions/zod-to-openapi/dist/openapi-registry';
+import type {
+  OpenAPIDefinitions,
+  RouteConfig,
+} from '@asteasolutions/zod-to-openapi/dist/openapi-registry';
 import type { Env, Schema } from 'hono';
 import { mergePath } from 'hono/utils/url';
 import type { BlazeRouter } from '../../router';
+import type { BlazeOpenAPIOption } from '../../types/router';
 
 export function assignOpenAPIRegistry<
   E extends Env = Env,
@@ -51,4 +55,18 @@ export function assignOpenAPIRegistry<
       throw new Error(`Unknown registry type: ${errorIfNotExhaustive}`);
     }
   }
+}
+
+export function fixOpenApiPath(path: string) {
+  return path.replaceAll(/:([^/]+)/g, '{$1}');
+}
+
+export function createOpenApiRouter(route: BlazeOpenAPIOption) {
+  const method = route.method === 'ALL' ? 'POST' : route.method;
+
+  return {
+    ...route,
+    path: fixOpenApiPath(route.path),
+    method: method.toLowerCase(),
+  } as RouteConfig;
 }

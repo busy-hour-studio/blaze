@@ -9,15 +9,15 @@ importers:
   .:
     dependencies:
       hono:
-        specifier: ^4.0.5
-        version: 4.0.5
+        specifier: ^4.4.9
+        version: 4.4.13
       zod:
         specifier: ^3.22.4
         version: 3.22.4
     devDependencies:
       '@asteasolutions/zod-to-openapi':
-        specifier: ^6.3.1
-        version: 6.3.1(zod@3.22.4)
+        specifier: ^7.1.1
+        version: 7.1.1(zod@3.22.4)
       '@commitlint/cli':
         specifier: ^17.8.1
         version: 17.8.1
@@ -103,8 +103,8 @@ packages:
   '@asamuzakjp/dom-selector@2.0.2':
     resolution: {integrity: sha512-x1KXOatwofR6ZAYzXRBL5wrdV0vwNxlTCK9NCuLqAzQYARqGcvFwiJA6A1ERuh+dgeA4Dxm3JBYictIes+SqUQ==}
 
-  '@asteasolutions/zod-to-openapi@6.3.1':
-    resolution: {integrity: sha512-1CRWBqslgdBpZeJnxxksGirAQ39Iztxk+LzTkYwoP0mNzuaULa604s8Xc5V9yzmYccwJ89O9fPQgxCkbNN398g==}
+  '@asteasolutions/zod-to-openapi@7.1.1':
+    resolution: {integrity: sha512-lF0d1gAc0lYLO9/BAGivwTwE2Sh9h6CHuDcbk5KnGBfIuAsAkDC+Fdat4dkQY3CS/zUWKHRmFEma0B7X132Ymw==}
     peerDependencies:
       zod: ^3.20.2
 
@@ -1479,8 +1479,8 @@ packages:
     resolution: {integrity: sha512-1/th4MHjnwncwXsIW6QMzlvYL9kG5e/CpVvLRZe4XPa8TOUNbCELqmvhDmnkNsAjwaG4+I8gJJL0JBvTTLO9qA==}
     engines: {node: '>= 0.4'}
 
-  hono@4.0.5:
-    resolution: {integrity: sha512-6LEGL1Pf3+dLjVA0NJxAB/3FJ6S3W5qxd/XOG7Wl9YOrpMRZT9lt83R4Ojs8dO6GbAUSutI7zTyjStnSn9sbEg==}
+  hono@4.4.13:
+    resolution: {integrity: sha512-c6qqenclmQ6wpXzqiElMa2jt423PVCmgBreDfC5s2lPPpGk7d0lOymd8QTzFZyYC5mSSs6imiTMPip+gLwuW/g==}
     engines: {node: '>=16.0.0'}
 
   hosted-git-info@2.8.9:
@@ -2639,7 +2639,7 @@ snapshots:
       css-tree: 2.3.1
       is-potential-custom-element-name: 1.0.1
 
-  '@asteasolutions/zod-to-openapi@6.3.1(zod@3.22.4)':
+  '@asteasolutions/zod-to-openapi@7.1.1(zod@3.22.4)':
     dependencies:
       openapi3-ts: 4.2.1
       zod: 3.22.4
@@ -4182,7 +4182,7 @@ snapshots:
     dependencies:
       function-bind: 1.1.2
 
-  hono@4.0.5: {}
+  hono@4.4.13: {}
 
   hosted-git-info@2.8.9: {}
 

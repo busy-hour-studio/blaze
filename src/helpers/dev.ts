@@ -7,6 +7,7 @@ import {
   showRoutes as honoShowRoutes,
 } from 'hono/dev';
 import type { Blaze } from '../router';
+import type { Random } from '../types/helper';
 
 export interface RouteData {
   path: string;
@@ -16,13 +17,13 @@ export interface RouteData {
 }
 
 export function getRouterName(app: Blaze) {
-  return honoGetRouterName(app.router);
+  return honoGetRouterName(app.router as Random);
 }
 
 export function showRoutes(app: Blaze) {
-  return honoShowRoutes(app.router);
+  return honoShowRoutes(app.router as Random);
 }
 
 export function inspectRoutes(app: Blaze): RouteData[] {
-  return honoInspectRoutes(app.router);
+  return honoInspectRoutes(app.router as Random);
 }
