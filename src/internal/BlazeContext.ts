@@ -180,14 +180,19 @@ export class BlazeContext<
     const { honoCtx, validator, throwOnValidationError, meta } = options;
 
     const cachedCtx: AnyContext | null = honoCtx?.get?.('blaze');
-    const cachedData = cachedCtx?.meta?.get?.('isCached');
+    const isCached = cachedCtx?.meta?.get?.('isCached');
 
     const data: ContextData<H, P, Q, B> = {
-      body: cachedData ? await cachedCtx?.request?.body?.() : null,
-      params: cachedData ? cachedCtx?.request?.params : null,
-      headers: cachedData ? cachedCtx?.request?.headers : null,
-      query: cachedData ? cachedCtx?.request?.query : null,
+      body: isCached ? await cachedCtx?.request?.body?.() : null,
+      params: isCached ? cachedCtx?.request?.params : null,
+      headers: isCached ? cachedCtx?.request?.headers : null,
+      query: isCached ? cachedCtx?.request?.query : null,
     };
+
+    if (options.body && !data.body) data.body = options.body;
+    if (options.params && !data.params) data.params = options.params;
+    if (options.headers && !data.headers) data.headers = options.headers;
+    if (options.query && !data.query) data.query = options.query;
 
     const validations: ValidationResult = {
       body: true,
