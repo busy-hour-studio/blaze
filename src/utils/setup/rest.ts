@@ -4,6 +4,7 @@ import { BlazeError } from '../../errors/BlazeError';
 import type { Action } from '../../types/action';
 import type { Method, Middleware, RestHandlerOption } from '../../types/rest';
 import type { OpenAPIRequest } from '../../types/router';
+import type { Service } from '../../types/service';
 import { createContext, isNil } from '../common';
 import { eventHandler } from '../helper/handler';
 import {
@@ -15,10 +16,11 @@ import {
 export class BlazeServiceRest {
   public readonly path: string;
   public readonly method: Method | null;
+  public readonly service: Service | null;
   private action: Action;
 
   constructor(options: RestHandlerOption) {
-    const { router, action } = options;
+    const { router, action, service } = options;
 
     if (!action.rest) {
       throw new BlazeError('Rest property is required');
@@ -29,6 +31,7 @@ export class BlazeServiceRest {
     this.path = path;
     this.method = method;
     this.action = action;
+    this.service = service;
 
     const { request, responses } = this.openAPIConfig;
 
@@ -37,6 +40,18 @@ export class BlazeServiceRest {
       ...(action.middlewares ?? []),
     ];
 
+    const tags: string[] = [];
+
+    if (this.service.tags) {
+      if (typeof this.service.tags === 'string') {
+        tags.push(this.service.tags);
+      } else {
+        tags.push(...this.service.tags);
+      }
+    } else if (this.service.name) {
+      tags.push(this.service.name);
+    }
+
     router.openapi({
       method: method || 'ALL',
       handler: this.restHandler.bind(this),
@@ -44,6 +59,7 @@ export class BlazeServiceRest {
       request,
       responses,
       middlewares,
+      tags,
     });
   }
 

@@ -13,6 +13,7 @@ export interface Service<
   E extends Events = Events,
 > {
   name?: N | null;
+  tags?: string | string[];
   version?: V | null;
   actions?: A | null;
   events?: E | null;
