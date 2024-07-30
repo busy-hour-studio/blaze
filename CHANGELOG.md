@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.3.4](https://github.com/Busy-Hour-Studio/blaze/compare/v3.3.3...v3.3.4) (2024-07-28)
+
+
+### Bug Fixes
+
+* empty context data ([abd4b44](https://github.com/Busy-Hour-Studio/blaze/commit/abd4b444648d490a91e0f238b873e0abe02d5cd5))
+
 ## [3.3.3](https://github.com/Busy-Hour-Studio/blaze/compare/v3.3.2...v3.3.3) (2024-07-12)
 
 
