@@ -32,18 +32,18 @@ export class BlazeContext<
   Q extends RecordUnknown = RecordUnknown,
   B extends RecordUnknown = RecordUnknown,
 > {
-  private readonly $honoCtx: HonoCtx | null;
-  private readonly $meta: Map<keyof M, M[keyof M]>;
+  private $honoCtx: HonoCtx | null;
+  private $meta: Map<keyof M, M[keyof M]>;
   private $query: Q | null;
   private $body: B | null;
   private $params: (B & P) | null;
   private $reqParams: P | null;
   private $reqHeaders: H | null;
+  private $validations: ValidationResult | null;
 
   public response: ResponseType | null;
   public status: StatusCode | null;
   public readonly headers: Map<string, string | string[]>;
-  public readonly validations: ValidationResult | null;
   public readonly isRest: boolean;
   public readonly broker: Broker;
 
@@ -68,7 +68,7 @@ export class BlazeContext<
     this.$meta = meta ? new Map(Object.entries(meta)) : new Map();
     this.headers = new Map();
     this.isRest = !!honoCtx;
-    this.validations = validations;
+    this.$validations = validations;
 
     this.broker = BlazeBroker;
     this.call = BlazeBroker.call.bind(BlazeBroker);
@@ -164,6 +164,10 @@ export class BlazeContext<
     };
   }
 
+  public get validations() {
+    return this.$validations;
+  }
+
   public static async create<
     M extends RecordUnknown,
     H extends RecordString,
@@ -241,9 +245,19 @@ export class BlazeContext<
       });
     }
 
-    const ctx: BlazeContext<M, H, P, Q, B> =
-      cachedCtx ??
-      new BlazeContext({
+    let ctx: BlazeContext<M, H, P, Q, B>;
+
+    if (cachedCtx) {
+      ctx = cachedCtx;
+      ctx.$body = data.body;
+      ctx.$params = null;
+      ctx.$reqHeaders = data.headers;
+      ctx.$query = data.query;
+      ctx.$honoCtx = honoCtx;
+      ctx.$meta = meta ? new Map(Object.entries(meta)) : new Map();
+      ctx.$validations = validations;
+    } else {
+      ctx = new BlazeContext({
         body: data.body,
         params: data.params,
         headers: data.headers,
@@ -252,6 +266,7 @@ export class BlazeContext<
         meta,
         validations,
       });
+    }
 
     if (honoCtx && cachedCtx) {
       Object.assign(ctx.headers, new Map(honoCtx.res.headers));

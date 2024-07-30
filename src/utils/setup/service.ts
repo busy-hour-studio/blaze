@@ -68,6 +68,7 @@ export class BlazeService {
     const restInstance = new BlazeServiceRest({
       action,
       router: this.router,
+      service: this.service,
       middlewares: this.middlewares,
     });
 

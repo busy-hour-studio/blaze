@@ -2,6 +2,7 @@ import type { Context as HonoCtx, MiddlewareHandler } from 'hono';
 import type { BlazeContext } from '../internal';
 import type { BlazeRouter } from '../router';
 import type { Action } from './action';
+import type { Service } from './service';
 
 export type Method =
   | 'ALL'
@@ -29,6 +30,7 @@ export interface RestParamOption {
 export type RestParam = RestParamOption | RestRoute;
 
 export interface RestHandlerOption {
+  service: Service;
   action: Omit<Action, 'name'>;
   router: BlazeRouter;
   middlewares: Middleware[];
