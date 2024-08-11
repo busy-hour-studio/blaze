@@ -1,6 +1,5 @@
 import type { Context as HonoCtx } from 'hono';
 import type { StatusCode } from 'hono/utils/http-status';
-import qs from 'node:querystring';
 import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
 // eslint-disable-next-line import/no-cycle
 import { BlazeBroker } from '.';
@@ -16,7 +15,7 @@ import type {
   ValidationResult,
 } from '../types/helper';
 import type { ResponseType } from '../types/rest';
-import { getReqBody } from '../utils/helper/context';
+import { getReqBody, getReqQuery } from '../utils/helper/context';
 import {
   validateBody,
   validateHeader,
@@ -99,9 +98,7 @@ export class BlazeContext<
     if (!this.$honoCtx) {
       this.$query = {} as Q;
     } else {
-      const url = new URL(this.$honoCtx.req.url).searchParams;
-
-      this.$query = qs.parse(url.toString()) as Q;
+      this.$query = getReqQuery<Q>(this.$honoCtx);
     }
 
     return this.$query;
