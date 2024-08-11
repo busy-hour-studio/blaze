@@ -2,7 +2,7 @@ import { ZodEffects, ZodObject, ZodRawShape } from 'zod';
 import { BlazeError } from '../../errors/BlazeError';
 import type { DataValidatorOption } from '../../types/helper';
 import type { Method } from '../../types/rest';
-import { getReqBody } from './context';
+import { getReqBody, getReqQuery } from './context';
 
 export function validateInput<
   T extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
@@ -63,7 +63,7 @@ export function validateQuery(options: DataValidatorOption) {
     options;
 
   if (!data.query && honoCtx) {
-    data.query = honoCtx.req.queries();
+    data.query = getReqQuery(honoCtx);
   }
 
   const result = validateInput(data.query, schema);
