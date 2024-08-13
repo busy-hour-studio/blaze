@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.3.7](https://github.com/Busy-Hour-Studio/blaze/compare/v3.3.6...v3.3.7) (2024-08-13)
+
+
+### Bug Fixes
+
+* not applied zod validations on params ([198008f](https://github.com/Busy-Hour-Studio/blaze/commit/198008f3f53d7e0681d52c43c41cdb2442afd413))
+
 ## [3.3.6](https://github.com/Busy-Hour-Studio/blaze/compare/v3.3.5...v3.3.6) (2024-08-11)
 
 
