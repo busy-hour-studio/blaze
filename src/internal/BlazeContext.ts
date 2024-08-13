@@ -247,8 +247,9 @@ export class BlazeContext<
     if (cachedCtx) {
       ctx = cachedCtx;
       ctx.$body = data.body;
-      ctx.$params = null;
+      ctx.$reqParams = data.params;
       ctx.$reqHeaders = data.headers;
+      ctx.$params = null;
       ctx.$query = data.query;
       ctx.$honoCtx = honoCtx;
       ctx.$meta = meta ? new Map(Object.entries(meta)) : new Map();
