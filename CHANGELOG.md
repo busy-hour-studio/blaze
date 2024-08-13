@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.3.6](https://github.com/Busy-Hour-Studio/blaze/compare/v3.3.5...v3.3.6) (2024-08-11)
+
+
+### Bug Fixes
+
+* ununified query form ([6c082d3](https://github.com/Busy-Hour-Studio/blaze/commit/6c082d39e379f64a7737bbba4e0a9eb0214d2aae))
+
 ## [3.3.5](https://github.com/Busy-Hour-Studio/blaze/compare/v3.3.4...v3.3.5) (2024-07-30)
 
 
