@@ -29,6 +29,16 @@ export function mapToObject(
   );
 }
 
+export function toArray<T>(value: T | T[]): T[] {
+  return Array.isArray(value) ? value : [value];
+}
+
+export function isNil<T>(
+  value: T | null | undefined
+): value is null | undefined {
+  return value === null || value === undefined;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-shadow
 export function removeTrailingSlash(path: string) {
   return path.replace(/^\/+/, '');
@@ -44,7 +54,7 @@ export function getRestPath(service: Service) {
 }
 
 export function getServiceName(service: Service) {
-  const version = service.version ? `v${service.version}` : '';
+  const version = !isNil(service.version) ? `v${service.version}` : '';
 
   return [version, service.name].filter(Boolean).join('.');
 }
@@ -57,16 +67,6 @@ export async function resolvePromise<T>(promise: Promise<T> | T) {
   } catch (err) {
     return [null, err] as const;
   }
-}
-
-export function toArray<T>(value: T | T[]): T[] {
-  return Array.isArray(value) ? value : [value];
-}
-
-export function isNil<T>(
-  value: T | null | undefined
-): value is null | undefined {
-  return value === null || value === undefined;
 }
 
 export async function createContext(
