@@ -46,8 +46,10 @@ export function removeTrailingSlash(path: string) {
 
 export function getRestPath(service: Service) {
   const version = service.version ? `v${service.version}` : '';
+  const restPath =
+    typeof service.rest === 'string' ? service.rest : service.name;
 
-  return [version, service.name]
+  return [version, restPath]
     .map((val) => (typeof val === 'string' ? removeTrailingSlash(val) : null))
     .filter(Boolean)
     .join('/');
