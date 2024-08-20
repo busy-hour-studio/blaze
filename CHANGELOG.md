@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [3.4.0](https://github.com/busy-hour-studio/blaze/compare/v3.3.7...v3.4.0) (2024-08-19)
+
+
+### Features
+
+* rest route renamer on service level ([9422062](https://github.com/busy-hour-studio/blaze/commit/94220622a2bddbfe510a8d1222715918ab15f7e6))
+
 ## [3.3.7](https://github.com/Busy-Hour-Studio/blaze/compare/v3.3.6...v3.3.7) (2024-08-13)
 
 
