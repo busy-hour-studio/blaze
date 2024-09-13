@@ -1,5 +1,5 @@
 import type { ResponseConfig } from '@asteasolutions/zod-to-openapi';
-import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
+import type { ZodSchema } from 'zod';
 import type { BlazeContext } from '../internal';
 import type { Random, RecordString, RecordUnknown } from './helper';
 import type {
@@ -10,18 +10,10 @@ import type {
 import type { Middleware, RestParam } from './rest';
 
 export interface ActionValidator<
-  H extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  P extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  Q extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  B extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  H extends ZodSchema = ZodSchema,
+  P extends ZodSchema = ZodSchema,
+  Q extends ZodSchema = ZodSchema,
+  B extends ZodSchema = ZodSchema,
 > {
   header?: H | null;
   params?: P | null;
@@ -58,18 +50,10 @@ export interface Action<
   R = unknown | void,
   HR = unknown | void,
   M extends RecordUnknown = RecordUnknown,
-  H extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  P extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  Q extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  B extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  H extends ZodSchema = ZodSchema,
+  P extends ZodSchema = ZodSchema,
+  Q extends ZodSchema = ZodSchema,
+  B extends ZodSchema = ZodSchema,
   AH extends AcceptedAfterHook<
     HR,
     M,

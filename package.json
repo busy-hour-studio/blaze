@@ -51,8 +51,8 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "hono": "^4.4.9",
-    "zod": "^3.22.4"
+    "hono": ">=4.6.1",
+    "zod": ">=3.23.8"
   },
   "author": "Muhammad Firdaus Sati (https://github.com/krsbx)",
   "keywords": [

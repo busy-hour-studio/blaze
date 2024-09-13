@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
 import { BlazeError } from '../errors/BlazeError';
+// eslint-disable-next-line import/no-cycle
 import { BlazeContext } from '../internal';
 import type { ActionCallResult } from '../types/action';
 import type { CreateContextOption } from '../types/context';
@@ -89,6 +90,18 @@ export async function createContext(
     result: blazeCtx,
     ok: true,
   };
+}
+
+export function isEmpty(value: Random): boolean {
+  if (Array.isArray(value)) {
+    return value.length === 0;
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.keys(value).length === 0;
+  }
+
+  return false;
 }
 
 export function isOnCjs() {
