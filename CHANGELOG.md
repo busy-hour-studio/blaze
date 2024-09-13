@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.0.0-0](https://github.com/busy-hour-studio/blaze/compare/v3.4.0...v4.0.0-0) (2024-09-13)
+
+
+### Bug Fixes
+
+* reduce context creation overhead ([818bd68](https://github.com/busy-hour-studio/blaze/commit/818bd68ed9e8e79a451e4a60d5de16dcf8f6de28))
+
 ## [3.4.0](https://github.com/busy-hour-studio/blaze/compare/v3.3.7...v3.4.0) (2024-08-19)
 
 
