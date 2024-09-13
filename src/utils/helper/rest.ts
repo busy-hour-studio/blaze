@@ -8,7 +8,7 @@ import type {
   RestResponseHandlerOption,
   RestRoute,
 } from '../../types/rest';
-import { mapToObject } from '../common';
+import { isEmpty, mapToObject } from '../common';
 
 export function extractRestPath(restRoute: RestRoute) {
   const restPath = restRoute.split(' ');
@@ -46,11 +46,11 @@ export function getRestResponse(
     return [result, undefined, undefined] as const;
   }
 
-  if (headers.size === 0) {
+  if (isEmpty(headers)) {
     return [result, status, undefined] as const;
   }
 
-  const resHeaders = mapToObject(options.ctx.headers);
+  const resHeaders = mapToObject(options.ctx.headers as never);
 
   return [result, status, resHeaders] as const;
 }

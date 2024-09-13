@@ -1,6 +1,6 @@
 import type { Context as HonoCtx } from 'hono';
 import type { StatusCode } from 'hono/utils/http-status';
-import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
+import type { ZodSchema } from 'zod';
 // eslint-disable-next-line import/no-cycle
 import { BlazeBroker } from '.';
 import type {
@@ -15,6 +15,7 @@ import type {
   ValidationResult,
 } from '../types/helper';
 import type { ResponseType } from '../types/rest';
+import { mapToObject } from '../utils/common';
 import { getReqBody, getReqQuery } from '../utils/helper/context';
 import {
   validateBody,
@@ -32,7 +33,7 @@ export class BlazeContext<
   B extends RecordUnknown = RecordUnknown,
 > {
   private $honoCtx: HonoCtx | null;
-  private $meta: Map<keyof M, M[keyof M]>;
+  private $meta: M | null;
   private $query: Q | null;
   private $body: B | null;
   private $params: (B & P) | null;
@@ -42,7 +43,7 @@ export class BlazeContext<
 
   public response: ResponseType | null;
   public status: StatusCode | null;
-  public readonly headers: Map<string, string | string[]>;
+  private $headers: Record<string, string | string[]> | null;
   public readonly isRest: boolean;
   public readonly broker: Broker;
 
@@ -64,8 +65,8 @@ export class BlazeContext<
 
     this.response = null;
     this.status = null;
-    this.$meta = meta ? new Map(Object.entries(meta)) : new Map();
-    this.headers = new Map();
+    this.$meta = meta ? structuredClone(meta) : null;
+    this.$headers = null;
     this.isRest = !!honoCtx;
     this.$validations = validations;
 
@@ -76,20 +77,42 @@ export class BlazeContext<
   }
 
   public get meta() {
+    if (!this.$meta) this.$meta = {} as M;
+
     const meta = this.$meta;
 
     return {
       set<K extends keyof M, V extends M[K]>(key: K, value: V) {
-        meta.set(key, value);
+        meta[key] = value;
 
         return this;
       },
       get<K extends keyof M, V extends M[K]>(key: K) {
-        return meta.get(key) as V;
+        return meta[key] as V;
       },
-      values: meta.values.bind(meta),
-      forEach: meta.forEach.bind(meta),
-      keys: meta.keys.bind(meta),
+      entries() {
+        return Object.entries(meta);
+      },
+    };
+  }
+
+  public get headers() {
+    if (!this.$headers) this.$headers = {};
+
+    const headers = this.$headers;
+
+    return {
+      set(key: string, value: string | string[]) {
+        headers[key] = value;
+
+        return this;
+      },
+      get(key: string) {
+        return headers[key];
+      },
+      entries() {
+        return Object.entries(headers);
+      },
     };
   }
 
@@ -171,10 +194,10 @@ export class BlazeContext<
     P extends RecordUnknown,
     Q extends RecordUnknown,
     B extends RecordUnknown,
-    HV extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-    PV extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-    QV extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-    BV extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    HV extends ZodSchema,
+    PV extends ZodSchema,
+    QV extends ZodSchema,
+    BV extends ZodSchema,
   >(
     options: CreateContextOption<M, H, P, Q, B, HV, PV, QV, BV>
   ): Promise<BlazeContext<M, H, P, Q, B>> {
@@ -252,7 +275,7 @@ export class BlazeContext<
       ctx.$params = null;
       ctx.$query = data.query;
       ctx.$honoCtx = honoCtx;
-      ctx.$meta = meta ? new Map(Object.entries(meta)) : new Map();
+      ctx.$meta = meta ? structuredClone(meta) : null;
       ctx.$validations = validations;
     } else {
       ctx = new BlazeContext({
@@ -267,7 +290,7 @@ export class BlazeContext<
     }
 
     if (honoCtx && cachedCtx) {
-      Object.assign(ctx.headers, new Map(honoCtx.res.headers));
+      ctx.$headers = mapToObject(honoCtx.res.headers as never);
     }
 
     return ctx;

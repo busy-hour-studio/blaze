@@ -1,12 +1,12 @@
-import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
+import type { ZodSchema } from 'zod';
 import type { Action, ActionValidator } from '../types/action';
 import type { RecordUnknown } from '../types/helper';
 
 export function createActionValidator<
-  H extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-  P extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-  Q extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-  B extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+  H extends ZodSchema,
+  P extends ZodSchema,
+  Q extends ZodSchema,
+  B extends ZodSchema,
 >(validator: ActionValidator<H, P, Q, B>) {
   return validator;
 }
@@ -15,10 +15,10 @@ export function createAction<
   R,
   HR,
   M extends RecordUnknown,
-  H extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-  P extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-  Q extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-  B extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+  H extends ZodSchema,
+  P extends ZodSchema,
+  Q extends ZodSchema,
+  B extends ZodSchema,
 >(action: Action<R, HR, M, H, P, Q, B>) {
   return action;
 }

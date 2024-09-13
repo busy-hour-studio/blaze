@@ -1,4 +1,4 @@
-import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
+import type { ZodSchema } from 'zod';
 import type { BlazeContext } from '../internal';
 import type { ActionHandler } from './action';
 import type { Random, RecordString, RecordUnknown } from './helper';
@@ -25,9 +25,7 @@ export interface EventHandler<
 
 export interface Event<
   M extends RecordUnknown = RecordUnknown,
-  P extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  P extends ZodSchema = ZodSchema,
 > {
   validator?: P | null;
   handler: EventHandler<M, P['_output']>;

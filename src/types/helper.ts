@@ -1,5 +1,5 @@
 import type { Context as HonoContext } from 'hono';
-import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
+import type { ZodSchema } from 'zod';
 
 export type RecordUnknown = Record<string, unknown>;
 
@@ -9,18 +9,10 @@ export type RecordString = Record<string, string>;
 export type Random = any;
 
 export interface ContextValidation<
-  H extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  P extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  Q extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  B extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  H extends ZodSchema = ZodSchema,
+  P extends ZodSchema = ZodSchema,
+  Q extends ZodSchema = ZodSchema,
+  B extends ZodSchema = ZodSchema,
 > {
   header?: H | null;
   params?: P | null;
@@ -54,7 +46,7 @@ export interface DataValidatorOption<
   B extends RecordUnknown = RecordUnknown,
 > {
   data: ContextData<H, P, Q, B>;
-  schema: ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>;
+  schema: ZodSchema;
   honoCtx: HonoContext | null;
   throwOnValidationError: boolean;
   validations: ValidationResult;

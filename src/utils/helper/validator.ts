@@ -1,15 +1,11 @@
-import { ZodEffects, ZodObject, ZodRawShape } from 'zod';
+import type { ZodSchema } from 'zod';
 import { BlazeError } from '../../errors/BlazeError';
 import type { DataValidatorOption } from '../../types/helper';
 import type { Method } from '../../types/rest';
 import { getReqBody, getReqQuery } from './context';
 
-export function validateInput<
-  T extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
->(input: unknown, schema: T) {
-  if (schema instanceof ZodEffects) return schema.safeParse(input);
-
-  const result = schema.passthrough().safeParse(input);
+export function validateInput<T extends ZodSchema>(input: unknown, schema: T) {
+  const result = schema.safeParse(input);
 
   return result;
 }
@@ -99,7 +95,7 @@ export async function validateBody(options: DataValidatorOption) {
     }
   }
 
-  const result = validateInput(data.body, schema);
+  const result = await validateInput(data.body, schema);
 
   validations.body = result.success;
 
