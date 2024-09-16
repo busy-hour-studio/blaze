@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.0.0-1](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0-0...v4.0.0-1) (2024-09-16)
+
+
+### Bug Fixes
+
+* after hooks result turns to any ([4e8988d](https://github.com/Busy-Hour-Studio/blaze/commit/4e8988d6613e6830b7fb99e021b1d1950ec6fbc7))
+
 ## [4.0.0-0](https://github.com/busy-hour-studio/blaze/compare/v3.4.0...v4.0.0-0) (2024-09-13)
 
 
