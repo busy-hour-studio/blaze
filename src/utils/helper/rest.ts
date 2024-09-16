@@ -1,6 +1,7 @@
 import type { StatusCode } from 'hono/utils/http-status';
 import { BlazeError } from '../../errors/BlazeError';
 import type { BlazeRouter } from '../../router';
+import { Random } from '../../types/helper';
 import type {
   Method,
   RestErrorHandlerOption,
@@ -35,24 +36,23 @@ export function getRouteHandler(router: BlazeRouter, method: Method | null) {
 export function getRestResponse(
   options: Omit<RestResponseHandlerOption, 'honoCtx'>
 ): readonly [
-  never,
+  Random,
   StatusCode | undefined,
   Record<string, string | string[]> | undefined,
 ] {
-  const result = options.result as never;
   const { status, headers } = options.ctx;
 
   if (!status) {
-    return [result, undefined, undefined] as const;
+    return [options.result, undefined, undefined] as const;
   }
 
   if (isEmpty(headers)) {
-    return [result, status, undefined] as const;
+    return [options.result, status, undefined] as const;
   }
 
   const resHeaders = mapToObject(options.ctx.headers as never);
 
-  return [result, status, resHeaders] as const;
+  return [options.result, status, resHeaders] as const;
 }
 
 export function handleRestError(options: RestErrorHandlerOption) {

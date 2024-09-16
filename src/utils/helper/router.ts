@@ -4,6 +4,7 @@ import type {
 } from '@asteasolutions/zod-to-openapi/dist/openapi-registry';
 import type { Env, Schema } from 'hono';
 import { mergePath } from 'hono/utils/url';
+import { BlazeError } from '../../errors/BlazeError';
 import type { BlazeRouter } from '../../router';
 import type { BlazeOpenAPIOption } from '../../types/router';
 
@@ -52,7 +53,7 @@ export function assignOpenAPIRegistry<
 
     default: {
       const errorIfNotExhaustive: never = def;
-      throw new Error(`Unknown registry type: ${errorIfNotExhaustive}`);
+      throw new BlazeError(`Unknown registry type: ${errorIfNotExhaustive}`);
     }
   }
 }

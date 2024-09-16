@@ -27,7 +27,7 @@ export interface AfterHookHandler<
   Q extends RecordUnknown = RecordUnknown,
   B extends RecordUnknown = RecordUnknown,
 > {
-  (ctx: BlazeContext<M, H, P, Q, B>, res: never): Promise<R>;
+  (ctx: BlazeContext<M, H, P, Q, B>, res: Random): Promise<R>;
 }
 
 export type AnyAfterHookHandler = AfterHookHandler<

@@ -54,6 +54,13 @@
     "hono": ">=4.6.1",
     "zod": ">=3.23.8"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Busy-Hour-Studio/blaze.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Busy-Hour-Studio/blaze/issues"
+  },
   "author": "Muhammad Firdaus Sati (https://github.com/krsbx)",
   "keywords": [
     "hono",

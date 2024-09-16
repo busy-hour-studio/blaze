@@ -37,7 +37,7 @@ export async function afterActionHookHandler(
 
   for (const hook of hooks) {
     const [hookRes, hookErr] = await resolvePromise(
-      hook(options.blazeCtx, result as never)
+      hook(options.blazeCtx, result)
     );
 
     if (hookErr) {
