@@ -15,6 +15,8 @@ export type {
   ActionCallRecord,
   ActionEventCallRequest,
   EventCallRecord,
+  TrpcMutationCallRecord,
+  TrpcQueryCallRecord,
 } from './types/common';
 export type { AnyEvent, Event, Events } from './types/event';
 export type {

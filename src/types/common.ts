@@ -25,3 +25,11 @@ export interface EventCallRecord {
   //   never
   // >;
 }
+
+export interface TrpcQueryCallRecord {
+  // Extend the interface with other modules
+}
+
+export interface TrpcMutationCallRecord {
+  // Extend the interface with other modules
+}

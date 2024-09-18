@@ -1,4 +1,5 @@
 import type { ResponseConfig } from '@asteasolutions/zod-to-openapi';
+import type { ProcedureType } from '@trpc/server';
 import type { ZodSchema } from 'zod';
 import type { BlazeContext } from '../internal';
 import type { Random, RecordString, RecordUnknown } from './helper';
@@ -82,6 +83,7 @@ export interface Action<
     Q['_output'],
     B['_output']
   >,
+  TRPC extends ProcedureType = ProcedureType,
 > {
   openapi?: ActionOpenAPI | null;
   middlewares?: Middleware[] | null;
@@ -98,6 +100,7 @@ export interface Action<
   rest?: RestParam | null;
   hooks?: ActionHook<AH, BH> | null;
   throwOnValidationError?: boolean | null;
+  trpc?: TRPC | null;
 }
 
 export type ActionCallResult<U> =
@@ -105,6 +108,7 @@ export type ActionCallResult<U> =
   | { ok: true; result: U };
 
 export type AnyAction = Action<
+  Random,
   Random,
   Random,
   Random,

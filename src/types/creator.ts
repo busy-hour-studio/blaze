@@ -1,3 +1,4 @@
+import type { ProcedureType } from '@trpc/server';
 import type { ZodSchema } from 'zod';
 import type { Action, ActionOpenAPI, Actions, ActionValidator } from './action';
 import type { Event, Events } from './event';
@@ -46,9 +47,10 @@ export interface BlazeActionCreator {
       Q['_output'],
       B['_output']
     >,
+    TRPC extends ProcedureType,
   >(
-    action: Action<R, HR, M, H, P, Q, B, AH, BH>
-  ): Action<R, HR, M, H, P, Q, B, AH, BH>;
+    action: Action<R, HR, M, H, P, Q, B, AH, BH, TRPC>
+  ): Action<R, HR, M, H, P, Q, B, AH, BH, TRPC>;
   /**
    * Create a reuseable validator for actions body, params and headers.
    * @example
