@@ -62,7 +62,11 @@ export function getServiceName(service: Service) {
   return [version, service.name].filter(Boolean).join('.');
 }
 
-export async function resolvePromise<T>(promise: Promise<T> | T) {
+export async function resolvePromise<T>(
+  promise: Promise<T> | T
+): Promise<
+  readonly [result: T, error: null] | readonly [result: null, error: unknown]
+> {
   try {
     const res = await promise;
 
