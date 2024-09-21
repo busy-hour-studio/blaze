@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.0.0-2](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0-1...v4.0.0-2) (2024-09-18)
+
+
+### Features
+
+* **rc:** trpc actions supports ([97a71ea](https://github.com/Busy-Hour-Studio/blaze/commit/97a71eaed5ad45efbe4d1d87b4670fa0b84fd357))
+
 ## [4.0.0-1](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0-0...v4.0.0-1) (2024-09-16)
 
 
