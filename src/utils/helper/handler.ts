@@ -1,30 +1,20 @@
 import { BlazeContext } from '../../internal';
-import { Action, ActionCallResult } from '../../types/action';
-import { resolvePromise } from '../common';
+import type { Action } from '../../types/action';
 import { afterActionHookHandler, beforeActionHookHandler } from './hooks';
 
 // Reuseable action handler for Call/Emit/REST
 export async function eventHandler(
   action: Action,
   blazeCtx: BlazeContext
-): Promise<ActionCallResult<unknown>> {
+): Promise<unknown> {
   if (action?.hooks?.before) {
-    const beforeHooksRes = await beforeActionHookHandler({
+    await beforeActionHookHandler({
       blazeCtx,
       hooks: action.hooks.before,
     });
-
-    if (!beforeHooksRes.ok) return beforeHooksRes;
   }
 
-  const [result, err] = await resolvePromise(action.handler(blazeCtx));
-
-  if (err) {
-    return {
-      error: err as Error,
-      ok: false,
-    };
-  }
+  const result = await action.handler(blazeCtx);
 
   if (action?.hooks?.after) {
     const afterHooksRes = await afterActionHookHandler({
@@ -36,8 +26,5 @@ export async function eventHandler(
     return afterHooksRes;
   }
 
-  return {
-    ok: true,
-    result,
-  };
+  return result;
 }

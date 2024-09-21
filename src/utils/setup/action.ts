@@ -1,8 +1,7 @@
-import { BlazeEvent } from '../../internal';
+import { BlazeContext, BlazeEvent } from '../../internal';
 import type { Action } from '../../types/action';
-import { Random } from '../../types/helper';
+import type { Random } from '../../types/helper';
 import type { CreateActionOption } from '../../types/service';
-import { createContext } from '../common';
 import { eventHandler } from '../helper/handler';
 
 export class BlazeServiceAction {
@@ -21,7 +20,7 @@ export class BlazeServiceAction {
   public async actionHandler(...values: Random[]) {
     const [body, params, headers, query] = values;
 
-    const contextRes = await createContext({
+    const context = await BlazeContext.create({
       honoCtx: null,
       body,
       headers,
@@ -32,10 +31,6 @@ export class BlazeServiceAction {
       throwOnValidationError: this.action.throwOnValidationError ?? false,
     });
 
-    if (!contextRes.ok) return contextRes;
-
-    const { result: blazeCtx } = contextRes;
-
-    return eventHandler(this.action, blazeCtx);
+    return eventHandler(this.action, context);
   }
 }

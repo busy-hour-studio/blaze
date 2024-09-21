@@ -1,11 +1,12 @@
 import type { Context as HonoCtx } from 'hono';
 import type { StatusCode } from 'hono/utils/http-status';
 import { BlazeError } from '../../errors/BlazeError';
+import { BlazeContext } from '../../internal';
 import type { Action } from '../../types/action';
 import type { Method, Middleware, RestHandlerOption } from '../../types/rest';
 import type { OpenAPIRequest } from '../../types/router';
 import type { Service } from '../../types/service';
-import { createContext, isNil } from '../common';
+import { isNil, resolvePromise } from '../common';
 import { eventHandler } from '../helper/handler';
 import {
   extractRestParams,
@@ -64,50 +65,50 @@ export class BlazeServiceRest {
   }
 
   public async restHandler(honoCtx: HonoCtx) {
-    const contextRes = await createContext({
-      honoCtx,
-      // NULL => automatically use honoCtx value instead
-      body: null,
-      headers: null,
-      params: null,
-      query: null,
-      validator: this.action.validator ?? null,
-      meta: this.action.meta ?? null,
-      throwOnValidationError: this.action.throwOnValidationError ?? false,
-    });
+    const [context, error] = await resolvePromise(
+      BlazeContext.create({
+        honoCtx,
+        // NULL => automatically use honoCtx value instead
+        body: null,
+        headers: null,
+        params: null,
+        query: null,
+        validator: this.action.validator ?? null,
+        meta: this.action.meta ?? null,
+        throwOnValidationError: this.action.throwOnValidationError ?? false,
+      })
+    );
 
-    if (!contextRes.ok) {
+    if (error || !context) {
       let status: StatusCode = 500;
 
-      if (contextRes.error instanceof BlazeError) {
-        status = contextRes.error.status as StatusCode;
+      if (error instanceof BlazeError) {
+        status = error.status as StatusCode;
       }
 
-      return honoCtx.json(contextRes.error, status);
+      return honoCtx.json(error as Error, status);
     }
 
-    const { result: blazeCtx } = contextRes;
+    const [restResult, restError] = await resolvePromise(
+      eventHandler(this.action, context)
+    );
 
-    const restResult = await eventHandler(this.action, blazeCtx);
-
-    if (!restResult.ok) {
+    if (restError) {
       return handleRestError({
-        ctx: blazeCtx,
-        err: restResult.error,
+        ctx: context,
+        err: restError,
         honoCtx,
       });
     }
 
-    const { result } = restResult;
-
-    if (isNil(result)) {
+    if (isNil(restResult)) {
       return honoCtx.body(null, 204);
     }
 
     return handleRestResponse({
-      ctx: blazeCtx,
+      ctx: context,
       honoCtx,
-      result,
+      result: restResult,
     });
   }
 

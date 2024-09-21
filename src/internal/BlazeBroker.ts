@@ -2,10 +2,14 @@
 /* eslint-disable import/no-cycle */
 import { BlazeEvent } from '.';
 import { BlazeError } from '../errors/BlazeError';
-import type { ActionCallResult as Result } from '../types/action';
+import type {
+  ActionCallResult,
+  ActionCallResult as Result,
+} from '../types/action';
 import type { ActionCallRecord, EventCallRecord } from '../types/common';
 import type { EventName } from '../types/event';
 import type { Random } from '../types/helper';
+import { resolvePromise } from '../utils/common';
 import { RESERVED_KEYWORD } from '../utils/constant';
 
 export class BlazeBroker {
@@ -32,15 +36,20 @@ export class BlazeBroker {
     // @ts-expect-error
     V = Result<U['result']>,
     // @ts-expect-error
-  >(eventName: T, body: U['body']): Promise<V>;
+  >(eventName: T, body: U['body']): Promise<ActionCallResult<V>>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
     // @ts-expect-error
     U = ActionCallRecord[T],
     // @ts-expect-error
     V = Result<U['result']>,
+  >(
+    eventName: T,
     // @ts-expect-error
-  >(eventName: T, body: U['body'], params: U['params']): Promise<V>;
+    body: U['body'],
+    // @ts-expect-error
+    params: U['params']
+  ): Promise<ActionCallResult<V>>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
     // @ts-expect-error
@@ -54,8 +63,8 @@ export class BlazeBroker {
     // @ts-expect-error
     params: U['params'],
     // @ts-expect-error
-    headers: U['headers']
-  ): Promise<V>;
+    headers: U['headers'] // @ts-expect-error
+  ): Promise<ActioncallResult<V>>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
     // @ts-expect-error
@@ -71,20 +80,32 @@ export class BlazeBroker {
     // @ts-expect-error
     headers: U['headers'],
     // @ts-expect-error
-    query: U['query']
-  ): Promise<V>;
+    query: U['query'] // @ts-expect-error
+  ): Promise<ActioncallResult<V>>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
     // @ts-expect-error
     U = ActionCallRecord[T],
     // @ts-expect-error
     V = Result<U['result']>,
-  >(eventName: T, ...values: Random[]) {
+  >(eventName: T, ...values: Random[]): Promise<ActionCallResult<V>> {
     this.validateEventName(eventName);
 
-    const results = await BlazeEvent.emitAsync<never, V>(eventName, ...values);
+    const [results, error] = await resolvePromise(
+      BlazeEvent.emitAsync<never, V>(eventName, ...values)
+    );
 
-    return results[0];
+    if (error || !results) {
+      return {
+        ok: false,
+        error: error as Error,
+      };
+    }
+
+    return {
+      ok: true,
+      result: results[0],
+    };
   }
 
   public emit<

@@ -1,57 +1,30 @@
-import type { ActionCallResult } from '../../types/action';
 import type {
   AfterHookHandlerOption,
   BeforeHookHandlerOption,
 } from '../../types/hooks';
-import { resolvePromise, toArray } from '../common';
+import { toArray } from '../common';
 
 export async function beforeActionHookHandler(
   options: BeforeHookHandlerOption
-): Promise<ActionCallResult<unknown>> {
+): Promise<void> {
   const hooks = toArray(options.hooks);
 
   for (const hook of hooks) {
-    const [, hookErr] = await resolvePromise(hook(options.blazeCtx));
-
-    if (hookErr) {
-      return {
-        error: hookErr as Error,
-        ok: false,
-      };
-    }
+    await hook(options.blazeCtx);
   }
-
-  return {
-    ok: true,
-    result: null,
-  };
 }
 
 export async function afterActionHookHandler(
   options: AfterHookHandlerOption
-): Promise<ActionCallResult<unknown>> {
+): Promise<unknown> {
   const hooks = toArray(options.hooks);
 
   // eslint-disable-next-line prefer-destructuring
   let result = options.result;
 
   for (const hook of hooks) {
-    const [hookRes, hookErr] = await resolvePromise(
-      hook(options.blazeCtx, result)
-    );
-
-    if (hookErr) {
-      return {
-        error: hookErr as Error,
-        ok: false,
-      };
-    }
-
-    result = hookRes;
+    result = await hook(options.blazeCtx, result);
   }
 
-  return {
-    ok: true,
-    result,
-  };
+  return result;
 }
