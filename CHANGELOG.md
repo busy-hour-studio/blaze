@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.0.0-3](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0-2...v4.0.0-3) (2024-09-21)
+
+
+### Bug Fixes
+
+* remove action resolver ([61697e2](https://github.com/Busy-Hour-Studio/blaze/commit/61697e2153807101fa8cbe287e281e4fc258e999))
+
 ## [4.0.0-2](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0-1...v4.0.0-2) (2024-09-18)
 
 
