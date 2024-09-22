@@ -1,4 +1,4 @@
-import { BlazeCreator } from '../../../../src';
+import { BlazeCreator } from '@busy-hour/blaze';
 import { validateUserHeader } from '../hooks/users.validate.header';
 import { USER_DB } from '../utils/constants';
 import { userHeaderSchema, userQuerySchema } from '../utils/schemas';
@@ -24,6 +24,7 @@ export const onListUser = BlazeCreator.action({
   rest: 'GET /',
   openapi: listUserOpenApi,
   validator: listUserValidator,
+  trpc: 'query',
   hooks: {
     before: validateUserHeader,
   },

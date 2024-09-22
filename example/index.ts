@@ -1,7 +1,9 @@
+import { Blaze } from '@busy-hour/blaze';
+import { cors } from '@busy-hour/blaze/cors';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Blaze } from '../src';
-import { cors } from '../src/middlewares/cors';
+
+export type { BlazeTrpcRouter } from '@busy-hour/blaze/trpc';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
