@@ -1,8 +1,8 @@
 import fs from 'node:fs';
-import { BlazeError } from '../errors/BlazeError';
-import { BlazeContext } from '../internal';
-import type { LoadServiceOption } from '../types/service';
-import { BlazeService } from './setup/service';
+import { BlazeError } from '../../errors/BlazeError';
+import { BlazeContext } from '../../internal';
+import type { LoadServiceOption } from '../../types/service';
+import { BlazeService } from './service';
 
 /**
  * Load all the services from the given path

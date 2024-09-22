@@ -1,4 +1,5 @@
-import { DependencyModule } from '../types/config';
+import { BlazeError } from '../errors/BlazeError';
+import { DEPENDENCY_MODULE_MAP, DependencyModule } from '../types/config';
 import { crossRequire } from '../utils/common';
 import { ExternalModule, PossibleRunTime } from '../utils/constant';
 
@@ -8,8 +9,10 @@ export class BlazeDependency {
 
   constructor() {
     this.modules = {
-      [ExternalModule.NodeAdapter]: this.loadNodeAdapter(),
-      [ExternalModule.ZodApi]: this.loadZodApi(),
+      [ExternalModule.NodeAdapter]: this.loadModule(ExternalModule.NodeAdapter),
+      [ExternalModule.ZodApi]: this.loadModule(ExternalModule.ZodApi),
+      [ExternalModule.Trpc]: this.loadModule(ExternalModule.Trpc),
+      [ExternalModule.TrpcAdapter]: this.loadModule(ExternalModule.TrpcAdapter),
     };
     this.$runTime = this.getRunTime();
   }
@@ -21,17 +24,9 @@ export class BlazeDependency {
     return PossibleRunTime.Other;
   }
 
-  private loadNodeAdapter() {
+  private loadModule<T extends ExternalModule>(module: T) {
     try {
-      return crossRequire(ExternalModule.NodeAdapter);
-    } catch {
-      return null;
-    }
-  }
-
-  private loadZodApi() {
-    try {
-      return crossRequire(ExternalModule.ZodApi);
+      return crossRequire(module);
     } catch {
       return null;
     }
@@ -39,5 +34,19 @@ export class BlazeDependency {
 
   public get runTime() {
     return this.$runTime;
+  }
+
+  public module<
+    T extends ExternalModule,
+    U extends DependencyModule[T],
+    V extends U extends null ? never : U,
+  >(module: T): V {
+    if (!this.modules[module]) {
+      throw new BlazeError(
+        `\x1b[31m[Blaze - ERROR]  ${DEPENDENCY_MODULE_MAP[module]} is not installed\x1b[0m`
+      );
+    }
+
+    return this.modules[module] as V;
   }
 }
