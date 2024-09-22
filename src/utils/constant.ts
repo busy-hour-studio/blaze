@@ -24,6 +24,8 @@ export const FORM_CONTENT_TYPE = [
 export enum ExternalModule {
   NodeAdapter = '@hono/node-server',
   ZodApi = '@asteasolutions/zod-to-openapi',
+  Trpc = '@trpc/server',
+  TrpcAdapter = '@trpc/server/adapters/fetch',
 }
 
 export enum PossibleRunTime {

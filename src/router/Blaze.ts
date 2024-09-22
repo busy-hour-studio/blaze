@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { AddressInfo } from 'node:net';
+import type { AddressInfo } from 'node:net';
 import { BlazeDependency } from '../config';
 import { BlazeError } from '../errors/BlazeError';
 import { BlazeContext } from '../internal';
@@ -9,10 +9,11 @@ import type {
   CreateBlazeOption,
   ServeConfig,
 } from '../types/router';
-import { LoadServicesOption } from '../types/service';
+import type { LoadServicesOption } from '../types/service';
 import { isNil } from '../utils/common';
 import { ExternalModule, PossibleRunTime } from '../utils/constant';
 import { BlazeService } from '../utils/setup/service';
+import { type UseTrpc, useTrpc } from '../utils/trpc';
 import { BlazeRouter } from './BlazeRouter';
 
 export class Blaze {
@@ -68,6 +69,7 @@ export class Blaze {
   private readonly adapter: DependencyModule[ExternalModule.NodeAdapter];
 
   public readonly fetch: BlazeFetch;
+  public readonly trpc: UseTrpc;
 
   constructor(options: CreateBlazeOption = {}) {
     this.services = [];
@@ -86,6 +88,7 @@ export class Blaze {
     this.adapter = BlazeDependency.modules[ExternalModule.NodeAdapter];
     this.fetch = this.router.fetch.bind(this.router) as BlazeFetch;
     this.use = this.router.use.bind(this.router);
+    this.trpc = useTrpc.bind(this);
 
     if (!options.path) return;
 

@@ -8,12 +8,15 @@ const __dirname = path.dirname(__filename);
 
 const servicePath = path.resolve(__dirname, 'services');
 
-const app = new Blaze({
+const app = new Blaze();
+
+await app.load({
   path: servicePath,
   autoStart: true,
   middlewares: [['ALL', cors()]],
 });
 
+// Auto generate OpenAPI documentation example
 app.doc('/doc', {
   openapi: '3.0.0',
   info: {
@@ -23,5 +26,10 @@ app.doc('/doc', {
 });
 
 const config = app.serve(3000);
+
+// TRPC server examples
+app.trpc('/trpc/*', {
+  middlewares: [cors()],
+});
 
 export default config;

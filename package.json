@@ -215,6 +215,11 @@
       "types": "./dist/types/utils/setup/index.d.ts",
       "import": "./dist/esm/utils/setup/index.js",
       "require": "./dist/cjs/utils/setup/index.js"
+    },
+    "./trpc": {
+      "types": "./dist/types/types/trpc.d.ts",
+      "import": "./dist/esm/types/trpc.js",
+      "require": "./dist/cjs/types/trpc.js"
     }
   }
 }
