@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.1.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0...v4.1.0) (2024-09-24)
+
+
+### Features
+
+* direct service import ([c8d83e4](https://github.com/Busy-Hour-Studio/blaze/commit/c8d83e48823bf5cc202141e74de929d021444a35))
+
+
+### Bug Fixes
+
+* bun internal state error ([08e3b5c](https://github.com/Busy-Hour-Studio/blaze/commit/08e3b5c3b48f437ffb45be9f013465dc6c103ce4))
+
 ## [4.0.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0-3...v4.0.0) (2024-09-22)
 
 
