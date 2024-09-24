@@ -37,6 +37,12 @@ export interface LoadServicesOption {
   middlewares?: Middleware[] | null;
 }
 
+export interface ImportServiceOption {
+  services: Service[];
+  autoStart?: boolean | null;
+  middlewares?: Middleware[] | null;
+}
+
 export interface CreateServiceOption {
   sourcePath: string;
   servicePath: string;

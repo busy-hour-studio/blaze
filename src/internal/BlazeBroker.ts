@@ -63,8 +63,8 @@ export class BlazeBroker {
     // @ts-expect-error
     params: U['params'],
     // @ts-expect-error
-    headers: U['headers'] // @ts-expect-error
-  ): Promise<ActioncallResult<V>>;
+    headers: U['headers']
+  ): Promise<ActionCallResult<V>>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
     // @ts-expect-error
@@ -80,8 +80,8 @@ export class BlazeBroker {
     // @ts-expect-error
     headers: U['headers'],
     // @ts-expect-error
-    query: U['query'] // @ts-expect-error
-  ): Promise<ActioncallResult<V>>;
+    query: U['query']
+  ): Promise<ActionCallResult<V>>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
     // @ts-expect-error
