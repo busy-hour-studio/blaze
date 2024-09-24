@@ -9,11 +9,11 @@ import type {
   CreateBlazeOption,
   ServeConfig,
 } from '../types/router';
-import type { LoadServicesOption } from '../types/service';
+import type { ImportServiceOption, LoadServicesOption } from '../types/service';
 import { isNil } from '../utils/common';
 import { ExternalModule, PossibleRunTime } from '../utils/constant';
 import { BlazeService } from '../utils/setup/service';
-import { type UseTrpc, useTrpc } from '../utils/trpc';
+import { useTrpc, type UseTrpc } from '../utils/trpc';
 import { BlazeRouter } from './BlazeRouter';
 
 export class Blaze {
@@ -112,7 +112,7 @@ export class Blaze {
   }
 
   /**
-   * `load` load all the services from the given path
+   * `load` all the services from the given path
    * @example
    * ```ts
    *  app.load({
@@ -149,6 +149,34 @@ export class Blaze {
     this.services.push(...services);
 
     if (!autoStart) return;
+
+    this.start();
+  }
+
+  /**
+   * Same as `load` but requires an array of services instead of a path. Recommended if you want to bundle those services with Bun
+   * @example
+   * ```ts
+   * app.import({
+   *  services: [userService, authService, ...],
+   *  autoStart: true
+   * })
+   * ```
+   */
+  public import(options: ImportServiceOption) {
+    options.services.forEach((serv) => {
+      const services = new BlazeService({
+        app: this.router,
+        blazeCtx: this.blazeCtx,
+        middlewares: options.middlewares ?? [],
+        service: serv,
+        servicePath: '',
+      });
+
+      this.services.push(services);
+    });
+
+    if (!options.autoStart) return;
 
     this.start();
   }

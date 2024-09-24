@@ -37,7 +37,7 @@ export class BlazeRouter<
   public readonly openAPIRegistry: OpenAPIRegistry | null;
   private zodApi: DependencyModule[ExternalModule.ZodApi];
 
-  constructor(options: CreateBlazeOption) {
+  constructor(options: Pick<CreateBlazeOption, 'router'> = {}) {
     super({ strict: false, router: options.router });
 
     this.zodApi = BlazeDependency.modules[ExternalModule.ZodApi];
@@ -102,16 +102,6 @@ export class BlazeRouter<
     const document = generator.generateDocument(config);
 
     return document;
-  }
-
-  public off(method: string, path: string) {
-    const index = this.router.routes.findIndex(
-      (route) => route[0] === method && route[1] === path
-    );
-
-    if (index === -1) return;
-
-    this.router.routes.splice(index, 1);
   }
 
   public doc(path: string, config: OpenAPIObjectConfig) {
