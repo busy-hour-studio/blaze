@@ -12,14 +12,14 @@ importers:
         specifier: ^7.1.1
         version: 7.1.1(zod@3.23.8)
       '@busy-hour/blaze':
-        specifier: ^4.0.0
-        version: 4.0.0
-      '@busy-hour/blaze-types':
-        specifier: ^0.2.0
-        version: 0.2.0
+        specifier: ^4.1.0
+        version: 4.1.0
       '@hono/node-server':
         specifier: ^1.13.1
         version: 1.13.1(hono@4.6.2)
+      '@hono/swagger-ui':
+        specifier: ^0.4.1
+        version: 0.4.1(hono@4.6.2)
       '@trpc/server':
         specifier: ^10.45.2
         version: 10.45.2
@@ -30,6 +30,9 @@ importers:
         specifier: ^3.23.8
         version: 3.23.8
     devDependencies:
+      '@busy-hour/blaze-types':
+        specifier: ^0.2.0
+        version: 0.2.0
       '@types/node':
         specifier: ^22.5.5
         version: 22.5.5
@@ -47,8 +50,8 @@ packages:
   '@busy-hour/blaze-types@0.2.0':
     resolution: {integrity: sha512-yKzEVtY+7sjoe2x5KcuyFfkqSeCZy0mf/GPBbFemIaBY22GD8ws9PcZRrugy8nkSslQKH2+HlXlsgPjrd2eEgQ==}
 
-  '@busy-hour/blaze@4.0.0':
-    resolution: {integrity: sha512-2B2nNfO96Ixk9S2LKatBEemCmf1ZwjHQ6jV+hSI9eLRV0SU8xIJRrIQVszJekbAeIAJiAIdL8UN1GbLKwmimtA==}
+  '@busy-hour/blaze@4.1.0':
+    resolution: {integrity: sha512-Y8A8UvJ3bg7nCjn71mRlXzfs/K6lMe1Y6sy1cfGACH4T9P6KXgQQaFGZE1lupk3Jxem8lLdQ5/S2CByIMd/HrQ==}
 
   '@esbuild/aix-ppc64@0.23.1':
     resolution: {integrity: sha512-6VhYk1diRqrhBAqpJEdjASR/+WVRtfjpqKuNw11cLiaWpAT/Uu+nokB+UJnevzy/P9C/ty6AOe0dwueMrGh/iQ==}
@@ -200,6 +203,11 @@ packages:
     peerDependencies:
       hono: ^4
 
+  '@hono/swagger-ui@0.4.1':
+    resolution: {integrity: sha512-kPaJatHffeYQ3yVkHo878hCqwfapqx54FczJVJ+eRWt8J4biyVVMIdCAJb6MyA8bcnHUoTmUpPc7OJAV1VTg2g==}
+    peerDependencies:
+      hono: '*'
+
   '@trpc/server@10.45.2':
     resolution: {integrity: sha512-wOrSThNNE4HUnuhJG6PfDRp4L2009KDVxsd+2VYH8ro6o/7/jwYZ8Uu5j+VaW+mOmc8EHerHzGcdbGNQSAUPgg==}
 
@@ -315,10 +323,10 @@ snapshots:
 
   '@busy-hour/blaze-types@0.2.0':
     dependencies:
-      '@busy-hour/blaze': 4.0.0
+      '@busy-hour/blaze': 4.1.0
       chokidar: 3.6.0
 
-  '@busy-hour/blaze@4.0.0':
+  '@busy-hour/blaze@4.1.0':
     dependencies:
       hono: 4.6.2
       zod: 3.23.8
@@ -396,6 +404,10 @@ snapshots:
     optional: true
 
   '@hono/node-server@1.13.1(hono@4.6.2)':
+    dependencies:
+      hono: 4.6.2
+
+  '@hono/swagger-ui@0.4.1(hono@4.6.2)':
     dependencies:
       hono: 4.6.2
 
