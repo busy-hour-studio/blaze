@@ -30,5 +30,6 @@ export enum ExternalModule {
 
 export enum PossibleRunTime {
   Node = 'node',
+  Bun = 'bun',
   Other = 'other',
 }

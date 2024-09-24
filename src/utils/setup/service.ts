@@ -125,14 +125,6 @@ export class BlazeService {
     // Trigger the on stopped listener
     this.service.onStopped?.(this.handlers);
 
-    // Remove all the rest
-    this.rests.forEach((rest) => {
-      const method: Method = rest.method ?? 'ALL';
-
-      // this.router?.off?.(method, rest.path);
-      this.mainRouter?.off?.(method, rest.path);
-    });
-
     // Remove all the action
     this.actions.forEach((action) => {
       BlazeEvent.off(action.actionName, action.actionHandler);
