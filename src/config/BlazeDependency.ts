@@ -8,17 +8,24 @@ export class BlazeDependency {
   public readonly modules: DependencyModule;
 
   constructor() {
+    this.$runTime = this.getRunTime();
+
     this.modules = {
-      [ExternalModule.NodeAdapter]: this.loadModule(ExternalModule.NodeAdapter),
+      [ExternalModule.NodeAdapter]: null,
       [ExternalModule.ZodApi]: this.loadModule(ExternalModule.ZodApi),
       [ExternalModule.Trpc]: this.loadModule(ExternalModule.Trpc),
       [ExternalModule.TrpcAdapter]: this.loadModule(ExternalModule.TrpcAdapter),
     };
-    this.$runTime = this.getRunTime();
+
+    if (this.$runTime === PossibleRunTime.Bun) return;
+
+    this.modules[ExternalModule.NodeAdapter] = this.loadModule(
+      ExternalModule.NodeAdapter
+    );
   }
 
   private getRunTime() {
-    if (process.versions.bun) return PossibleRunTime.Other;
+    if (process.versions.bun) return PossibleRunTime.Bun;
     if (process.versions.node) return PossibleRunTime.Node;
 
     return PossibleRunTime.Other;
@@ -43,7 +50,7 @@ export class BlazeDependency {
   >(module: T): V {
     if (!this.modules[module]) {
       throw new BlazeError(
-        `\x1b[31m[Blaze - ERROR]  ${DEPENDENCY_MODULE_MAP[module]} is not installed\x1b[0m`
+        `\x1b[31m[Blaze - ERROR]\t${DEPENDENCY_MODULE_MAP[module]} is not installed\x1b[0m`
       );
     }
 
