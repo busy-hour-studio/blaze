@@ -220,6 +220,11 @@
       "types": "./dist/types/types/trpc.d.ts",
       "import": "./dist/esm/types/trpc.js",
       "require": "./dist/cjs/types/trpc.js"
+    },
+    "./constant": {
+      "types": "./dist/types/utils/constant.d.ts",
+      "import": "./dist/esm/utils/constant.js",
+      "require": "./dist/cjs/utils/constant.js"
     }
   }
 }

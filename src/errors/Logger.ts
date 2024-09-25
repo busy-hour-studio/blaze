@@ -1,3 +1,5 @@
+import { BlazeError } from './BlazeError';
+
 export class Logger {
   public static info(...args: unknown[]) {
     console.log(`\x1b[0m[Blaze - LOG]\t`, ...args, '\x1b[0m');
@@ -13,5 +15,9 @@ export class Logger {
 
   public static debug(...args: unknown[]) {
     console.debug(`\x1b[34m[Blaze - DEBUG]\t`, ...args, '\x1b[0m');
+  }
+
+  public static throw(message: string) {
+    return new BlazeError(`\x1b[31m[Blaze - ERROR]\t${message}\x1b[0m`, 500);
   }
 }

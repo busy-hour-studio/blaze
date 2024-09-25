@@ -1,6 +1,7 @@
 import type { Context as HonoCtx } from 'hono';
 import type { StatusCode } from 'hono/utils/http-status';
 import { BlazeError } from '../../errors/BlazeError';
+import { Logger } from '../../errors/Logger';
 import { BlazeContext } from '../../internal';
 import type { Action } from '../../types/action';
 import type { Method, Middleware, RestHandlerOption } from '../../types/rest';
@@ -24,7 +25,7 @@ export class BlazeServiceRest {
     const { router, action, service } = options;
 
     if (!action.rest) {
-      throw new BlazeError('Rest property is required');
+      throw Logger.throw('Rest property is required');
     }
 
     const [method, path] = extractRestParams(action.rest);
