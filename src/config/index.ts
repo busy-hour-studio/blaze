@@ -1,3 +1,3 @@
-import { BlazeDependency as Depedency } from './BlazeDependency';
+import { BlazeConfig as Config } from './BlazeConfig';
 
-export const BlazeDependency = new Depedency();
+export const BlazeConfig = new Config();

@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import type { AddressInfo } from 'node:net';
-import { BlazeDependency } from '../config';
-import { BlazeError } from '../errors/BlazeError';
+import { BlazeConfig } from '../config';
+import { Logger } from '../errors/Logger';
 import { BlazeContext } from '../internal';
 import { DependencyModule } from '../types/config';
 import type {
@@ -66,7 +66,7 @@ export class Blaze {
    */
   public readonly use: BlazeRouter['use'];
   private readonly blazeCtx: BlazeContext;
-  private readonly adapter: DependencyModule[ExternalModule.NodeAdapter];
+  private readonly adapter: DependencyModule[typeof ExternalModule.NodeAdapter];
 
   public readonly fetch: BlazeFetch;
   public readonly trpc: UseTrpc;
@@ -85,7 +85,7 @@ export class Blaze {
       query: null,
       validations: null,
     });
-    this.adapter = BlazeDependency.modules[ExternalModule.NodeAdapter];
+    this.adapter = BlazeConfig.modules[ExternalModule.NodeAdapter];
     this.fetch = this.router.fetch.bind(this.router) as BlazeFetch;
     this.use = this.router.use.bind(this.router);
     this.trpc = useTrpc.bind(this);
@@ -127,7 +127,7 @@ export class Blaze {
 
     // Load all the services
     if (!fs.existsSync(sourcePath)) {
-      throw new BlazeError("Service path doesn't exist");
+      throw Logger.throw("Service path doesn't exist");
     }
 
     const serviceFiles = fs.readdirSync(sourcePath);
@@ -217,7 +217,7 @@ export class Blaze {
     const args = this.getServeConfig(port, listener);
 
     if (!isNil(port)) {
-      if (BlazeDependency.runTime === PossibleRunTime.Node && this.adapter) {
+      if (BlazeConfig.runTime === PossibleRunTime.Node && this.adapter) {
         this.adapter.serve(...args);
       }
 
@@ -228,7 +228,7 @@ export class Blaze {
       return args;
     }
 
-    if (BlazeDependency.runTime === PossibleRunTime.Node && this.adapter) {
+    if (BlazeConfig.runTime === PossibleRunTime.Node && this.adapter) {
       this.adapter.serve(...args);
     }
 

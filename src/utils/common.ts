@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import { BlazeError } from '../errors/BlazeError';
+import { Logger } from '../errors/Logger';
 // eslint-disable-next-line import/no-cycle
 import { BlazeContext } from '../internal';
 import type { ActionCallResult } from '../types/action';
@@ -118,7 +118,7 @@ export function loadFile<T = Random>(id: string): Promise<T> {
   }
 
   if (!fs.existsSync(id)) {
-    throw new BlazeError(`${id} doesn't exist`);
+    throw Logger.throw(`${id} doesn't exist`);
   }
 
   if (fs.statSync(id).isDirectory()) {
@@ -128,7 +128,7 @@ export function loadFile<T = Random>(id: string): Promise<T> {
     );
 
     if (!index) {
-      throw new BlazeError(
+      throw Logger.throw(
         `No index file found in directory ${id} (expected to find index.[jt]s or index.[jt]x or index.[cm][jt]s)`
       );
     }

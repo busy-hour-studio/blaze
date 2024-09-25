@@ -34,6 +34,7 @@ export type {
 export type { Method, RestParam, RestRoute } from './types/rest';
 export type { Service } from './types/service';
 
+export { BlazeConfig } from './config';
 export { BlazeCreator } from './creator';
 export { BlazeError } from './errors/BlazeError';
 export { Blaze, BlazeRouter, z } from './router';

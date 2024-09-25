@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { BlazeDependency } from '../config';
+import { BlazeConfig } from '../config';
 import { Logger } from '../errors/Logger';
 import { Random } from '../types/helper';
 import { ExternalModule } from '../utils/constant';
 
-const zodApi = BlazeDependency.modules[ExternalModule.ZodApi];
+const zodApi = BlazeConfig.modules[ExternalModule.ZodApi];
 
 if (zodApi) {
   zodApi.extendZodWithOpenApi(z);

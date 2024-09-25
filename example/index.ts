@@ -1,12 +1,19 @@
+import * as zodApi from '@asteasolutions/zod-to-openapi';
 import { swaggerUI } from '@hono/swagger-ui';
+import * as trpc from '@trpc/server';
+import * as trpcAdapter from '@trpc/server/adapters/fetch';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Blaze } from '../src';
+import { Blaze, BlazeConfig } from '../src';
 import { cors } from '../src/middlewares/cors';
 import coreService from './services/core';
 import usersService from './services/users';
 
 export type { BlazeTrpcRouter } from '../src/types/trpc';
+
+BlazeConfig.setModule('@asteasolutions/zod-to-openapi', zodApi);
+BlazeConfig.setModule('@trpc/server', trpc);
+BlazeConfig.setModule('@trpc/server/adapters/fetch', trpcAdapter);
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

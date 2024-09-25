@@ -1,13 +1,11 @@
-import { BlazeDependency } from '../../config';
+import { BlazeConfig } from '../../config';
 import type { Blaze } from '../../router';
 import type { BlazeTrpc, TrpcOption } from '../../types/trpc';
 import { ExternalModule } from '../constant';
 import { TrpcConstructor } from './constructor';
 
 export function loadTrpc(app: Blaze): BlazeTrpc {
-  const instance = BlazeDependency.module(
-    ExternalModule.Trpc
-  ).initTRPC.create();
+  const instance = BlazeConfig.module(ExternalModule.Trpc).initTRPC.create();
 
   const trpcLoader = new TrpcConstructor(app, instance.procedure);
   const router = instance.router(trpcLoader.procedures);
@@ -42,7 +40,7 @@ export function useTrpc(
   const trpc = loadTrpc(this);
 
   this.use(path, ...middlewares, async (ctx) => {
-    const response = await BlazeDependency.module(
+    const response = await BlazeConfig.module(
       ExternalModule.TrpcAdapter
     ).fetchRequestHandler({
       ...options,

@@ -16,8 +16,7 @@ import type { OpenAPIObjectConfig } from '@asteasolutions/zod-to-openapi/dist/v3
 import type { Env, Schema } from 'hono';
 import { Hono } from 'hono';
 import type { MergePath, MergeSchemaPath } from 'hono/types';
-import { BlazeDependency } from '../config';
-import { BlazeError } from '../errors/BlazeError';
+import { BlazeConfig } from '../config';
 import { Logger } from '../errors/Logger';
 import { DependencyModule } from '../types/config';
 import type { Random } from '../types/helper';
@@ -35,12 +34,12 @@ export class BlazeRouter<
   BasePath extends string = '/',
 > extends Hono<E, S, BasePath> {
   public readonly openAPIRegistry: OpenAPIRegistry | null;
-  private zodApi: DependencyModule[ExternalModule.ZodApi];
+  private zodApi: DependencyModule[typeof ExternalModule.ZodApi];
 
   constructor(options: Pick<CreateBlazeOption, 'router'> = {}) {
     super({ strict: false, router: options.router });
 
-    this.zodApi = BlazeDependency.modules[ExternalModule.ZodApi];
+    this.zodApi = BlazeConfig.modules[ExternalModule.ZodApi];
 
     if (!this.zodApi) {
       this.openAPIRegistry = null;
@@ -76,8 +75,7 @@ export class BlazeRouter<
     config: OpenAPIObjectConfig
   ): ReturnType<OpenApiGeneratorV3['generateDocument']> {
     if (!this.zodApi || !this.openAPIRegistry) {
-      Logger.error(`${ExternalModule.ZodApi} is not installed`);
-      throw new BlazeError(`${ExternalModule.ZodApi} is not installed`);
+      throw Logger.throw(`${ExternalModule.ZodApi} is not installed`);
     }
 
     const generator = new this.zodApi.OpenApiGeneratorV3(
@@ -92,8 +90,7 @@ export class BlazeRouter<
     config: OpenAPIObjectConfig
   ): ReturnType<OpenApiGeneratorV31['generateDocument']> {
     if (!this.zodApi || !this.openAPIRegistry) {
-      Logger.error(`${ExternalModule.ZodApi} is not installed`);
-      throw new BlazeError(`${ExternalModule.ZodApi} is not installed`);
+      throw Logger.throw(`${ExternalModule.ZodApi} is not installed`);
     }
 
     const generator = new this.zodApi.OpenApiGeneratorV31(

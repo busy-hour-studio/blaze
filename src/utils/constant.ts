@@ -21,15 +21,21 @@ export const FORM_CONTENT_TYPE = [
   REST_CONTENT_TYPE.MULTIPART,
 ] as const;
 
-export enum ExternalModule {
-  NodeAdapter = '@hono/node-server',
-  ZodApi = '@asteasolutions/zod-to-openapi',
-  Trpc = '@trpc/server',
-  TrpcAdapter = '@trpc/server/adapters/fetch',
-}
+export const ExternalModule = {
+  NodeAdapter: '@hono/node-server',
+  ZodApi: '@asteasolutions/zod-to-openapi',
+  Trpc: '@trpc/server',
+  TrpcAdapter: '@trpc/server/adapters/fetch',
+} as const;
 
-export enum PossibleRunTime {
-  Node = 'node',
-  Bun = 'bun',
-  Other = 'other',
-}
+export type ExternalModule =
+  (typeof ExternalModule)[keyof typeof ExternalModule];
+
+export const PossibleRunTime = {
+  Node: 'node',
+  Bun: 'bun',
+  Other: 'other',
+} as const;
+
+export type PossibleRunTime =
+  (typeof PossibleRunTime)[keyof typeof PossibleRunTime];

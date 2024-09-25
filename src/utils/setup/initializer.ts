@@ -1,5 +1,5 @@
 import fs from 'node:fs';
-import { BlazeError } from '../../errors/BlazeError';
+import { Logger } from '../../errors/Logger';
 import { BlazeContext } from '../../internal';
 import type { LoadServiceOption } from '../../types/service';
 import { BlazeService } from './service';
@@ -12,7 +12,7 @@ export async function initializeServices(options: LoadServiceOption) {
   const { app, path: sourcePath } = options;
 
   if (!fs.existsSync(sourcePath)) {
-    throw new BlazeError("Service path doesn't exist");
+    throw Logger.throw("Service path doesn't exist");
   }
 
   const blazeCtx = new BlazeContext({
