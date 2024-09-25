@@ -6,7 +6,6 @@
   },
   "dependencies": {
     "@asteasolutions/zod-to-openapi": "^7.1.1",
-    "@busy-hour/blaze": "^4.1.0",
     "@hono/node-server": "^1.13.1",
     "@hono/swagger-ui": "^0.4.1",
     "@trpc/server": "^10.45.2",

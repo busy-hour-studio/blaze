@@ -1,4 +1,4 @@
-import { BlazeCreator, BlazeError } from '@busy-hour/blaze';
+import { BlazeCreator, BlazeError } from '../../../../src';
 import { USER_DB } from '../utils/constants';
 import { UserHeaderSchema } from '../utils/schemas';
 

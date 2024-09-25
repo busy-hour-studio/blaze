@@ -1,4 +1,4 @@
-import { BlazeCreator } from '@busy-hour/blaze';
+import { BlazeCreator } from '../../../src';
 import { Logger } from '../../utils/Logger';
 import { onCreateUser } from './actions/users.create';
 import { onFindUser } from './actions/users.find';

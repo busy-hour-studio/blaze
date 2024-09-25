@@ -1,4 +1,4 @@
-import { BlazeCreator, z } from '@busy-hour/blaze';
+import { BlazeCreator, z } from '../../../../src';
 import { Logger } from '../../../utils/Logger';
 import { USER_DB } from '../../users/utils/constants';
 

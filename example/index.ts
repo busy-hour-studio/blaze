@@ -1,12 +1,12 @@
-import { Blaze } from '@busy-hour/blaze';
-import { cors } from '@busy-hour/blaze/cors';
 import { swaggerUI } from '@hono/swagger-ui';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { Blaze } from '../src';
+import { cors } from '../src/middlewares/cors';
 import coreService from './services/core';
 import usersService from './services/users';
 
-export type { BlazeTrpcRouter } from '@busy-hour/blaze/trpc';
+export type { BlazeTrpcRouter } from '../src/types/trpc';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -44,7 +44,7 @@ app.use(
   '/doc/ui',
   swaggerUI({
     url: '/doc',
-  })
+  }) as never
 );
 
 const config = app.serve(3000);

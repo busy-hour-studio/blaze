@@ -1,4 +1,4 @@
-import { BlazeCreator } from '@busy-hour/blaze';
+import { BlazeCreator } from '../../../src';
 import { Logger } from '../../utils/Logger';
 import { onUserCreated } from './events/users.created';
 
