@@ -11,6 +11,9 @@ importers:
       '@asteasolutions/zod-to-openapi':
         specifier: ^7.1.1
         version: 7.1.1(zod@3.23.8)
+      '@busy-hour/blaze':
+        specifier: file:..
+        version: file:..
       '@hono/node-server':
         specifier: ^1.13.1
         version: 1.13.1(hono@4.6.2)
@@ -49,6 +52,9 @@ packages:
 
   '@busy-hour/blaze@4.1.0':
     resolution: {integrity: sha512-Y8A8UvJ3bg7nCjn71mRlXzfs/K6lMe1Y6sy1cfGACH4T9P6KXgQQaFGZE1lupk3Jxem8lLdQ5/S2CByIMd/HrQ==}
+
+  '@busy-hour/blaze@file:..':
+    resolution: {directory: .., type: directory}
 
   '@esbuild/aix-ppc64@0.23.1':
     resolution: {integrity: sha512-6VhYk1diRqrhBAqpJEdjASR/+WVRtfjpqKuNw11cLiaWpAT/Uu+nokB+UJnevzy/P9C/ty6AOe0dwueMrGh/iQ==}
@@ -324,6 +330,11 @@ snapshots:
       chokidar: 3.6.0
 
   '@busy-hour/blaze@4.1.0':
+    dependencies:
+      hono: 4.6.2
+      zod: 3.23.8
+
+  '@busy-hour/blaze@file:..':
     dependencies:
       hono: 4.6.2
       zod: 3.23.8

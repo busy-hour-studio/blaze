@@ -1,4 +1,4 @@
-import { z } from '../../../../src';
+import { z } from '@busy-hour/blaze';
 
 export const userSchema = z.object({
   name: z.string().openapi({ example: 'John Doe' }),

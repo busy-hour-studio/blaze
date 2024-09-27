@@ -1,4 +1,4 @@
-import { BlazeCreator } from '../../../../src';
+import { BlazeCreator } from '@busy-hour/blaze';
 import { validateUserHeader } from '../hooks/users.validate.header';
 import { USER_DB } from '../utils/constants';
 import { userHeaderSchema, userQuerySchema } from '../utils/schemas';
