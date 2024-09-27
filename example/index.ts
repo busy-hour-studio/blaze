@@ -1,24 +1,18 @@
-import * as zodApi from '@asteasolutions/zod-to-openapi';
+import './utils/setup';
+
+import { Blaze } from '@busy-hour/blaze';
+import { cors } from '@busy-hour/blaze/cors';
 import { swaggerUI } from '@hono/swagger-ui';
-import * as trpc from '@trpc/server';
-import * as trpcAdapter from '@trpc/server/adapters/fetch';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { Blaze, BlazeConfig } from '../src';
-import { cors } from '../src/middlewares/cors';
 import coreService from './services/core';
 import usersService from './services/users';
 
-export type { BlazeTrpcRouter } from '../src/types/trpc';
-
-BlazeConfig.setModule('@asteasolutions/zod-to-openapi', zodApi);
-BlazeConfig.setModule('@trpc/server', trpc);
-BlazeConfig.setModule('@trpc/server/adapters/fetch', trpcAdapter);
+export type { BlazeTrpcRouter } from '@busy-hour/blaze/trpc';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const servicePath = path.resolve(__dirname, 'services');
 
 const app = new Blaze();
@@ -30,12 +24,11 @@ app.import({
   middlewares: [['ALL', cors()]],
 });
 
-// Uncomment to load all the services from the given path dynamically
-// await app.load({
-//   path: servicePath,
-//   autoStart: true,
-//   middlewares: [['ALL', cors()]],
-// });
+await app.load({
+  path: servicePath,
+  autoStart: true,
+  middlewares: [['ALL', cors()]],
+});
 
 // Auto generate OpenAPI documentation example
 app.doc('/doc', {
