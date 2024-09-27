@@ -10,18 +10,14 @@ import type {
   ServeConfig,
 } from '../types/router';
 import type { ImportServiceOption, LoadServicesOption } from '../types/service';
-import { isNil } from '../utils/common';
+import { isNil, toArray } from '../utils/common';
 import { ExternalModule, PossibleRunTime } from '../utils/constant';
 import { BlazeService } from '../utils/setup/service';
 import { useTrpc, type UseTrpc } from '../utils/trpc';
 import { BlazeRouter } from './BlazeRouter';
 
 export class Blaze {
-  /**
-   * List of all the loaded services
-   * @see {@link BlazeService}
-   */
-  public readonly services: BlazeService[];
+  private readonly $services: Map<BlazeService['serviceName'], BlazeService>;
   public readonly router: BlazeRouter;
   /**
    * Shorthand for `app.router.doc`.
@@ -72,7 +68,7 @@ export class Blaze {
   public readonly trpc: UseTrpc;
 
   constructor(options: CreateBlazeOption = {}) {
-    this.services = [];
+    this.$services = new Map();
     this.router = new BlazeRouter(options);
     this.doc = this.router.doc.bind(this.router);
     this.doc31 = this.router.doc31.bind(this.router);
@@ -108,7 +104,17 @@ export class Blaze {
    * passing `autoStart: true` on app creation (`new Blaze({ autoStart: true })`) will also start all the services
    */
   public start() {
-    this.services.forEach((service) => service.onStarted());
+    this.$services.forEach((service) => service.onStarted());
+  }
+
+  private addServices(service: BlazeService | BlazeService[]) {
+    const services = toArray(service);
+
+    services.forEach((serv) => {
+      if (this.$services.has(serv.serviceName)) return;
+
+      this.$services.set(serv.serviceName, serv);
+    });
   }
 
   /**
@@ -146,7 +152,7 @@ export class Blaze {
       })
     );
 
-    this.services.push(...services);
+    this.addServices(services);
 
     if (!autoStart) return;
 
@@ -164,8 +170,8 @@ export class Blaze {
    * ```
    */
   public import(options: ImportServiceOption) {
-    options.services.forEach((serv) => {
-      const services = new BlazeService({
+    const services = options.services.map((serv) => {
+      const service = new BlazeService({
         app: this.router,
         blazeCtx: this.blazeCtx,
         middlewares: options.middlewares ?? [],
@@ -173,12 +179,22 @@ export class Blaze {
         servicePath: '',
       });
 
-      this.services.push(services);
+      return service;
     });
+
+    this.addServices(services);
 
     if (!options.autoStart) return;
 
     this.start();
+  }
+
+  /**
+   * List of all the loaded services
+   * @see {@link BlazeService}
+   */
+  public get services() {
+    return [...this.$services.values()];
   }
 
   private getServeConfig(

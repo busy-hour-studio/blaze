@@ -3,9 +3,6 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { Logger } from '../errors/Logger';
 // eslint-disable-next-line import/no-cycle
-import { BlazeContext } from '../internal';
-import type { ActionCallResult } from '../types/action';
-import type { CreateContextOption } from '../types/context';
 import type { Random } from '../types/helper';
 import type { Service } from '../types/service';
 
@@ -74,26 +71,6 @@ export async function resolvePromise<T>(
   } catch (err) {
     return [null, err] as const;
   }
-}
-
-export async function createContext(
-  options: CreateContextOption
-): Promise<ActionCallResult<BlazeContext>> {
-  const [blazeCtx, blazeErr] = await resolvePromise(
-    BlazeContext.create(options)
-  );
-
-  if (!blazeCtx || blazeErr) {
-    return {
-      error: blazeErr as Error,
-      ok: false,
-    };
-  }
-
-  return {
-    result: blazeCtx,
-    ok: true,
-  };
 }
 
 export function isEmpty(value: Random): boolean {

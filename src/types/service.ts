@@ -4,6 +4,7 @@ import type { BlazeContext } from '../internal';
 import type { BlazeRouter } from '../router';
 import type { Action, ActionHandler, Actions } from './action';
 import type { Event, EventActionHandler, Events } from './event';
+import type { Random } from './helper';
 import type { Middleware } from './rest';
 
 export interface Service<
@@ -24,6 +25,8 @@ export interface Service<
   onStopped?(handlers: EventActionHandler[]): void;
   router?: Router<[never, RouterRoute]>;
 }
+
+export type AnyService = Service<Random, Random, Actions, Events>;
 
 export interface LoadServiceOption {
   app: BlazeRouter;
