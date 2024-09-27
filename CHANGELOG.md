@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.2.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.1.0...v4.2.0) (2024-09-27)
+
+
+### Features
+
+* direct module import ([067132c](https://github.com/Busy-Hour-Studio/blaze/commit/067132cbbf75ccbe5eb6051b2afea685cd30029d))
+
+
+### Bug Fixes
+
+* redundant broker return types ([9cf93ab](https://github.com/Busy-Hour-Studio/blaze/commit/9cf93abd4cccc3cb809ce1c6bb5ecb67164f4e1d))
+
 ## [4.1.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0...v4.1.0) (2024-09-24)
 
 
