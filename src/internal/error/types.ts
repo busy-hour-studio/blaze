@@ -1,9 +1,9 @@
+import { StatusCode } from '../../types.new/rest';
 import type { RecordString, RecordUnknown } from '../../types/helper';
 
-export interface IgnisiaErrorOption {
+export interface BlazeErrorOption {
   errors: RecordUnknown | RecordString | unknown | null;
-  // TODO: Change this to StatusCode
-  status: number;
+  status: StatusCode;
   message: string;
   name?: string | null;
 }

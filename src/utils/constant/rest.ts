@@ -88,10 +88,11 @@ export const RESPONSE_TYPE = {
   BODY: 'body',
   TEXT: 'text',
   JSON: 'json',
-  BUFFER: 'buffer',
+  HTML: 'html',
 } as const;
 
 export const REST_METHOD = {
+  ALL: 'ALL',
   GET: 'GET',
   POST: 'POST',
   PUT: 'PUT',
