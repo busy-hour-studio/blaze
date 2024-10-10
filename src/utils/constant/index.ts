@@ -1,12 +1,3 @@
-export const RESERVED_KEYWORD = {
-  SUFFIX: {},
-  PREFIX: {
-    EVENT: '$events$',
-    KILL: '$kill$',
-    RESTART: '$restart$',
-  },
-} as const;
-
 export const REST_CONTENT_TYPE = {
   JSON: 'application/json',
   TEXT: 'text/plain',

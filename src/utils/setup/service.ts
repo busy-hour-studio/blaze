@@ -1,9 +1,9 @@
 import path from 'node:path';
-import { BlazeContext, BlazeEvent } from '../../internal';
+import { BlazeContext } from '../../internal';
 import { BlazeRouter } from '../../router/BlazeRouter';
 import type { Action } from '../../types/action';
 import type { EventActionHandler } from '../../types/event';
-import type { Method, Middleware } from '../../types/rest';
+import type { Middleware } from '../../types/rest';
 import type {
   CreateServiceOption,
   Service,
@@ -119,33 +119,6 @@ export class BlazeService {
     if (!this.router) return;
 
     this.mainRouter.route(`/${this.restPath}`, this.router);
-  }
-
-  public onStopped() {
-    // Trigger the on stopped listener
-    this.service.onStopped?.(this.handlers);
-
-    // Remove all the action
-    this.actions.forEach((action) => {
-      BlazeEvent.off(action.actionName, action.actionHandler);
-    });
-  }
-
-  public onRestarted() {
-    // Trigger the on restarted listener
-    // this.service.onRestarted?.(this.handlers);
-
-    // Re-assign the rest
-    this.rests.forEach((rest) => {
-      const method: Method = rest.method ?? 'ALL';
-
-      this.router?.on?.(method, rest.path, rest.restHandler);
-    });
-
-    // Re-assign the action
-    this.actions.forEach((action) => {
-      BlazeEvent.on(action.actionName, action.actionHandler);
-    });
   }
 
   public onStarted() {

@@ -1,5 +1,5 @@
-import type { EventListener, EventName } from '../types/event';
-import { BlazeMap } from './BlazeMap';
+import type { EventListener, EventName } from '../../types/event';
+import { BlazeMap } from '../map';
 
 type Option = {
   maxListener?: number | null;

@@ -1,4 +1,4 @@
-import { BlazeContext, BlazeEvent } from '../../internal';
+import { BlazeContext, BlazeEventEmitter } from '../../internal';
 import type { Action } from '../../types/action';
 import type { Random } from '../../types/helper';
 import type { CreateActionOption } from '../../types/service';
@@ -14,7 +14,7 @@ export class BlazeServiceAction {
     this.actionName = [this.serviceName, options.actionAlias].join('.');
     this.action = options.action;
 
-    BlazeEvent.on(this.actionName, this.actionHandler.bind(this));
+    BlazeEventEmitter.on(this.actionName, this.actionHandler.bind(this));
   }
 
   public async actionHandler(...values: Random[]) {

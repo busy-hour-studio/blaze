@@ -1,8 +1,8 @@
-import { BlazeContext, BlazeEvent } from '../../internal';
+import { BlazeContext, BlazeEventEmitter } from '../../internal';
 import type { Event } from '../../types/event';
 import type { ContextValidation, RecordUnknown } from '../../types/helper';
 import type { CreateEventOption } from '../../types/service';
-import { RESERVED_KEYWORD } from '../constant';
+import { RESERVED_KEYWORD } from '../constant/broker';
 import { eventHandler } from '../helper/handler';
 
 export class BlazeServiceEvent {
@@ -23,7 +23,7 @@ export class BlazeServiceEvent {
       body: this.event.validator,
     };
 
-    BlazeEvent.on(this.eventName, this.eventHandler.bind(this));
+    BlazeEventEmitter.on(this.eventName, this.eventHandler.bind(this));
   }
 
   public async eventHandler(body: RecordUnknown) {
