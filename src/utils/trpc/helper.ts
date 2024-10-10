@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import type { ActionValidator } from '../../types/action';
-import { TrpcProcedure } from '../../types/trpc';
+import type { TrpcProcedure } from '../../types/trpc';
+import type { BlazeActionValidator } from '../../types/validator';
 import type { BlazeServiceAction } from '../setup/action';
 
 export function getValidator<
@@ -8,7 +8,7 @@ export function getValidator<
   P extends z.ZodSchema = z.ZodSchema,
   Q extends z.ZodSchema = z.ZodSchema,
   B extends z.ZodSchema = z.ZodSchema,
->(validator: ActionValidator<H, P, Q, B> | null | undefined) {
+>(validator: BlazeActionValidator<H, P, Q, B> | null | undefined) {
   const defaultValidation = z.any().nullable().default(null);
 
   return z.object({

@@ -1,40 +1,59 @@
+import type { HandlerInterface } from 'hono/types';
 import type { StatusCode } from 'hono/utils/http-status';
-import { BlazeError } from '../../errors/BlazeError';
+import { BlazeError } from '../../internal/error';
 import type { BlazeRouter } from '../../router';
-import { Random } from '../../types/helper';
+import type { BlazeAction } from '../../types/action';
+import type { Random } from '../../types/common';
 import type {
-  Method,
-  RestErrorHandlerOption,
-  RestParam,
-  RestResponseHandlerOption,
-  RestRoute,
+  BlazeRestErrorHandlerOption,
+  BlazeRestParam,
+  BlazeRestRoute,
+  BlazeRestSuccessHandlerOption,
+  ExposedBlazeRestMethod,
 } from '../../types/rest';
+import type { BlazeService } from '../../types/service';
 import { isEmpty, mapToObject } from '../common';
+import { REST_METHOD } from '../constant/rest';
 
-export function extractRestPath(restRoute: RestRoute) {
+export function extractRestPath(restRoute: BlazeRestRoute) {
   const restPath = restRoute.split(' ');
 
   if (restPath.length === 1) {
     return [null, restPath[0]] as const;
   }
 
-  return [restPath[0] as Method, restPath[1]] as const;
+  return [restPath[0] as ExposedBlazeRestMethod, restPath[1]] as const;
 }
 
-export function extractRestParams(params: RestParam) {
+export function extractRestParams(params: BlazeRestParam) {
   if (typeof params === 'string') return extractRestPath(params);
 
   return [params.method ?? null, params.path] as const;
 }
 
-export function getRouteHandler(router: BlazeRouter, method: Method | null) {
+export function getRestMiddlewares(service: BlazeService, action: BlazeAction) {
+  if (!service.middlewares || !action.rest) return [];
+
+  const [method] = extractRestParams(action.rest);
+
+  const middlewares = service.middlewares.filter(
+    ([m]) => m === method || m === REST_METHOD.ALL
+  );
+
+  return middlewares.map(([, middleware]) => middleware);
+}
+
+export function getRouteHandler(
+  router: BlazeRouter,
+  method: ExposedBlazeRestMethod | null
+) {
   if (!method) return router.all;
 
-  return router[method.toLowerCase() as Lowercase<Method>];
+  return router[method.toLowerCase() as keyof BlazeRouter] as HandlerInterface;
 }
 
 export function getRestResponse(
-  options: Omit<RestResponseHandlerOption, 'honoCtx'>
+  options: Omit<BlazeRestSuccessHandlerOption, 'honoCtx'>
 ): readonly [
   Random,
   StatusCode | undefined,
@@ -55,7 +74,7 @@ export function getRestResponse(
   return [options.result, status, resHeaders] as const;
 }
 
-export function handleRestError(options: RestErrorHandlerOption) {
+export function handleRestError(options: BlazeRestErrorHandlerOption) {
   const { err, ctx, honoCtx } = options;
 
   let status = ctx.status ?? 500;
@@ -67,7 +86,7 @@ export function handleRestError(options: RestErrorHandlerOption) {
   return honoCtx.json(err as Error, status);
 }
 
-export function handleRestResponse(options: RestResponseHandlerOption) {
+export function handleRestResponse(options: BlazeRestSuccessHandlerOption) {
   const { ctx, honoCtx } = options;
   const args = getRestResponse(options);
 

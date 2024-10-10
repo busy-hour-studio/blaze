@@ -1,15 +1,17 @@
 import type { ProcedureType } from '@trpc/server';
 import type { ZodSchema } from 'zod';
-import type { Action, ActionOpenAPI, Actions, ActionValidator } from './action';
-import type { Event, Events } from './event';
-import type { RecordString, RecordUnknown } from './helper';
+import type { AnyBlazeActions, BlazeAction } from './action';
+import type { RecordString, RecordUnknown } from './common';
+import type { AnyBlazeEvents, BlazeEvent } from './event';
 import type {
-  AcceptedAfterHook,
-  AcceptedBeforeHook,
-  AfterHookHandler,
-  BeforeHookHandler,
-} from './hooks';
-import type { Service } from './service';
+  BlazeAcceptedAfterHook,
+  BlazeAcceptedBeforeHook,
+  BlazeAfterHookHandler,
+  BlazeBeforeHookHandler,
+} from './hook';
+import type { BlazeActionOpenAPI } from './openapi';
+import type { BlazeService } from './service';
+import type { BlazeActionValidator } from './validator';
 
 export interface BlazeActionCreator {
   /**
@@ -32,7 +34,7 @@ export interface BlazeActionCreator {
     P extends ZodSchema,
     Q extends ZodSchema,
     B extends ZodSchema,
-    AH extends AcceptedAfterHook<
+    AH extends BlazeAcceptedAfterHook<
       HR,
       M,
       H['_output'],
@@ -40,7 +42,7 @@ export interface BlazeActionCreator {
       Q['_output'],
       B['_output']
     >,
-    BH extends AcceptedBeforeHook<
+    BH extends BlazeAcceptedBeforeHook<
       M,
       H['_output'],
       P['_output'],
@@ -49,8 +51,8 @@ export interface BlazeActionCreator {
     >,
     TRPC extends ProcedureType,
   >(
-    action: Action<R, HR, M, H, P, Q, B, AH, BH, TRPC>
-  ): Action<R, HR, M, H, P, Q, B, AH, BH, TRPC>;
+    action: BlazeAction<R, HR, M, H, P, Q, B, AH, BH, TRPC>
+  ): BlazeAction<R, HR, M, H, P, Q, B, AH, BH, TRPC>;
   /**
    * Create a reuseable validator for actions body, params and headers.
    * @example
@@ -68,8 +70,8 @@ export interface BlazeActionCreator {
     Q extends ZodSchema,
     B extends ZodSchema,
   >(
-    validator: ActionValidator<H, P, Q, B>
-  ): ActionValidator<H, P, Q, B>;
+    validator: BlazeActionValidator<H, P, Q, B>
+  ): BlazeActionValidator<H, P, Q, B>;
   /**
    * Create an openai spec for action.
    * @example
@@ -86,7 +88,7 @@ export interface BlazeActionCreator {
    * })
    * ```
    */
-  openapi(openapi: ActionOpenAPI): ActionOpenAPI;
+  openapi(openapi: BlazeActionOpenAPI): BlazeActionOpenAPI;
   hook: {
     /**
      * Create a reuseable after hook for the service.
@@ -111,8 +113,8 @@ export interface BlazeActionCreator {
       Q extends RecordUnknown,
       B extends RecordUnknown,
     >(
-      hook: AfterHookHandler<R, M, H, P, Q, B>
-    ): AfterHookHandler<R, M, H, P, Q, B>;
+      hook: BlazeAfterHookHandler<R, M, H, P, Q, B>
+    ): BlazeAfterHookHandler<R, M, H, P, Q, B>;
     /**
      * Create a reuseable before hook for the service.
      * The hook will be called before the action handler called.
@@ -132,8 +134,8 @@ export interface BlazeActionCreator {
       Q extends RecordUnknown,
       B extends RecordUnknown,
     >(
-      hook: BeforeHookHandler<M, H, P, Q, B>
-    ): BeforeHookHandler<M, H, P, Q, B>;
+      hook: BlazeBeforeHookHandler<M, H, P, Q, B>
+    ): BlazeBeforeHookHandler<M, H, P, Q, B>;
   };
 }
 
@@ -152,8 +154,8 @@ export interface BlazeEventCreator {
    * ```
    */
   <M extends RecordUnknown, P extends ZodSchema>(
-    event: Event<M, P>
-  ): Event<M, P>;
+    event: BlazeEvent<M, P>
+  ): BlazeEvent<M, P>;
   /**
    * Create a reuseable validator for events parameters.
    * @example
@@ -184,9 +186,9 @@ export interface BlazeServiceCreator {
   <
     N extends string,
     V extends number,
-    A extends Actions,
-    E extends Events,
-    S extends Service<N, V, A, E>,
+    A extends AnyBlazeActions,
+    E extends AnyBlazeEvents,
+    S extends BlazeService<N, V, A, E>,
   >(
     service: S
   ): Readonly<S>;

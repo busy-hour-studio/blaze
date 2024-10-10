@@ -4,34 +4,29 @@
     MIT License
     Copyright (c) 2022 Yusuke Wada
 */
-import type { Context as HonoContext, Next as HonoNext } from 'hono';
-import { BlazeError } from '../errors/BlazeError';
+import type { Context as HonoCtx, Next as HonoNext } from 'hono';
 import { BlazeContext } from '../internal';
-import type { ActionHandler } from '../types/action';
+import { BlazeError } from '../internal/error';
+import type { BlazeActionHandler } from '../types/handler';
 import { resolvePromise } from '../utils/common';
 import { handleRestError, handleRestResponse } from '../utils/helper/rest';
 
 export interface BodyLimitOptions {
   maxSize: number;
-  onError?: ActionHandler;
+  onError?: BlazeActionHandler;
 }
 
-function errorHandler(onError: ActionHandler) {
+function errorHandler(onError: BlazeActionHandler) {
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  return async function errorHandler(honoCtx: HonoContext) {
-    const ctx =
-      honoCtx.get('blaze') ??
-      new BlazeContext({
-        body: null,
-        honoCtx,
-        headers: null,
-        meta: null,
-        params: null,
-        query: null,
-        validations: null,
-      });
-
-    honoCtx.set('blaze', ctx);
+  return async function errorHandler(honoCtx: HonoCtx) {
+    const ctx = new BlazeContext({
+      body: null,
+      honoCtx,
+      headers: null,
+      meta: null,
+      params: null,
+      query: null,
+    });
 
     const [result, err] = await resolvePromise(onError(ctx));
 
@@ -84,7 +79,7 @@ export function bodyLimit(options: BodyLimitOptions) {
   const onError = errorHandler(handler);
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  return async function bodyLimit(honoCtx: HonoContext, next: HonoNext) {
+  return async function bodyLimit(honoCtx: HonoCtx, next: HonoNext) {
     if (!honoCtx.req.raw.body) {
       return next();
     }

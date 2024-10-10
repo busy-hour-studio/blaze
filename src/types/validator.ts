@@ -1,5 +1,63 @@
-import type { z } from 'zod';
-import type { Random, RecordUnknown } from './helper';
+import { Context as HonoCtx } from 'hono';
+import { ZodSchema } from 'zod';
+import { Random, RecordString, RecordUnknown } from './common';
+import { BlazeValidationErrorHandler } from './handler';
+
+export interface BlazeContextData<
+  H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
+  Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
+> {
+  headers: H | null;
+  params: P | null;
+  query: Q | null;
+  body: B | null;
+}
+
+export interface BlazeContextValidation<
+  H extends ZodSchema = ZodSchema,
+  P extends ZodSchema = ZodSchema,
+  Q extends ZodSchema = ZodSchema,
+  B extends ZodSchema = ZodSchema,
+> {
+  header?: H | null;
+  params?: P | null;
+  query?: Q | null;
+  body?: B | null;
+}
+
+export interface BlazeActionValidator<
+  H extends ZodSchema = ZodSchema,
+  P extends ZodSchema = ZodSchema,
+  Q extends ZodSchema = ZodSchema,
+  B extends ZodSchema = ZodSchema,
+> {
+  header?: H | null;
+  params?: P | null;
+  query?: Q | null;
+  body?: B | null;
+}
+
+export type AnyBlazeActionValidator = BlazeActionValidator<
+  Random,
+  Random,
+  Random,
+  Random
+>;
+
+export interface DataValidatorOption<
+  M extends RecordUnknown = RecordUnknown,
+  H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
+  Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
+> {
+  data: BlazeContextData<H, P, Q, B>;
+  schema: ZodSchema;
+  honoCtx: HonoCtx | null;
+  onValidationError: BlazeValidationErrorHandler<M, H, P, Q, B> | null;
+}
 
 type ExampleValue<T> = T extends Date ? string : T;
 

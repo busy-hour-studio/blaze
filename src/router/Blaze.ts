@@ -1,13 +1,13 @@
 import fs from 'node:fs';
 import type { AddressInfo } from 'node:net';
 import { BlazeConfig } from '../config';
-import { Logger } from '../errors/Logger';
 import { BlazeContext } from '../internal';
+import { Logger } from '../internal/logger';
 import { DependencyModule } from '../types/config';
 import type {
   BlazeFetch,
+  BlazeServeConfig,
   CreateBlazeOption,
-  ServeConfig,
 } from '../types/router';
 import type { ImportServiceOption, LoadServicesOption } from '../types/service';
 import { isNil, toArray } from '../utils/common';
@@ -79,7 +79,6 @@ export class Blaze {
       honoCtx: null,
       meta: null,
       query: null,
-      validations: null,
     });
     this.adapter = BlazeConfig.modules[ExternalModule.NodeAdapter];
     this.fetch = this.router.fetch.bind(this.router) as BlazeFetch;
@@ -224,11 +223,11 @@ export class Blaze {
    * })
    * ```
    */
-  public serve(port?: number): ServeConfig;
+  public serve(port?: number): BlazeServeConfig;
   public serve<Listener extends (addressInfo: AddressInfo) => void>(
     port: number,
     listener: Listener
-  ): [ServeConfig, Listener];
+  ): [BlazeServeConfig, Listener];
   public serve(port?: number, listener?: (addressInfo: AddressInfo) => void) {
     const args = this.getServeConfig(port, listener);
 

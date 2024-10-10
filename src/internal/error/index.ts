@@ -1,8 +1,9 @@
-import type { RecordUnknown } from '../../types/helper';
-import { BlazeErrorOption } from './types';
+import type { RecordUnknown } from '../../types/common';
+import type { StatusCode } from '../../types/rest';
+import type { BlazeErrorOption } from './types';
 
 export class BlazeError extends Error {
-  public status: number;
+  public status: StatusCode;
   public errors: RecordUnknown | unknown | null;
 
   constructor(err: BlazeErrorOption);

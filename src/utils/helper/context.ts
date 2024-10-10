@@ -1,6 +1,6 @@
 import type { Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
-import type { RecordUnknown } from '../../types/helper';
+import type { RecordUnknown } from '../../types/common';
 import { FORM_CONTENT_TYPE, REST_CONTENT_TYPE } from '../constant';
 
 export async function getReqBody(honoCtx: HonoCtx) {

@@ -1,33 +1,13 @@
-import type {
-  RouteConfig,
-  ZodRequestBody,
-} from '@asteasolutions/zod-to-openapi';
 import type { Router } from 'hono/router';
-import type { Env, MiddlewareHandler, RouterRoute } from 'hono/types';
-import type { ZodSchema } from 'zod';
-import type { RecordUnknown } from './helper';
-import type { Method, Middleware } from './rest';
+import type { Env, RouterRoute } from 'hono/types';
+import type { RecordUnknown } from './common';
+import type { Middleware } from './rest';
 
 export interface CreateBlazeOption {
   router?: Router<[never, RouterRoute]>;
   path?: string | null;
   autoStart?: boolean | null;
   middlewares?: Middleware[];
-}
-
-export interface OpenAPIRequest {
-  body?: ZodRequestBody;
-  params?: ZodSchema;
-  headers?: ZodSchema;
-  query?: ZodSchema;
-}
-
-export interface BlazeOpenAPIOption
-  extends Omit<RouteConfig, 'request' | 'method'> {
-  request: OpenAPIRequest;
-  method: Method;
-  handler: MiddlewareHandler;
-  middlewares: Middleware[];
 }
 
 export interface BlazeFetch<E extends Env = Env> {
@@ -38,7 +18,7 @@ export interface BlazeFetch<E extends Env = Env> {
   ): Response | Promise<Response>;
 }
 
-export interface ServeConfig {
+export interface BlazeServeConfig {
   fetch: BlazeFetch;
   port: number;
   reusePort: boolean;

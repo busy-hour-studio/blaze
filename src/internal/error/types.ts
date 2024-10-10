@@ -1,8 +1,8 @@
-import { StatusCode } from '../../types.new/rest';
-import type { RecordString, RecordUnknown } from '../../types/helper';
+import type { RecordUnknown } from '../../types/common';
+import type { StatusCode } from '../../types/rest';
 
 export interface BlazeErrorOption {
-  errors: RecordUnknown | RecordString | unknown | null;
+  errors: RecordUnknown | unknown | null;
   status: StatusCode;
   message: string;
   name?: string | null;

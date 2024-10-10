@@ -1,19 +1,21 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 /* eslint-disable import/no-cycle */
 import { BlazeEventEmitter } from '..';
-import { BlazeError } from '../../errors/BlazeError';
-import type { ActionCallRecord, EventCallRecord } from '../../types/common';
-import type { EventName } from '../../types/event';
-import type { Random } from '../../types/helper';
+import type {
+  ActionCallRecord,
+  EventCallRecord,
+  Random,
+} from '../../types/common';
 import { RESERVED_KEYWORD } from '../../utils/constant/broker';
-import { BlazeActionCallName, BlazeEventCallName } from './types';
+import { BlazeError } from '../error';
+import type { BlazeActionCallName, BlazeEventCallName } from './types';
 
 export class BlazeBroker {
-  public hasListener(eventName: EventName) {
+  public hasListener(eventName: string) {
     return BlazeEventEmitter.listenerCount(eventName) > 0;
   }
 
-  private validateEventName(eventName: EventName) {
+  private validateEventName(eventName: string) {
     if (this.hasListener(eventName)) return;
 
     throw new BlazeError({

@@ -1,21 +1,21 @@
 import type {
-  AfterHookHandlerOption,
-  BeforeHookHandlerOption,
-} from '../../types/hooks';
+  BlazeAfterHookHandlerOption,
+  BlazeBeforeHookHandlerOption,
+} from '../../types/hook';
 import { toArray } from '../common';
 
 export async function beforeActionHookHandler(
-  options: BeforeHookHandlerOption
+  options: BlazeBeforeHookHandlerOption
 ): Promise<void> {
   const hooks = toArray(options.hooks);
 
   for (const hook of hooks) {
-    await hook(options.blazeCtx);
+    await hook(options.ctx);
   }
 }
 
 export async function afterActionHookHandler(
-  options: AfterHookHandlerOption
+  options: BlazeAfterHookHandlerOption
 ): Promise<unknown> {
   const hooks = toArray(options.hooks);
 
@@ -23,7 +23,7 @@ export async function afterActionHookHandler(
   let result = options.result;
 
   for (const hook of hooks) {
-    result = await hook(options.blazeCtx, result);
+    result = await hook(options.ctx, result);
   }
 
   return result;

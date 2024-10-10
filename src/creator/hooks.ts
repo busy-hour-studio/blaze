@@ -1,5 +1,8 @@
-import type { RecordString, RecordUnknown } from '../types/helper';
-import type { AfterHookHandler, BeforeHookHandler } from '../types/hooks';
+import type { RecordString, RecordUnknown } from '../types/common';
+import type {
+  BlazeAfterHookHandler,
+  BlazeBeforeHookHandler,
+} from '../types/hook';
 
 export function createAfterHook<
   R,
@@ -8,7 +11,7 @@ export function createAfterHook<
   P extends RecordUnknown,
   Q extends RecordUnknown,
   B extends RecordUnknown,
->(hook: AfterHookHandler<R, M, H, P, Q, B>) {
+>(hook: BlazeAfterHookHandler<R, M, H, P, Q, B>) {
   return hook;
 }
 
@@ -18,6 +21,6 @@ export function createBeforeHook<
   P extends RecordUnknown,
   Q extends RecordUnknown,
   B extends RecordUnknown,
->(hook: BeforeHookHandler<M, H, P, Q, B>) {
+>(hook: BlazeBeforeHookHandler<M, H, P, Q, B>) {
   return hook;
 }

@@ -3,18 +3,9 @@ import type { StatusCode } from 'hono/utils/http-status';
 import type { ZodSchema } from 'zod';
 // eslint-disable-next-line import/no-cycle
 import { BlazeBroker } from '..';
-import type {
-  AnyContext,
-  ContextConstructorOption,
-  CreateContextOption,
-} from '../../types/context';
-import type {
-  ContextData,
-  RecordString,
-  RecordUnknown,
-  ValidationResult,
-} from '../../types/helper';
+import type { RecordString, RecordUnknown } from '../../types/common';
 import type { ResponseType } from '../../types/rest';
+import { BlazeContextData } from '../../types/validator';
 import { mapToObject } from '../../utils/common';
 import { getReqBody, getReqQuery } from '../../utils/helper/context';
 import {
@@ -24,6 +15,10 @@ import {
   validateQuery,
 } from '../../utils/helper/validator';
 import { BlazeBroker as Broker } from '../broker';
+import {
+  BlazeContextConstructorOption,
+  CreateBlazeContextOption,
+} from './types';
 
 export class BlazeContext<
   M extends RecordUnknown = RecordUnknown,
@@ -39,7 +34,6 @@ export class BlazeContext<
   private $params: (B & P) | null;
   private $reqParams: P | null;
   private $reqHeaders: H | null;
-  private $validations: ValidationResult | null;
 
   public response: ResponseType | null;
   public status: StatusCode | null;
@@ -52,9 +46,8 @@ export class BlazeContext<
   public readonly emit: Broker['emit'];
   public readonly event: Broker['event'];
 
-  constructor(options: ContextConstructorOption<M, H, P, Q, B>) {
-    const { honoCtx, body, params, headers, query, validations, meta } =
-      options;
+  constructor(options: BlazeContextConstructorOption<M, H, P, Q, B>) {
+    const { honoCtx, body, params, headers, query, meta } = options;
 
     this.$honoCtx = honoCtx;
     this.$reqHeaders = headers;
@@ -68,7 +61,6 @@ export class BlazeContext<
     this.$meta = meta ? structuredClone(meta) : null;
     this.$headers = null;
     this.isRest = !!honoCtx;
-    this.$validations = validations;
 
     this.broker = BlazeBroker;
     this.call = BlazeBroker.call.bind(BlazeBroker);
@@ -184,10 +176,6 @@ export class BlazeContext<
     };
   }
 
-  public get validations() {
-    return this.$validations;
-  }
-
   public static async create<
     M extends RecordUnknown,
     H extends RecordString,
@@ -199,30 +187,15 @@ export class BlazeContext<
     QV extends ZodSchema,
     BV extends ZodSchema,
   >(
-    options: CreateContextOption<M, H, P, Q, B, HV, PV, QV, BV>
+    options: CreateBlazeContextOption<M, H, P, Q, B, HV, PV, QV, BV>
   ): Promise<BlazeContext<M, H, P, Q, B>> {
-    const { honoCtx, validator, throwOnValidationError, meta } = options;
+    const { honoCtx, validator, onValidationError, meta } = options;
 
-    const cachedCtx: AnyContext | null = honoCtx?.get?.('blaze');
-    const isCached = cachedCtx?.meta?.get?.('isCached');
-
-    const data: ContextData<H, P, Q, B> = {
-      body: isCached ? await cachedCtx?.request?.body?.() : null,
-      params: isCached ? cachedCtx?.request?.params : null,
-      headers: isCached ? cachedCtx?.request?.headers : null,
-      query: isCached ? cachedCtx?.request?.query : null,
-    };
-
-    if (options.body && !data.body) data.body = options.body;
-    if (options.params && !data.params) data.params = options.params;
-    if (options.headers && !data.headers) data.headers = options.headers;
-    if (options.query && !data.query) data.query = options.query;
-
-    const validations: ValidationResult = {
-      body: true,
-      params: true,
-      header: true,
-      query: true,
+    const data: BlazeContextData<H, P, Q, B> = {
+      body: options.body,
+      params: options.params,
+      headers: options.headers,
+      query: options.query,
     };
 
     if (validator?.header) {
@@ -230,8 +203,7 @@ export class BlazeContext<
         data,
         honoCtx,
         schema: validator.header,
-        throwOnValidationError,
-        validations,
+        onValidationError,
       });
     }
 
@@ -240,8 +212,7 @@ export class BlazeContext<
         data,
         honoCtx,
         schema: validator.params,
-        throwOnValidationError,
-        validations,
+        onValidationError,
       });
     }
 
@@ -250,8 +221,7 @@ export class BlazeContext<
         data,
         honoCtx,
         schema: validator.query,
-        throwOnValidationError,
-        validations,
+        onValidationError,
       });
     }
 
@@ -260,36 +230,20 @@ export class BlazeContext<
         data,
         honoCtx,
         schema: validator.body,
-        throwOnValidationError,
-        validations,
+        onValidationError,
       });
     }
 
-    let ctx: BlazeContext<M, H, P, Q, B>;
+    const ctx = new BlazeContext<M, H, P, Q, B>({
+      body: data.body,
+      params: data.params,
+      headers: data.headers,
+      query: data.query,
+      honoCtx,
+      meta,
+    });
 
-    if (cachedCtx) {
-      ctx = cachedCtx;
-      ctx.$body = data.body;
-      ctx.$reqParams = data.params;
-      ctx.$reqHeaders = data.headers;
-      ctx.$params = null;
-      ctx.$query = data.query;
-      ctx.$honoCtx = honoCtx;
-      ctx.$meta = meta ? structuredClone(meta) : null;
-      ctx.$validations = validations;
-    } else {
-      ctx = new BlazeContext({
-        body: data.body,
-        params: data.params,
-        headers: data.headers,
-        query: data.query,
-        honoCtx,
-        meta,
-        validations,
-      });
-    }
-
-    if (honoCtx && cachedCtx) {
+    if (honoCtx) {
       ctx.$headers = mapToObject(honoCtx.res.headers as never);
     }
 

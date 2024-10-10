@@ -1,39 +1,28 @@
 import type { ZodSchema } from 'zod';
-import type { BlazeContext } from '../internal';
-import type { ActionHandler } from './action';
-import type { Random, RecordString, RecordUnknown } from './helper';
+import type { Random, RecordString, RecordUnknown } from './common';
+import type { BlazeEventHandler, BlazeValidationErrorHandler } from './handler';
 
-export interface EventActionHandler {
-  name: string;
-  handler(...values: unknown[]): ReturnType<ActionHandler>;
-}
-
-export interface EventListener {
-  (...values: Random[]): Promise<void | unknown> | void | unknown;
-}
-
-export type EventName = string;
-
-export interface EventHandler<
-  M extends RecordUnknown = RecordUnknown,
-  P extends RecordUnknown = RecordUnknown,
-> {
-  (
-    ctx: BlazeContext<M, RecordString, RecordUnknown, RecordUnknown, P>
-  ): Promise<void>;
-}
-
-export interface Event<
+export interface BlazeEvent<
   M extends RecordUnknown = RecordUnknown,
   P extends ZodSchema = ZodSchema,
 > {
   validator?: P | null;
-  handler: EventHandler<M, P['_output']>;
-  throwOnValidationError?: boolean | null;
+  handler: BlazeEventHandler<M, P['_output']>;
+  onValidationError?: BlazeValidationErrorHandler<
+    M,
+    RecordString,
+    P['_output'],
+    RecordUnknown,
+    RecordUnknown
+  >;
 }
 
-export type AnyEvent = Event<RecordUnknown, Random>;
+export type AnyBlazeEvent = BlazeEvent<Random, Random>;
 
-export interface Events {
-  [key: string]: AnyEvent;
+export type AnyBlazeEvents = Record<string, AnyBlazeEvent>;
+
+export interface CreateBlazeEventOption {
+  event: BlazeEvent;
+  serviceName: string;
+  eventAlias: string;
 }

@@ -1,19 +1,20 @@
 import path from 'node:path';
-import { BlazeContext } from '../../internal';
-import { BlazeRouter } from '../../router/BlazeRouter';
-import type { Action } from '../../types/action';
-import type { EventActionHandler } from '../../types/event';
-import type { Middleware } from '../../types/rest';
+import { BlazeContext } from '../../../internal';
+import { BlazeRouter } from '../../../router/BlazeRouter';
+import type { BlazeAction } from '../../../types/action';
+import type { Middleware } from '../../../types/rest';
+import type { AnyBlazeService } from '../../../types/service';
+import { getRestPath, getServiceName } from '../../common';
+import { getRestMiddlewares } from '../../helper/rest';
+import { loadService } from '../../helper/service';
+import { BlazeServiceAction } from '../action';
+import { BlazeServiceEvent } from '../event';
+import { BlazeServiceRest } from '../rest';
 import type {
+  BlazeEventActionHandler,
+  BlazeServiceOption,
   CreateServiceOption,
-  Service,
-  ServiceConstructorOption,
-} from '../../types/service';
-import { getRestPath, getServiceName } from '../common';
-import { loadService } from '../helper/service';
-import { BlazeServiceAction } from './action';
-import { BlazeServiceEvent } from './event';
-import { BlazeServiceRest } from './rest';
+} from './types';
 
 export class BlazeService {
   public readonly servicePath: string;
@@ -23,15 +24,15 @@ export class BlazeService {
   public readonly actions: BlazeServiceAction[];
   public readonly events: BlazeServiceEvent[];
   public readonly rests: BlazeServiceRest[];
-  public readonly handlers: EventActionHandler[];
+  public readonly handlers: BlazeEventActionHandler[];
   public readonly middlewares: Middleware[];
   public router: BlazeRouter | null;
 
   private readonly blazeCtx: BlazeContext;
-  private readonly service: Service;
+  private readonly service: AnyBlazeService;
   private isStarted: boolean;
 
-  constructor(options: ServiceConstructorOption) {
+  constructor(options: BlazeServiceOption) {
     const { service, blazeCtx, servicePath, app, middlewares } = options;
 
     this.service = service;
@@ -58,18 +59,20 @@ export class BlazeService {
     this.loadServiceEvents();
   }
 
-  private loadRest(action: Action) {
+  private loadRest(action: BlazeAction) {
     if (!this.router) {
       this.router = new BlazeRouter({
         router: this.service.router,
       });
     }
 
+    const middlewares = getRestMiddlewares(this.service, action);
+
     const restInstance = new BlazeServiceRest({
       action,
       router: this.router,
       service: this.service,
-      middlewares: this.middlewares,
+      middlewares,
     });
 
     this.rests.push(restInstance);

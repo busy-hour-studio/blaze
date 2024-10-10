@@ -1,13 +1,14 @@
 import type { ZodSchema } from 'zod';
-import type { Action, ActionValidator } from '../types/action';
-import type { RecordUnknown } from '../types/helper';
+import type { BlazeAction } from '../types/action';
+import type { RecordUnknown } from '../types/common';
+import type { BlazeActionValidator } from '../types/validator';
 
 export function createActionValidator<
   H extends ZodSchema,
   P extends ZodSchema,
   Q extends ZodSchema,
   B extends ZodSchema,
->(validator: ActionValidator<H, P, Q, B>) {
+>(validator: BlazeActionValidator<H, P, Q, B>) {
   return validator;
 }
 
@@ -19,6 +20,6 @@ export function createAction<
   P extends ZodSchema,
   Q extends ZodSchema,
   B extends ZodSchema,
->(action: Action<R, HR, M, H, P, Q, B>) {
+>(action: BlazeAction<R, HR, M, H, P, Q, B>) {
   return action;
 }

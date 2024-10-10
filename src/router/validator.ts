@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { BlazeConfig } from '../config';
-import { Logger } from '../errors/Logger';
-import { Random } from '../types/helper';
+import { Logger } from '../internal/logger';
+import type { Random } from '../types/common';
 import { ExternalModule } from '../utils/constant';
 
 const zodApi = BlazeConfig.modules[ExternalModule.ZodApi];

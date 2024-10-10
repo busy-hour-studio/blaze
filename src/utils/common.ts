@@ -1,10 +1,10 @@
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import { Logger } from '../errors/Logger';
+import { Logger } from '../internal/logger';
 // eslint-disable-next-line import/no-cycle
-import type { Random } from '../types/helper';
-import type { Service } from '../types/service';
+import type { Random } from '../types/common';
+import type { BlazeService } from '../types/service';
 
 export function hasOwnProperty<
   Z extends NonNullable<unknown>,
@@ -42,7 +42,7 @@ export function removeTrailingSlash(path: string) {
   return path.replace(/^\/+/, '');
 }
 
-export function getRestPath(service: Service) {
+export function getRestPath(service: BlazeService) {
   const version = service.version ? `v${service.version}` : '';
   const restPath =
     typeof service.rest === 'string' ? service.rest : service.name;
@@ -53,7 +53,7 @@ export function getRestPath(service: Service) {
     .join('/');
 }
 
-export function getServiceName(service: Service) {
+export function getServiceName(service: BlazeService) {
   const version = !isNil(service.version) ? `v${service.version}` : '';
 
   return [version, service.name].filter(Boolean).join('.');

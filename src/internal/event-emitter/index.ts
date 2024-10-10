@@ -1,4 +1,4 @@
-import type { EventListener, EventName } from '../../types/event';
+import type { BlazeEventListener } from '../../types/handler';
 import { BlazeMap } from '../map';
 
 type Option = {
@@ -7,14 +7,14 @@ type Option = {
 
 export class BlazeEventEmitter {
   private $maxListeners: number;
-  private $emitter: BlazeMap<EventName, Set<EventListener>>;
+  private $emitter: BlazeMap<string, Set<BlazeEventListener>>;
 
   constructor(options: Option) {
     this.$maxListeners = options?.maxListener ?? 100;
     this.$emitter = new BlazeMap();
   }
 
-  public listenerCount(eventName: EventName) {
+  public listenerCount(eventName: string) {
     return this.$emitter.get(eventName)?.size ?? 0;
   }
 
@@ -26,7 +26,7 @@ export class BlazeEventEmitter {
     this.$maxListeners = value;
   }
 
-  public emit(eventName: EventName, ...values: unknown[]) {
+  public emit(eventName: string, ...values: unknown[]) {
     if (!this.$emitter.has(eventName)) {
       return false;
     }
@@ -40,7 +40,7 @@ export class BlazeEventEmitter {
 
   // eslint-disable-next-line no-use-before-define, @typescript-eslint/no-shadow
   public async emitAsync<T, U = T extends Array<infer T> ? T : T>(
-    eventName: EventName,
+    eventName: string,
     ...values: unknown[]
   ): Promise<U[]> {
     if (!this.$emitter.has(eventName)) {
@@ -54,7 +54,7 @@ export class BlazeEventEmitter {
     );
   }
 
-  public on(eventName: EventName, listener: EventListener) {
+  public on(eventName: string, listener: BlazeEventListener) {
     const listenerCount = this.listenerCount(eventName);
 
     if (!this.$emitter.has(eventName)) {
@@ -66,15 +66,15 @@ export class BlazeEventEmitter {
     this.$emitter.get(eventName)?.add(listener);
   }
 
-  public off(eventName: EventName, listener: EventListener) {
+  public off(eventName: string, listener: BlazeEventListener) {
     if (!this.$emitter.has(eventName)) return;
 
     this.$emitter.get(eventName)?.delete(listener);
   }
 
   public offAll(): void;
-  public offAll(eventName: EventName): void;
-  public offAll(eventName?: EventName) {
+  public offAll(eventName: string): void;
+  public offAll(eventName?: string) {
     if (eventName) {
       this.$emitter.delete(eventName);
       return;
@@ -87,12 +87,12 @@ export class BlazeEventEmitter {
     return [...this.$emitter.keys()];
   }
 
-  public listeners(eventName: EventName) {
+  public listeners(eventName: string) {
     return [...(this.$emitter.get(eventName) ?? [])];
   }
 
-  public rawListeners(eventName: EventName) {
-    const listenerSet = new Set<EventListener>();
+  public rawListeners(eventName: string) {
+    const listenerSet = new Set<BlazeEventListener>();
 
     if (this.$emitter.has(eventName)) {
       this.$emitter.get(eventName)?.forEach((listener) => {

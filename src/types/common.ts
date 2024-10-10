@@ -1,3 +1,10 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Random = any;
+
+export type RecordUnknown = Record<string, unknown>;
+
+export type RecordString = Record<string, string>;
+
 export interface ActionEventCallRequest<Headers, Params, Query, Body, Result> {
   headers: Headers;
   params: Params;
@@ -6,30 +13,18 @@ export interface ActionEventCallRequest<Headers, Params, Query, Body, Result> {
   query: Query;
 }
 
-export interface ActionCallRecord {
-  // Extend the interface with other modules
-  // [key: string]: ActionEventCallRequest<
-  //   RecordString,
-  //   RecordUnknown,
-  //   Random,
-  //   never
-  // >;
-}
-
-export interface EventCallRecord {
-  // Extend the interface with other modules
-  // [key: string]: ActionEventCallRequest<
-  //   RecordString,
-  //   RecordUnknown,
-  //   Random,
-  //   never
-  // >;
-}
-
 export interface TrpcQueryCallRecord {
   // Extend the interface with other modules
 }
 
 export interface TrpcMutationCallRecord {
+  // Extend the interface with other modules
+}
+
+export interface ActionCallRecord {
+  // Extend the interface with other modules
+}
+
+export interface EventCallRecord {
   // Extend the interface with other modules
 }

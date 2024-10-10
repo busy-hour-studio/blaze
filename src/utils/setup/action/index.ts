@@ -1,15 +1,15 @@
-import { BlazeContext, BlazeEventEmitter } from '../../internal';
-import type { Action } from '../../types/action';
-import type { Random } from '../../types/helper';
-import type { CreateActionOption } from '../../types/service';
-import { eventHandler } from '../helper/handler';
+import { BlazeContext, BlazeEventEmitter } from '../../../internal';
+import type { BlazeAction } from '../../../types/action';
+import type { Random } from '../../../types/common';
+import { eventHandler } from '../../helper/handler';
+import { BlazeServiceActionOption } from './types';
 
 export class BlazeServiceAction {
   public readonly serviceName: string;
   public readonly actionName: string;
-  public readonly action: Action;
+  public readonly action: BlazeAction;
 
-  constructor(options: CreateActionOption) {
+  constructor(options: BlazeServiceActionOption) {
     this.serviceName = options.serviceName;
     this.actionName = [this.serviceName, options.actionAlias].join('.');
     this.action = options.action;
@@ -28,7 +28,7 @@ export class BlazeServiceAction {
       query,
       validator: this.action.validator ?? null,
       meta: this.action.meta ?? null,
-      throwOnValidationError: this.action.throwOnValidationError ?? false,
+      onValidationError: this.action.onValidationError ?? null,
     });
 
     return eventHandler(this.action, context);

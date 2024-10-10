@@ -24,11 +24,16 @@ export interface BlazeEventListener {
 }
 
 export interface BlazeValidationErrorHandler<
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   M extends RecordUnknown = RecordUnknown,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   H extends RecordString = RecordString,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   P extends RecordUnknown = RecordUnknown,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Q extends RecordUnknown = RecordUnknown,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   B extends RecordUnknown = RecordUnknown,
 > {
-  (ctx: BlazeContext<M, H, P, Q, B>): Promise<void>;
+  (error: Random): Promise<void>;
 }

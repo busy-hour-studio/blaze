@@ -7,7 +7,7 @@ import {
   showRoutes as honoShowRoutes,
 } from 'hono/dev';
 import type { Blaze } from '../router';
-import type { Random } from '../types/helper';
+import type { Random } from '../types/common';
 
 export interface RouteData {
   path: string;

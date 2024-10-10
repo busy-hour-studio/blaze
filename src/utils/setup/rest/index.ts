@@ -1,27 +1,28 @@
-import type { Context as HonoCtx } from 'hono';
-import type { StatusCode } from 'hono/utils/http-status';
-import { BlazeError } from '../../errors/BlazeError';
-import { Logger } from '../../errors/Logger';
-import { BlazeContext } from '../../internal';
-import type { Action } from '../../types/action';
-import type { Method, Middleware, RestHandlerOption } from '../../types/rest';
-import type { OpenAPIRequest } from '../../types/router';
-import type { Service } from '../../types/service';
-import { isNil, resolvePromise } from '../common';
-import { eventHandler } from '../helper/handler';
+import type { Context as HonoCtx, MiddlewareHandler } from 'hono';
+import { BlazeContext } from '../../../internal';
+import { BlazeError } from '../../../internal/error';
+import { Logger } from '../../../internal/logger';
+import type { BlazeAction } from '../../../types/action';
+import type { BlazeOpenAPIRequest } from '../../../types/openapi';
+import type { ExposedBlazeRestMethod, StatusCode } from '../../../types/rest';
+import type { BlazeService } from '../../../types/service';
+import { isNil, resolvePromise } from '../../common';
+import { REST_METHOD } from '../../constant/rest';
+import { eventHandler } from '../../helper/handler';
 import {
   extractRestParams,
   handleRestError,
   handleRestResponse,
-} from '../helper/rest';
+} from '../../helper/rest';
+import type { BlazeServiceRestOption } from './types';
 
 export class BlazeServiceRest {
   public readonly path: string;
-  public readonly method: Method | null;
-  public readonly service: Service | null;
-  private action: Action;
+  public readonly method: ExposedBlazeRestMethod | null;
+  public readonly service: BlazeService | null;
+  private action: BlazeAction;
 
-  constructor(options: RestHandlerOption) {
+  constructor(options: BlazeServiceRestOption) {
     const { router, action, service } = options;
 
     if (!action.rest) {
@@ -37,7 +38,7 @@ export class BlazeServiceRest {
 
     const { request, responses } = this.openAPIConfig;
 
-    const middlewares: Middleware[] = [
+    const middlewares: MiddlewareHandler[] = [
       ...options.middlewares,
       ...(action.middlewares ?? []),
     ];
@@ -55,7 +56,7 @@ export class BlazeServiceRest {
     }
 
     router.openapi({
-      method: method || 'ALL',
+      method: method || REST_METHOD.ALL,
       handler: this.restHandler.bind(this),
       path,
       request,
@@ -76,7 +77,7 @@ export class BlazeServiceRest {
         query: null,
         validator: this.action.validator ?? null,
         meta: this.action.meta ?? null,
-        throwOnValidationError: this.action.throwOnValidationError ?? false,
+        onValidationError: this.action.onValidationError ?? null,
       })
     );
 
@@ -84,10 +85,10 @@ export class BlazeServiceRest {
       let status: StatusCode = 500;
 
       if (error instanceof BlazeError) {
-        status = error.status as StatusCode;
+        status = error.status;
       }
 
-      return honoCtx.json(error as Error, status);
+      return honoCtx.json(error as Error, status as never);
     }
 
     const [restResult, restError] = await resolvePromise(
@@ -122,7 +123,7 @@ export class BlazeServiceRest {
 
     const { openapi, validator } = this.action;
 
-    const request: OpenAPIRequest = {};
+    const request: BlazeOpenAPIRequest = {};
     const responses = openapi.responses ?? {};
 
     if (validator?.body && openapi.body) {

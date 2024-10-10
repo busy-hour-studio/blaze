@@ -1,6 +1,6 @@
 import fs from 'node:fs';
-import { Logger } from '../../errors/Logger';
 import { BlazeContext } from '../../internal';
+import { Logger } from '../../internal/logger';
 import type { LoadServiceOption } from '../../types/service';
 import { BlazeService } from './service';
 
@@ -22,7 +22,6 @@ export async function initializeServices(options: LoadServiceOption) {
     honoCtx: null,
     meta: null,
     query: null,
-    validations: null,
   });
 
   const serviceFiles = fs.readdirSync(sourcePath);

@@ -1,15 +1,9 @@
 import './types/validator';
 
 export type {
-  Action,
-  ActionCallResult,
-  ActionHandler,
-  ActionOpenAPI,
-  ActionValidator,
-  Actions,
-  AnyAction,
-  AnyValidator,
-  OpenAPIBody,
+  AnyBlazeAction,
+  AnyBlazeActions,
+  BlazeAction,
 } from './types/action';
 export type {
   ActionCallRecord,
@@ -18,24 +12,32 @@ export type {
   TrpcMutationCallRecord,
   TrpcQueryCallRecord,
 } from './types/common';
-export type { AnyEvent, Event, Events } from './types/event';
+export { AnyBlazeEvent, AnyBlazeEvents, BlazeEvent } from './types/event';
+export type { BlazeActionHandler, BlazeEventHandler } from './types/handler';
+export {
+  AnyBlazeActionHook,
+  AnyBlazeAfterHookHandler,
+  AnyBlazeBeforeHookHandler,
+  BlazeAcceptedAfterHook,
+  BlazeAcceptedBeforeHook,
+  BlazeActionHook,
+  BlazeAfterHookHandler,
+  BlazeBeforeHookHandler,
+} from './types/hook';
+export { BlazeActionOpenAPI, OpenAPIBody } from './types/openapi';
 export type {
-  AcceptedAfterHook,
-  AcceptedBeforeHook,
-  ActionHook,
-  AfterHookHandler,
-  AnyActionHook,
-  AnyAfterHook,
-  AnyAfterHookHandler,
-  AnyBeforeHook,
-  AnyBeforeHookHandler,
-  BeforeHookHandler,
-} from './types/hooks';
-export type { Method, RestParam, RestRoute } from './types/rest';
-export type { Service } from './types/service';
+  BlazeRestParam,
+  BlazeRestRoute,
+  ExposedBlazeRestMethod,
+} from './types/rest';
+export type { BlazeService } from './types/service';
+export {
+  AnyBlazeActionValidator,
+  BlazeActionValidator,
+} from './types/validator';
 
 export { BlazeConfig } from './config';
 export { BlazeCreator } from './creator';
-export { BlazeError } from './errors/BlazeError';
+export { BlazeError } from './internal/error';
 export { Blaze, BlazeRouter, z } from './router';
 export { initializeServices } from './utils/setup';

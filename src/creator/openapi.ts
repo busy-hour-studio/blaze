@@ -1,5 +1,5 @@
-import type { ActionOpenAPI } from '../types/action';
+import type { BlazeActionOpenAPI } from '../types/openapi';
 
-export function createActionOpenAPI(openapi: ActionOpenAPI) {
+export function createActionOpenAPI(openapi: BlazeActionOpenAPI) {
   return openapi;
 }

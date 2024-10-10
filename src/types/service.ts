@@ -1,17 +1,18 @@
 import type { Router } from 'hono/router';
 import type { RouterRoute } from 'hono/types';
 import type { BlazeContext } from '../internal';
-import type { BlazeRouter } from '../router';
-import type { Action, ActionHandler, Actions } from './action';
-import type { Event, EventActionHandler, Events } from './event';
-import type { Random } from './helper';
-import type { Middleware } from './rest';
+import type { BlazeRouter } from '../router/BlazeRouter';
+import type { AnyBlazeActions } from './action';
+import type { Random } from './common';
+import type { AnyBlazeEvents } from './event';
+import type { BlazeActionHandler } from './handler';
+import type { BlazeRestRoute, Middleware } from './rest';
 
-export interface Service<
+export interface BlazeService<
   N extends string = string,
   V extends number = number,
-  A extends Actions = Actions,
-  E extends Events = Events,
+  A extends AnyBlazeActions = AnyBlazeActions,
+  E extends AnyBlazeEvents = AnyBlazeEvents,
 > {
   name?: N | null;
   rest?: string | null;
@@ -20,13 +21,29 @@ export interface Service<
   actions?: A | null;
   events?: E | null;
   middlewares?: Middleware[] | null;
-  onCreated?: ActionHandler | null;
-  onStarted?: ActionHandler | null;
-  onStopped?(handlers: EventActionHandler[]): void;
+  onCreated?: BlazeActionHandler | null;
+  onStarted?: BlazeActionHandler | null;
   router?: Router<[never, RouterRoute]>;
 }
 
-export type AnyService = Service<Random, Random, Actions, Events>;
+export type AnyBlazeService = BlazeService<
+  Random,
+  Random,
+  AnyBlazeActions,
+  AnyBlazeEvents
+>;
+
+export interface CreateBlazeServiceOption {
+  servicePath: string;
+  ctx: BlazeContext;
+  router: BlazeRestRoute;
+  middlewares?: Middleware[] | null;
+  service: BlazeService;
+}
+
+export interface CreateBlazeService extends CreateBlazeServiceOption {
+  sourcePath: string;
+}
 
 export interface LoadServiceOption {
   app: BlazeRouter;
@@ -34,39 +51,14 @@ export interface LoadServiceOption {
   middlewares?: Middleware[] | null;
 }
 
+export interface ImportServiceOption {
+  services: BlazeService[];
+  autoStart?: boolean | null;
+  middlewares?: Middleware[] | null;
+}
+
 export interface LoadServicesOption {
   path: string;
   autoStart?: boolean | null;
   middlewares?: Middleware[] | null;
-}
-
-export interface ImportServiceOption {
-  services: Service[];
-  autoStart?: boolean | null;
-  middlewares?: Middleware[] | null;
-}
-
-export interface CreateServiceOption {
-  sourcePath: string;
-  servicePath: string;
-  blazeCtx: BlazeContext;
-  app: BlazeRouter;
-  middlewares: Middleware[];
-}
-
-export interface ServiceConstructorOption
-  extends Omit<CreateServiceOption, 'sourcePath'> {
-  service: Service;
-}
-
-export interface CreateActionOption {
-  action: Action;
-  serviceName: string;
-  actionAlias: string;
-}
-
-export interface CreateEventOption {
-  event: Event;
-  serviceName: string;
-  eventAlias: string;
 }

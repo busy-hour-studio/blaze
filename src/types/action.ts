@@ -1,53 +1,21 @@
-import type { ResponseConfig } from '@asteasolutions/zod-to-openapi';
 import type { ProcedureType } from '@trpc/server';
+import type { MiddlewareHandler } from 'hono';
 import type { ZodSchema } from 'zod';
-import type { BlazeContext } from '../internal';
-import type { Random, RecordString, RecordUnknown } from './helper';
+import type { Random, RecordUnknown } from './common';
 import type {
-  AcceptedAfterHook,
-  AcceptedBeforeHook,
-  ActionHook,
-} from './hooks';
-import type { Middleware, RestParam } from './rest';
+  BlazeActionHandler,
+  BlazeValidationErrorHandler,
+} from './handler';
+import type {
+  BlazeAcceptedAfterHook,
+  BlazeAcceptedBeforeHook,
+  BlazeActionHook,
+} from './hook';
+import type { BlazeActionOpenAPI } from './openapi';
+import type { BlazeRestParam } from './rest';
+import type { BlazeActionValidator } from './validator';
 
-export interface ActionValidator<
-  H extends ZodSchema = ZodSchema,
-  P extends ZodSchema = ZodSchema,
-  Q extends ZodSchema = ZodSchema,
-  B extends ZodSchema = ZodSchema,
-> {
-  header?: H | null;
-  params?: P | null;
-  query?: Q | null;
-  body?: B | null;
-}
-
-export interface ActionHandler<
-  R = unknown | void,
-  M extends RecordUnknown = RecordUnknown,
-  H extends RecordString = RecordString,
-  P extends RecordUnknown = RecordUnknown,
-  Q extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-> {
-  (ctx: BlazeContext<M, H, P, Q, B>): Promise<R>;
-}
-
-export interface OpenAPIBody {
-  required?: boolean;
-  description?: string;
-  type:
-    | 'application/json'
-    | 'multipart/form-data'
-    | 'application/x-www-form-urlencoded';
-}
-
-export interface ActionOpenAPI {
-  responses?: Record<number, ResponseConfig> | null;
-  body?: OpenAPIBody | null;
-}
-
-export interface Action<
+export interface BlazeAction<
   R = unknown | void,
   HR = unknown | void,
   M extends RecordUnknown = RecordUnknown,
@@ -55,14 +23,14 @@ export interface Action<
   P extends ZodSchema = ZodSchema,
   Q extends ZodSchema = ZodSchema,
   B extends ZodSchema = ZodSchema,
-  AH extends AcceptedAfterHook<
+  AH extends BlazeAcceptedAfterHook<
     HR,
     M,
     H['_output'],
     P['_output'],
     Q['_output'],
     B['_output']
-  > = AcceptedAfterHook<
+  > = BlazeAcceptedAfterHook<
     HR,
     M,
     H['_output'],
@@ -70,13 +38,13 @@ export interface Action<
     Q['_output'],
     B['_output']
   >,
-  BH extends AcceptedBeforeHook<
+  BH extends BlazeAcceptedBeforeHook<
     M,
     H['_output'],
     P['_output'],
     Q['_output'],
     B['_output']
-  > = AcceptedBeforeHook<
+  > = BlazeAcceptedBeforeHook<
     M,
     H['_output'],
     P['_output'],
@@ -85,10 +53,10 @@ export interface Action<
   >,
   TRPC extends ProcedureType = ProcedureType,
 > {
-  openapi?: ActionOpenAPI | null;
-  middlewares?: Middleware[] | null;
-  validator?: ActionValidator<H, P, Q, B> | null;
-  handler: ActionHandler<
+  openapi?: BlazeActionOpenAPI | null;
+  middlewares?: MiddlewareHandler[] | null;
+  validator?: BlazeActionValidator<H, P, Q, B> | null;
+  handler: BlazeActionHandler<
     R,
     M,
     H['_output'],
@@ -97,17 +65,19 @@ export interface Action<
     B['_output']
   >;
   meta?: M | null;
-  rest?: RestParam | null;
-  hooks?: ActionHook<AH, BH> | null;
-  throwOnValidationError?: boolean | null;
+  rest?: BlazeRestParam | null;
+  hooks?: BlazeActionHook<AH, BH> | null;
+  onValidationError?: BlazeValidationErrorHandler<
+    M,
+    H['_output'],
+    P['_output'],
+    Q['_output'],
+    B['_output']
+  >;
   trpc?: TRPC | null;
 }
 
-export type ActionCallResult<U> =
-  | { error: Error; ok: false }
-  | { ok: true; result: U };
-
-export type AnyAction = Action<
+export type AnyBlazeAction = BlazeAction<
   Random,
   Random,
   Random,
@@ -120,8 +90,10 @@ export type AnyAction = Action<
   Random
 >;
 
-export type AnyValidator = ActionValidator<Random, Random, Random, Random>;
+export type AnyBlazeActions = Record<string, AnyBlazeAction>;
 
-export interface Actions {
-  [key: string]: AnyAction;
+export interface CreateBlazeActionOption {
+  action: BlazeAction;
+  serviceName: string;
+  actionAlias: string;
 }

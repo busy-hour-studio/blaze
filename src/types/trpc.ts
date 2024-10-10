@@ -9,7 +9,7 @@ import type {
 } from '@trpc/server';
 import type { FetchHandlerRequestOptions } from '@trpc/server/adapters/fetch';
 import type { MiddlewareHandler } from 'hono';
-import type { BlazeServiceAction } from '../utils/setup/action';
+import type { BlazeServiceAction } from '../utils/setup';
 import type { TrpcMutationCallRecord, TrpcQueryCallRecord } from './common';
 
 export type BlazeTrpcRouter = CreateRouterInner<
@@ -32,10 +32,10 @@ export type GroupTrpcAction = { [T in ProcedureType]: BlazeServiceAction[] };
 export interface BlazeTrpc {
   instance: Trpc;
   router: BlazeTrpcRouter;
-  procedure: Trpc['procedure'];
+  procedure: TrpcProcedure;
 }
 
-export interface TrpcOption
+export interface BlazeTrpcOption
   extends Partial<
     Omit<
       FetchHandlerRequestOptions<AnyRouter>,

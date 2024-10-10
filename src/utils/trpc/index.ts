@@ -1,6 +1,6 @@
 import { BlazeConfig } from '../../config';
 import type { Blaze } from '../../router';
-import type { BlazeTrpc, TrpcOption } from '../../types/trpc';
+import type { BlazeTrpc, BlazeTrpcOption } from '../../types/trpc';
 import { ExternalModule } from '../constant';
 import { TrpcConstructor } from './constructor';
 
@@ -35,7 +35,7 @@ export function loadTrpc(app: Blaze): BlazeTrpc {
 export function useTrpc(
   this: Blaze,
   path: string,
-  { endpoint = '/trpc', middlewares = [], ...options }: TrpcOption = {}
+  { endpoint = '/trpc', middlewares = [], ...options }: BlazeTrpcOption = {}
 ) {
   const trpc = loadTrpc(this);
 

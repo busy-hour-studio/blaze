@@ -1,8 +1,8 @@
 import { z } from 'zod';
-import { Logger } from '../errors/Logger';
-import { DEPENDENCY_MODULE_MAP, DependencyModule } from '../types/config';
-import { crossRequire } from '../utils/common';
-import { ExternalModule, PossibleRunTime } from '../utils/constant';
+import { Logger } from '../../internal/logger';
+import { DEPENDENCY_MODULE_MAP, DependencyModule } from '../../types/config';
+import { crossRequire } from '../../utils/common';
+import { ExternalModule, PossibleRunTime } from '../../utils/constant';
 
 export class BlazeConfig {
   public readonly runTime: PossibleRunTime;

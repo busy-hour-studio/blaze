@@ -1,17 +1,18 @@
-import { BlazeContext, BlazeEventEmitter } from '../../internal';
-import type { Event } from '../../types/event';
-import type { ContextValidation, RecordUnknown } from '../../types/helper';
-import type { CreateEventOption } from '../../types/service';
-import { RESERVED_KEYWORD } from '../constant/broker';
-import { eventHandler } from '../helper/handler';
+import { BlazeContext, BlazeEventEmitter } from '../../../internal';
+import type { RecordUnknown } from '../../../types/common';
+import type { BlazeEvent } from '../../../types/event';
+import type { BlazeContextValidation } from '../../../types/validator';
+import { RESERVED_KEYWORD } from '../../constant/broker';
+import { eventHandler } from '../../helper/handler';
+import type { BlazeServiceEventOption } from './types';
 
 export class BlazeServiceEvent {
   public readonly serviceName: string;
   public readonly eventName: string;
-  public readonly event: Event;
-  private readonly validator: ContextValidation;
+  public readonly event: BlazeEvent;
+  private readonly validator: BlazeContextValidation;
 
-  constructor(options: CreateEventOption) {
+  constructor(options: BlazeServiceEventOption) {
     this.serviceName = options.serviceName;
     this.eventName = [
       RESERVED_KEYWORD.PREFIX.EVENT,
@@ -35,7 +36,7 @@ export class BlazeServiceEvent {
       query: null,
       validator: this.validator ?? null,
       meta: null,
-      throwOnValidationError: this.event.throwOnValidationError ?? false,
+      onValidationError: this.event.onValidationError ?? null,
     });
 
     const options = {

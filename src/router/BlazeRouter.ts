@@ -17,10 +17,11 @@ import type { Env, Schema } from 'hono';
 import { Hono } from 'hono';
 import type { MergePath, MergeSchemaPath } from 'hono/types';
 import { BlazeConfig } from '../config';
-import { Logger } from '../errors/Logger';
+import { Logger } from '../internal/logger';
+import type { Random } from '../types/common';
 import { DependencyModule } from '../types/config';
-import type { Random } from '../types/helper';
-import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router';
+import type { BlazeOpenAPIOption } from '../types/openapi';
+import type { CreateBlazeOption } from '../types/router';
 import { ExternalModule } from '../utils/constant';
 import {
   assignOpenAPIRegistry,
@@ -50,25 +51,17 @@ export class BlazeRouter<
   }
 
   public openapi(route: BlazeOpenAPIOption) {
-    const method = route.method === 'ALL' ? 'POST' : route.method;
-    const allMiddlewares = route.middlewares
-      .filter((middleware) => middleware[0] === 'ALL')
-      .map((middleware) => middleware[1]);
-    const methodMiddlewares = route.middlewares
-      .filter((middleware) => middleware[0] === method)
-      .map((middleware) => middleware[1]);
+    const middlewares = [...(route.middlewares ?? [])];
 
     const newRoute = createOpenApiRouter(route);
 
-    if (allMiddlewares.length) {
-      this.use(...allMiddlewares);
-    }
-
-    this.on(route.method, route.path, ...methodMiddlewares, route.handler);
+    this.on(route.method, route.path, ...middlewares, route.handler);
 
     if (!this.openAPIRegistry) return;
 
     this.openAPIRegistry.registerPath(newRoute);
+
+    return this;
   }
 
   public getOpenAPIDocument(
@@ -111,6 +104,8 @@ export class BlazeRouter<
         return ctx.json(e as Error, 500);
       }
     });
+
+    return this;
   }
 
   public doc31(path: string, config: OpenAPIObjectConfig) {
@@ -123,6 +118,8 @@ export class BlazeRouter<
         return ctx.json(e as Error, 500);
       }
     });
+
+    return this;
   }
 
   public route<
