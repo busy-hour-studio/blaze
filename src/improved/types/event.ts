@@ -29,6 +29,6 @@ export interface BlazeEvent<
 
 export type AnyBlazeEvent = BlazeEvent<RecordUnknown, Random>;
 
-export interface BlazeEvents {
+export interface AnyBlazeEvents {
   [key: string]: AnyBlazeEvent;
 }

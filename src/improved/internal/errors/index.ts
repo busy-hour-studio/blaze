@@ -3,16 +3,13 @@ import type { StatusCode } from '../../types/rest.ts';
 import type { BlazeErrorOption } from './types.ts';
 
 export class BlazeError extends Error {
-  public status: StatusCode | number;
+  public status: StatusCode;
   public errors: RecordUnknown | unknown | null;
 
   constructor(err: BlazeErrorOption);
   constructor(message: string);
-  constructor(message: string, status: StatusCode | number);
-  constructor(
-    err: BlazeErrorOption | string,
-    status: StatusCode | number = 500
-  ) {
+  constructor(message: string, status: StatusCode);
+  constructor(err: BlazeErrorOption | string, status: StatusCode = 500) {
     if (typeof err === 'string') {
       super(err);
       this.status = status;

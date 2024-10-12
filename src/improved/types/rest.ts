@@ -1,9 +1,9 @@
 import type { MiddlewareHandler } from 'hono';
 import type {
-  RESPONSE_TYPE,
-  REST_METHOD,
-  REST_CONTENT_TYPE,
   FORM_CONTENT_TYPE,
+  RESPONSE_TYPE,
+  REST_CONTENT_TYPE,
+  REST_METHOD,
 } from '../utils/constants/rest/index.ts';
 import type { STATUS_CODE } from '../utils/constants/rest/status-code.ts';
 
@@ -24,9 +24,7 @@ export interface BlazeRestOption {
 
 export type BlazeRestParam = BlazeRestRoute | BlazeRestOption;
 
-export type StatusCode =
-  | (typeof STATUS_CODE)[keyof typeof STATUS_CODE]
-  | (number & NonNullable<unknown>);
+export type StatusCode = (typeof STATUS_CODE)[keyof typeof STATUS_CODE];
 
 export type ResponseType = (typeof RESPONSE_TYPE)[keyof typeof RESPONSE_TYPE];
 

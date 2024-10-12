@@ -2,7 +2,7 @@
 import type { Context as HonoCtx } from 'hono';
 import type { ZodSchema } from 'zod';
 import type { RecordString, RecordUnknown } from '../../types/common.ts';
-import type { StatusCode } from '../../types/rest.ts';
+import type { ResponseType, StatusCode } from '../../types/rest.ts';
 import { mapToObject } from '../../utils/common/index.ts';
 import { getReqBody, getReqQuery } from '../../utils/common/rest.ts';
 import {

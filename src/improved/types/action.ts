@@ -1,14 +1,15 @@
 import type { ProcedureType } from '@trpc/server';
+import type { MiddlewareHandler } from 'hono';
 import type { ZodSchema } from 'zod';
 import type { BlazeContext } from '../internal/index.ts';
 import type { Random, RecordString, RecordUnknown } from './common.ts';
+import type { OnBlazeActionEventErrorHandler } from './handler.ts';
 import type { AcceptedBlazeAfterHook } from './hooks/after.ts';
 import type { AcceptedBlazeBeforeHook } from './hooks/before.ts';
-import type { BlazeOpenAPIConfig } from './openapi.ts';
-import type { BlazeRestParam, Middleware } from './rest.ts';
-import type { BlazeValidator } from './validator.ts';
 import type { BlazeActionHook } from './hooks/index.ts';
-import type { OnBlazeActionEventErrorHandler } from './handler.ts';
+import type { BlazeOpenAPIConfig } from './openapi.ts';
+import type { BlazeRestParam } from './rest.ts';
+import type { BlazeValidator } from './validator.ts';
 
 export interface BlazeActionHandler<
   R = unknown | void,
@@ -60,7 +61,7 @@ export interface BlazeAction<
   TRPC extends ProcedureType = ProcedureType,
 > {
   openapi?: BlazeOpenAPIConfig | null;
-  middlewares?: Middleware[] | null;
+  middlewares?: MiddlewareHandler[] | null;
   validator?: BlazeValidator<H, P, Q, B> | null;
   handler: BlazeActionHandler<
     R,
