@@ -1,4 +1,4 @@
-import type { Context as HonoContext } from 'hono';
+import type { Context as HonoCtx } from 'hono';
 import type { ZodSchema } from 'zod';
 import type { BlazeContext } from '../internal';
 import type { OnActionEventErrorHandler } from './handler';
@@ -31,7 +31,7 @@ export interface DataValidatorOption<
 > {
   data: Random;
   schema: ZodSchema;
-  honoCtx: HonoContext | null;
+  honoCtx: HonoCtx | null;
   ctx: BlazeContext<M, H, P, Q, B>;
   onError: OnActionEventErrorHandler<M, H, P, Q, B> | null;
   setter: {

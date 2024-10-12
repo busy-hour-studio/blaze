@@ -4,7 +4,7 @@
     MIT License
     Copyright (c) 2022 Yusuke Wada
 */
-import type { Context as HonoContext, Next as HonoNext } from 'hono';
+import type { Context as HonoCtx, Next as HonoNext } from 'hono';
 import { BlazeError } from '../errors/BlazeError';
 import { BlazeContext } from '../internal';
 import type { ActionHandler } from '../types/action';
@@ -18,7 +18,7 @@ export interface BodyLimitOptions {
 
 function errorHandler(onError: ActionHandler) {
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  return async function errorHandler(honoCtx: HonoContext) {
+  return async function errorHandler(honoCtx: HonoCtx) {
     const ctx = new BlazeContext({
       body: null,
       honoCtx,
@@ -79,7 +79,7 @@ export function bodyLimit(options: BodyLimitOptions) {
   const onError = errorHandler(handler);
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  return async function bodyLimit(honoCtx: HonoContext, next: HonoNext) {
+  return async function bodyLimit(honoCtx: HonoCtx, next: HonoNext) {
     if (!honoCtx.req.raw.body) {
       return next();
     }
