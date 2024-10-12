@@ -2,6 +2,7 @@ import type { ResponseConfig } from '@asteasolutions/zod-to-openapi';
 import type { ProcedureType } from '@trpc/server';
 import type { ZodSchema } from 'zod';
 import type { BlazeContext } from '../internal';
+import type { OnActionEventErrorHandler } from './handler';
 import type { Random, RecordString, RecordUnknown } from './helper';
 import type {
   AcceptedAfterHook,
@@ -99,7 +100,13 @@ export interface Action<
   meta?: M | null;
   rest?: RestParam | null;
   hooks?: ActionHook<AH, BH> | null;
-  throwOnValidationError?: boolean | null;
+  onError?: OnActionEventErrorHandler<
+    M,
+    H['_output'],
+    P['_output'],
+    Q['_output'],
+    B['_output']
+  > | null;
   trpc?: TRPC | null;
 }
 

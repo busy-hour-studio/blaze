@@ -19,19 +19,14 @@ export interface BodyLimitOptions {
 function errorHandler(onError: ActionHandler) {
   // eslint-disable-next-line @typescript-eslint/no-shadow
   return async function errorHandler(honoCtx: HonoContext) {
-    const ctx =
-      honoCtx.get('blaze') ??
-      new BlazeContext({
-        body: null,
-        honoCtx,
-        headers: null,
-        meta: null,
-        params: null,
-        query: null,
-        validations: null,
-      });
-
-    honoCtx.set('blaze', ctx);
+    const ctx = new BlazeContext({
+      body: null,
+      honoCtx,
+      headers: null,
+      meta: null,
+      params: null,
+      query: null,
+    });
 
     const [result, err] = await resolvePromise(onError(ctx));
 

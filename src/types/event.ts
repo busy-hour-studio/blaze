@@ -1,6 +1,7 @@
 import type { ZodSchema } from 'zod';
 import type { BlazeContext } from '../internal';
 import type { ActionHandler } from './action';
+import type { OnActionEventErrorHandler } from './handler';
 import type { Random, RecordString, RecordUnknown } from './helper';
 
 export interface EventActionHandler {
@@ -29,7 +30,13 @@ export interface Event<
 > {
   validator?: P | null;
   handler: EventHandler<M, P['_output']>;
-  throwOnValidationError?: boolean | null;
+  onError?: OnActionEventErrorHandler<
+    M,
+    RecordString,
+    RecordUnknown,
+    RecordUnknown,
+    P['_output']
+  > | null;
 }
 
 export type AnyEvent = Event<RecordUnknown, Random>;

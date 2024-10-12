@@ -28,7 +28,7 @@ export class BlazeServiceAction {
       query,
       validator: this.action.validator ?? null,
       meta: this.action.meta ?? null,
-      throwOnValidationError: this.action.throwOnValidationError ?? false,
+      onError: this.action.onError ?? null,
     });
 
     return eventHandler(this.action, context);

@@ -1,5 +1,7 @@
 import type { Context as HonoContext } from 'hono';
 import type { ZodSchema } from 'zod';
+import type { BlazeContext } from '../internal';
+import type { OnActionEventErrorHandler } from './handler';
 
 export type RecordUnknown = Record<string, unknown>;
 
@@ -20,34 +22,22 @@ export interface ContextValidation<
   body?: B | null;
 }
 
-export interface ValidationResult {
-  header: boolean;
-  params: boolean;
-  query: boolean;
-  body: boolean;
-}
-
-export interface ContextData<
-  H extends RecordString = RecordString,
-  P extends RecordUnknown = RecordUnknown,
-  Q extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-> {
-  headers: H | null;
-  params: P | null;
-  query: Q | null;
-  body: B | null;
-}
-
 export interface DataValidatorOption<
+  M extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
   P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
   B extends RecordUnknown = RecordUnknown,
 > {
-  data: ContextData<H, P, Q, B>;
+  data: Random;
   schema: ZodSchema;
   honoCtx: HonoContext | null;
-  throwOnValidationError: boolean;
-  validations: ValidationResult;
+  ctx: BlazeContext<M, H, P, Q, B>;
+  onError: OnActionEventErrorHandler<M, H, P, Q, B> | null;
+  setter: {
+    headers: (headers: H) => void;
+    params: (params: P) => void;
+    query: (query: Q) => void;
+    body: (body: B) => void;
+  };
 }

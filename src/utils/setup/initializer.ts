@@ -22,7 +22,6 @@ export async function initializeServices(options: LoadServiceOption) {
     honoCtx: null,
     meta: null,
     query: null,
-    validations: null,
   });
 
   const serviceFiles = fs.readdirSync(sourcePath);

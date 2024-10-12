@@ -1,13 +1,7 @@
 import type { Context as HonoCtx } from 'hono';
 import type { ZodSchema } from 'zod';
-import type { BlazeContext } from '../internal';
-import type {
-  ContextValidation,
-  Random,
-  RecordString,
-  RecordUnknown,
-  ValidationResult,
-} from './helper';
+import type { OnActionEventErrorHandler } from './handler';
+import type { ContextValidation, RecordString, RecordUnknown } from './helper';
 
 export interface CreateContextOption<
   M extends RecordUnknown = RecordUnknown,
@@ -33,7 +27,7 @@ export interface CreateContextOption<
   query: Q | null;
   body: B | null;
   validator: V | null;
-  throwOnValidationError: boolean;
+  onError: OnActionEventErrorHandler<M, H, P, Q, B> | null;
 }
 
 export interface ContextConstructorOption<
@@ -48,9 +42,5 @@ export interface ContextConstructorOption<
   BV extends ZodSchema = ZodSchema,
 > extends Omit<
     CreateContextOption<M, H, P, Q, B, HV, PV, QV, BV>,
-    'validator' | 'throwOnValidationError'
-  > {
-  validations: ValidationResult | null;
-}
-
-export type AnyContext = BlazeContext<Random, Random, Random, Random, Random>;
+    'validator' | 'onError'
+  > {}
