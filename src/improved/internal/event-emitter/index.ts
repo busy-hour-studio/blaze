@@ -1,21 +1,17 @@
 import type { Random } from '../../types/common.ts';
+import { BlazeMap } from '../map/index.ts';
 import type { BlazeEventEmitterOption, BlazeEventListener } from './types.ts';
 
 export class BlazeEventEmitter {
   private $maxListeners: number;
-  private $emitter: Map<string, Set<BlazeEventListener>>;
+  private $emitter:
+    | Map<string, Set<BlazeEventListener>>
+    | BlazeMap<string, Set<BlazeEventListener>>;
 
   constructor();
   constructor(options: BlazeEventEmitterOption);
-  constructor(maxListeners: number);
-  constructor(options: BlazeEventEmitterOption | number = {}) {
-    this.$emitter = new Map();
-
-    if (typeof options === 'number') {
-      this.$maxListeners = options;
-      return;
-    }
-
+  constructor(options: BlazeEventEmitterOption = {}) {
+    this.$emitter = options.useNativeMap ? new Map() : new BlazeMap();
     this.$maxListeners = options?.maxListener ?? 100;
   }
 

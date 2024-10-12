@@ -1,5 +1,5 @@
-import type { RecordUnknown } from '../../types/common';
-import type { BlazeErrorOption } from './types';
+import type { RecordUnknown } from '../../types/common.ts';
+import type { BlazeErrorOption } from './types.ts';
 
 export class BlazeError extends Error {
   public status: number;

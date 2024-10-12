@@ -6,4 +6,5 @@ export interface BlazeEventListener {
 
 export interface BlazeEventEmitterOption {
   maxListener?: number;
+  useNativeMap?: boolean;
 }

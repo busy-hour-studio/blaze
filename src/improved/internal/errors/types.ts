@@ -1,4 +1,4 @@
-import type { RecordUnknown } from '../../types/common';
+import type { RecordUnknown } from '../../types/common.ts';
 
 export interface BlazeErrorOption {
   errors: RecordUnknown | unknown | null;
