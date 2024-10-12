@@ -9,6 +9,7 @@ declare global {
   var fastly: unknown | null | undefined;
   var Netlify: unknown | null | undefined;
   var EdgeRuntime: unknown | null | undefined;
+  var Deno: unknown | null | undefined;
 
   var process: Random;
   var module: Random;

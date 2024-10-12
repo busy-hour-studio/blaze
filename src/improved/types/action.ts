@@ -6,7 +6,7 @@ import type { AcceptedBlazeAfterHook } from './hooks/after.ts';
 import type { AcceptedBlazeBeforeHook } from './hooks/before.ts';
 import type { BlazeOpenAPIConfig } from './openapi.ts';
 import type { BlazeRestParam, Middleware } from './rest.ts';
-import type { BlazeActionValidator } from './validator.ts';
+import type { BlazeValidator } from './validator.ts';
 import type { BlazeActionHook } from './hooks/index.ts';
 import type { OnBlazeActionEventErrorHandler } from './handler.ts';
 
@@ -61,7 +61,7 @@ export interface BlazeAction<
 > {
   openapi?: BlazeOpenAPIConfig | null;
   middlewares?: Middleware[] | null;
-  validator?: BlazeActionValidator<H, P, Q, B> | null;
+  validator?: BlazeValidator<H, P, Q, B> | null;
   handler: BlazeActionHandler<
     R,
     M,
