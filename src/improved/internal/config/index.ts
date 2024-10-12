@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { crossRequire } from '../../utils/common.ts';
+import { crossRequire } from '../../utils/common/loader.ts';
 import {
   DepedencyModuleMap,
   ExternalModule,

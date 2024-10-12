@@ -1,0 +1,49 @@
+{
+  "version": "4",
+  "specifiers": {
+    "npm:@asteasolutions/zod-to-openapi@7.1.1": "7.1.1_zod@3.23.8",
+    "npm:@hono/node-server@1.8.1": "1.8.1",
+    "npm:@trpc/server@10.45.2": "10.45.2",
+    "npm:hono@4.6.1": "4.6.1",
+    "npm:zod@3.23.8": "3.23.8"
+  },
+  "npm": {
+    "@asteasolutions/zod-to-openapi@7.1.1_zod@3.23.8": {
+      "integrity": "sha512-lF0d1gAc0lYLO9/BAGivwTwE2Sh9h6CHuDcbk5KnGBfIuAsAkDC+Fdat4dkQY3CS/zUWKHRmFEma0B7X132Ymw==",
+      "dependencies": [
+        "openapi3-ts",
+        "zod"
+      ]
+    },
+    "@hono/node-server@1.8.1": {
+      "integrity": "sha512-9ondWs/5EuyZOd/iyiRp0GQfMEq+IA+IbV8Wy2bgdr5+cC55I3xbQrqtXKprw7jJhfvq3IVw7ALiuvCEmLdCAA=="
+    },
+    "@trpc/server@10.45.2": {
+      "integrity": "sha512-wOrSThNNE4HUnuhJG6PfDRp4L2009KDVxsd+2VYH8ro6o/7/jwYZ8Uu5j+VaW+mOmc8EHerHzGcdbGNQSAUPgg=="
+    },
+    "hono@4.6.1": {
+      "integrity": "sha512-6NGwvttY1+HAFii08VYiEKI6ETPAFbpLntpm2M/MogEsAFWdZV74UNT+2M4bmqX90cIQhjlpBSP+tO+CfB0uww=="
+    },
+    "openapi3-ts@4.4.0": {
+      "integrity": "sha512-9asTNB9IkKEzWMcHmVZE7Ts3kC9G7AFHfs8i7caD8HbI76gEjdkId4z/AkP83xdZsH7PLAnnbl47qZkXuxpArw==",
+      "dependencies": [
+        "yaml"
+      ]
+    },
+    "yaml@2.5.1": {
+      "integrity": "sha512-bLQOjaX/ADgQ20isPJRvF0iRUHIxVhYvr53Of7wGcWlO2jvtUlH5m87DsmulFVxRpNLOnI4tB6p/oh8D7kpn9Q=="
+    },
+    "zod@3.23.8": {
+      "integrity": "sha512-XBx9AXhXktjUqnepgTiE5flcKIYWi/rme0Eaj+5Y0lftuGBq+jyRu/md4WnuxqgP1ubdpNCsYEYPxrzVHD8d6g=="
+    }
+  },
+  "workspace": {
+    "dependencies": [
+      "npm:@asteasolutions/zod-to-openapi@7.1.1",
+      "npm:@hono/node-server@1.8.1",
+      "npm:@trpc/server@10.45.2",
+      "npm:hono@4.6.1",
+      "npm:zod@3.23.8"
+    ]
+  }
+}

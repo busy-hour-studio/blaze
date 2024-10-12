@@ -1,0 +1,11 @@
+{
+  "tasks": {},
+  "imports": {
+    "@asteasolutions/zod-to-openapi": "npm:@asteasolutions/zod-to-openapi@7.1.1",
+    "@hono/node-server": "npm:@hono/node-server@1.8.1",
+    "hono": "npm:hono@4.6.1",
+    "@trpc/server": "npm:@trpc/server@10.45.2",
+    "zod": "npm:zod@3.23.8"
+  }
+}
+ 

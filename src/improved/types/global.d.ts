@@ -11,6 +11,9 @@ declare global {
   var EdgeRuntime: unknown | null | undefined;
 
   var process: Random;
+  var module: Random;
+  var require: (id: string) => Random;
+  var exports: Random;
 }
 
 export {};
