@@ -6,7 +6,8 @@ import type { Router } from 'hono/router';
 import type { Env, MiddlewareHandler, RouterRoute } from 'hono/types';
 import type { ZodSchema } from 'zod';
 import type { RecordUnknown } from './helper';
-import type { Method, Middleware } from './rest';
+import type { Method } from './rest';
+import type { Middleware } from './service';
 
 export interface CreateBlazeOption {
   router?: Router<[never, RouterRoute]>;
@@ -27,7 +28,7 @@ export interface BlazeOpenAPIOption
   request: OpenAPIRequest;
   method: Method;
   handler: MiddlewareHandler;
-  middlewares: Middleware[];
+  middlewares: MiddlewareHandler[];
 }
 
 export interface BlazeFetch<E extends Env = Env> {

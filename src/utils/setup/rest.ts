@@ -1,19 +1,16 @@
 import type { Context as HonoCtx } from 'hono';
-import type { StatusCode } from 'hono/utils/http-status';
 import { BlazeError } from '../../errors/BlazeError';
 import { Logger } from '../../errors/Logger';
+import { ValidationError } from '../../errors/ValidationError';
 import { BlazeContext } from '../../internal';
 import type { Action } from '../../types/action';
-import type { Method, Middleware, RestHandlerOption } from '../../types/rest';
+import type { Method, RestHandlerOption, StatusCode } from '../../types/rest';
 import type { OpenAPIRequest } from '../../types/router';
 import type { Service } from '../../types/service';
-import { isNil, resolvePromise } from '../common';
+import { resolvePromise } from '../common';
+import { REST_METHOD } from '../constant/rest';
 import { eventHandler } from '../helper/handler';
-import {
-  extractRestParams,
-  handleRestError,
-  handleRestResponse,
-} from '../helper/rest';
+import { extractRestParams, handleRest } from '../helper/rest';
 
 export class BlazeServiceRest {
   public readonly path: string;
@@ -37,10 +34,7 @@ export class BlazeServiceRest {
 
     const { request, responses } = this.openAPIConfig;
 
-    const middlewares: Middleware[] = [
-      ...options.middlewares,
-      ...(action.middlewares ?? []),
-    ];
+    const middlewares = [...options.middlewares, ...(action.middlewares ?? [])];
 
     const tags: string[] = [];
 
@@ -55,7 +49,7 @@ export class BlazeServiceRest {
     }
 
     router.openapi({
-      method: method || 'ALL',
+      method: method || REST_METHOD.ALL,
       handler: this.restHandler.bind(this),
       path,
       request,
@@ -66,7 +60,7 @@ export class BlazeServiceRest {
   }
 
   public async restHandler(honoCtx: HonoCtx) {
-    const [context, error] = await resolvePromise(
+    const [ctx, error] = await resolvePromise(
       BlazeContext.create({
         honoCtx,
         // NULL => automatically use honoCtx value instead
@@ -76,40 +70,31 @@ export class BlazeServiceRest {
         query: null,
         validator: this.action.validator ?? null,
         meta: this.action.meta ?? null,
-        throwOnValidationError: this.action.throwOnValidationError ?? false,
       })
     );
 
-    if (error || !context) {
+    if (error || !ctx) {
+      if (error instanceof ValidationError && this.action.onRestError) {
+        return handleRest({
+          ctx: error.ctx,
+          honoCtx,
+          promise: this.action.onRestError(error.ctx, error.errors),
+        });
+      }
+
       let status: StatusCode = 500;
 
       if (error instanceof BlazeError) {
-        status = error.status as StatusCode;
+        status = error.status;
       }
 
       return honoCtx.json(error as Error, status);
     }
 
-    const [restResult, restError] = await resolvePromise(
-      eventHandler(this.action, context)
-    );
-
-    if (restError) {
-      return handleRestError({
-        ctx: context,
-        err: restError,
-        honoCtx,
-      });
-    }
-
-    if (isNil(restResult)) {
-      return honoCtx.body(null, 204);
-    }
-
-    return handleRestResponse({
-      ctx: context,
+    return handleRest({
+      ctx,
       honoCtx,
-      result: restResult,
+      promise: eventHandler(this.action, ctx),
     });
   }
 

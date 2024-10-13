@@ -28,7 +28,6 @@ export const onCreateUser = BlazeCreator.action({
   rest: 'POST /',
   openapi: userOpenApi,
   validator: createUserValidator,
-  throwOnValidationError: true,
   trpc: 'mutation',
   hooks: {
     // Auto log incoming request

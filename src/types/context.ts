@@ -6,7 +6,6 @@ import type {
   Random,
   RecordString,
   RecordUnknown,
-  ValidationResult,
 } from './helper';
 
 export interface CreateContextOption<
@@ -33,7 +32,6 @@ export interface CreateContextOption<
   query: Q | null;
   body: B | null;
   validator: V | null;
-  throwOnValidationError: boolean;
 }
 
 export interface ContextConstructorOption<
@@ -48,9 +46,7 @@ export interface ContextConstructorOption<
   BV extends ZodSchema = ZodSchema,
 > extends Omit<
     CreateContextOption<M, H, P, Q, B, HV, PV, QV, BV>,
-    'validator' | 'throwOnValidationError'
-  > {
-  validations: ValidationResult | null;
-}
+    'validator'
+  > {}
 
 export type AnyContext = BlazeContext<Random, Random, Random, Random, Random>;

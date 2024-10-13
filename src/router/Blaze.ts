@@ -79,7 +79,6 @@ export class Blaze {
       honoCtx: null,
       meta: null,
       query: null,
-      validations: null,
     });
     this.adapter = BlazeConfig.modules[ExternalModule.NodeAdapter];
     this.fetch = this.router.fetch.bind(this.router) as BlazeFetch;

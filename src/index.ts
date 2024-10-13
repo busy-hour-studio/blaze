@@ -37,5 +37,6 @@ export type { Service } from './types/service';
 export { BlazeConfig } from './config';
 export { BlazeCreator } from './creator';
 export { BlazeError } from './errors/BlazeError';
+export { ValidationError } from './errors/ValidationError';
 export { Blaze, BlazeRouter, z } from './router';
 export { initializeServices } from './utils/setup';

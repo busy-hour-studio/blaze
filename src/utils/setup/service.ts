@@ -3,13 +3,15 @@ import { BlazeContext, BlazeEvent } from '../../internal';
 import { BlazeRouter } from '../../router/BlazeRouter';
 import type { Action } from '../../types/action';
 import type { EventActionHandler } from '../../types/event';
-import type { Method, Middleware } from '../../types/rest';
+import type { Method } from '../../types/rest';
 import type {
   CreateServiceOption,
+  Middleware,
   Service,
   ServiceConstructorOption,
 } from '../../types/service';
 import { getRestPath, getServiceName } from '../common';
+import { getRestMiddlewares } from '../helper/rest';
 import { loadService } from '../helper/service';
 import { BlazeServiceAction } from './action';
 import { BlazeServiceEvent } from './event';
@@ -65,11 +67,13 @@ export class BlazeService {
       });
     }
 
+    const middlewares = getRestMiddlewares(this.service, action);
+
     const restInstance = new BlazeServiceRest({
       action,
       router: this.router,
       service: this.service,
-      middlewares: this.middlewares,
+      middlewares,
     });
 
     this.rests.push(restInstance);

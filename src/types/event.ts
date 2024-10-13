@@ -29,7 +29,6 @@ export interface Event<
 > {
   validator?: P | null;
   handler: EventHandler<M, P['_output']>;
-  throwOnValidationError?: boolean | null;
 }
 
 export type AnyEvent = Event<RecordUnknown, Random>;

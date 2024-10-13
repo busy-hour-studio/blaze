@@ -22,6 +22,7 @@ interface ZodOpenApiFullMetadata<T = Random> {
 
 declare module 'zod' {
   interface ZodTypeDef {
+    // @ts-expect-error type-definitions-mismatch
     openapi?: ZodOpenApiFullMetadata;
   }
 
