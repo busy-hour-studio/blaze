@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.3.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.2.0...v4.3.0) (2024-10-13)
+
+
+### Features
+
+* on rest error handler ([a496f00](https://github.com/Busy-Hour-Studio/blaze/commit/a496f00f87bbd9a7b76416f1bac51b6adbcfa066))
+
 ## [4.2.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.1.0...v4.2.0) (2024-09-27)
 
 
