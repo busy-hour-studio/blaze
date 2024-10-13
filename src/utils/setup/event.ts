@@ -35,7 +35,6 @@ export class BlazeServiceEvent {
       query: null,
       validator: this.validator ?? null,
       meta: null,
-      throwOnValidationError: this.event.throwOnValidationError ?? false,
     });
 
     const options = {

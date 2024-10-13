@@ -1,8 +1,9 @@
-import type { RecordString, RecordUnknown } from './helper';
+import type { Random } from './helper';
+import { StatusCode } from './rest';
 
 export interface BlazeErrorOption {
-  errors: RecordUnknown | RecordString | unknown | null;
-  status: number;
+  errors: Random;
+  status: StatusCode;
   message: string;
   name?: string | null;
 }

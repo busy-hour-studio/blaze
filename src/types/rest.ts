@@ -1,24 +1,18 @@
 import type { Context as HonoCtx, MiddlewareHandler } from 'hono';
 import type { BlazeContext } from '../internal';
 import type { BlazeRouter } from '../router';
+import type { RESPONSE_TYPE, REST_METHOD } from '../utils/constant/rest';
+import type { STATUS_CODE } from '../utils/constant/rest/status-code';
 import type { Action } from './action';
 import type { Service } from './service';
 
-export type Method =
-  | 'ALL'
-  | 'POST'
-  | 'GET'
-  | 'PUT'
-  | 'PATCH'
-  | 'OPTIONS'
-  | 'DELETE'
-  | 'USE';
+export type StatusCode = (typeof STATUS_CODE)[keyof typeof STATUS_CODE];
+
+export type Method = (typeof REST_METHOD)[keyof typeof REST_METHOD];
 
 export type ExposedMethod = Exclude<Method, 'USE'> | NonNullable<unknown>;
 
-export type Middleware = [ExposedMethod, MiddlewareHandler];
-
-export type ResponseType = 'body' | 'text' | 'json' | 'html';
+export type ResponseType = (typeof RESPONSE_TYPE)[keyof typeof RESPONSE_TYPE];
 
 export type RestRoute = `${Method} /${string}` | `/${string}`;
 
@@ -33,7 +27,7 @@ export interface RestHandlerOption {
   service: Service;
   action: Omit<Action, 'name'>;
   router: BlazeRouter;
-  middlewares: Middleware[];
+  middlewares: MiddlewareHandler[];
 }
 
 export interface RestErrorHandlerOption {

@@ -7,6 +7,7 @@ import { mergePath } from 'hono/utils/url';
 import { Logger } from '../../errors/Logger';
 import type { BlazeRouter } from '../../router';
 import type { BlazeOpenAPIOption } from '../../types/router';
+import { REST_METHOD } from '../constant/rest';
 
 export function assignOpenAPIRegistry<
   E extends Env = Env,
@@ -63,7 +64,8 @@ export function fixOpenApiPath(path: string) {
 }
 
 export function createOpenApiRouter(route: BlazeOpenAPIOption) {
-  const method = route.method === 'ALL' ? 'POST' : route.method;
+  const method =
+    route.method === REST_METHOD.ALL ? REST_METHOD.POST : route.method;
 
   return {
     ...route,

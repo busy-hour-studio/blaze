@@ -6,7 +6,6 @@
 */
 import type { Context as HonoCtx, Next as HonoNext } from 'hono';
 import { BlazeContext } from '../internal';
-import type { AnyContext } from '../types/context';
 import { ExposedMethod } from '../types/rest';
 
 export interface CORSOptions {
@@ -77,20 +76,14 @@ export function cors(options: CORSOptions = defaults) {
   // eslint-disable-next-line @typescript-eslint/no-shadow
   return async function cors(honoCtx: HonoCtx, next: HonoNext) {
     const setRes = set(honoCtx);
-    const ctx: AnyContext =
-      honoCtx.get('blaze') ??
-      new BlazeContext({
-        body: null,
-        honoCtx,
-        headers: null,
-        meta: null,
-        params: null,
-        query: null,
-        validations: null,
-      });
-
-    // Re-use the BlazeContext later on
-    honoCtx.set('blaze', ctx);
+    const ctx = new BlazeContext({
+      body: null,
+      honoCtx,
+      headers: null,
+      meta: null,
+      params: null,
+      query: null,
+    });
 
     const allowOrigin = findAllowOrigin(opts.origin)(
       honoCtx.req.header('origin') || '',
