@@ -208,16 +208,9 @@ export class BlazeContext<
   >(
     options: CreateContextOption<M, H, P, Q, B, HV, PV, QV, BV>
   ): Promise<BlazeContext<M, H, P, Q, B>> {
-    const { honoCtx, validator, meta } = options;
+    const { honoCtx, validator } = options;
 
-    const ctx = new BlazeContext<M, H, P, Q, B>({
-      body: null,
-      params: null,
-      headers: null,
-      query: null,
-      honoCtx,
-      meta,
-    });
+    const ctx = new BlazeContext<M, H, P, Q, B>(options);
 
     const setter = BlazeContext.setter(ctx);
 
