@@ -39,3 +39,27 @@ export interface DataValidatorOption<
     body(body: B): void;
   };
 }
+
+export interface AllDataValidatorOption<
+  M extends RecordUnknown = RecordUnknown,
+  H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
+  Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
+> {
+  ctx: BlazeContext<M, H, P, Q, B>;
+  input: {
+    headers: H | null;
+    params: P | null;
+    query: Q | null;
+    body: B | null;
+  };
+  validator: ContextValidation | null;
+  honoCtx: HonoContext | null;
+  setter: {
+    headers(headers: H): void;
+    params(params: P): void;
+    query(query: Q): void;
+    body(body: B): void;
+  };
+}
