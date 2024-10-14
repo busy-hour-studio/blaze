@@ -1,5 +1,5 @@
 import type { ZodError } from 'zod';
-import { BlazeContext } from '../internal';
+import type { BlazeContext } from '../internal/BlazeContext';
 import type { StatusCode } from '../types/rest';
 import { BlazeError } from './BlazeError';
 

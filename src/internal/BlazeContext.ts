@@ -9,12 +9,7 @@ import type {
 import type { RecordString, RecordUnknown } from '../types/helper';
 import type { ResponseType, StatusCode } from '../types/rest';
 import { getReqBody, getReqQuery } from '../utils/helper/context';
-import {
-  validateBody,
-  validateHeader,
-  validateParams,
-  validateQuery,
-} from '../utils/helper/validator';
+import { validateAll } from '../utils/helper/validator';
 import { BlazeBroker as Broker } from './BlazeBroker';
 
 export class BlazeContext<
@@ -208,55 +203,19 @@ export class BlazeContext<
   >(
     options: CreateContextOption<M, H, P, Q, B, HV, PV, QV, BV>
   ): Promise<BlazeContext<M, H, P, Q, B>> {
-    const { honoCtx, validator } = options;
+    const { honoCtx, validator: $validator } = options;
 
     const ctx = new BlazeContext<M, H, P, Q, B>(options);
 
     const setter = BlazeContext.setter(ctx);
 
-    if (validator?.header) {
-      await validateHeader({
-        ctx,
-        setter,
-        data: options.headers,
-        honoCtx,
-        schema: validator.header,
-      });
-    }
-
-    if (validator?.params) {
-      await validateParams({
-        ctx,
-        setter,
-        data: options.params,
-        honoCtx,
-        schema: validator.params,
-      });
-    }
-
-    if (validator?.query) {
-      await validateQuery({
-        ctx,
-        setter,
-        data: options.query,
-        honoCtx,
-        schema: validator.query,
-      });
-    }
-
-    if (validator?.body) {
-      await validateBody({
-        ctx,
-        setter,
-        data: options.body,
-        honoCtx,
-        schema: validator.body,
-      });
-    }
-
-    if (honoCtx && [...honoCtx.res.headers.keys()].length > 0) {
-      ctx.$headers = honoCtx.res.headers as never;
-    }
+    await validateAll({
+      ctx,
+      input: options,
+      validator: $validator,
+      honoCtx,
+      setter,
+    });
 
     return ctx;
   }
