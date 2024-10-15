@@ -21,7 +21,7 @@ import { Logger } from '../errors/Logger';
 import { DependencyModule } from '../types/config';
 import type { Random } from '../types/helper';
 import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router';
-import { ExternalModule } from '../utils/constant';
+import { ExternalModule } from '../utils/constant/config';
 import {
   assignOpenAPIRegistry,
   createOpenApiRouter,

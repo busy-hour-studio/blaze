@@ -11,7 +11,7 @@ import type {
 } from '../types/router';
 import type { ImportServiceOption, LoadServicesOption } from '../types/service';
 import { isNil, toArray } from '../utils/common';
-import { ExternalModule, PossibleRunTime } from '../utils/constant';
+import { ExternalModule, PossibleRunTime } from '../utils/constant/config';
 import { BlazeService } from '../utils/setup/service';
 import { useTrpc, type UseTrpc } from '../utils/trpc';
 import { BlazeRouter } from './BlazeRouter';
@@ -233,7 +233,7 @@ export class Blaze {
     const args = this.getServeConfig(port, listener);
 
     if (!isNil(port)) {
-      if (BlazeConfig.runTime === PossibleRunTime.Node && this.adapter) {
+      if (BlazeConfig.runTime === PossibleRunTime.NODE && this.adapter) {
         this.adapter.serve(...args);
       }
 
@@ -244,7 +244,7 @@ export class Blaze {
       return args;
     }
 
-    if (BlazeConfig.runTime === PossibleRunTime.Node && this.adapter) {
+    if (BlazeConfig.runTime === PossibleRunTime.NODE && this.adapter) {
       this.adapter.serve(...args);
     }
 
