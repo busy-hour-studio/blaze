@@ -20,7 +20,7 @@ export class BlazeServiceAction {
   public async actionHandler(...values: Random[]) {
     const [body, params, headers, query] = values;
 
-    const context = await BlazeContext.create({
+    const ctx = await BlazeContext.create({
       honoCtx: null,
       body,
       headers,
@@ -30,6 +30,6 @@ export class BlazeServiceAction {
       meta: this.action.meta ?? null,
     });
 
-    return eventHandler(this.action, context);
+    return eventHandler(this.action, ctx);
   }
 }

@@ -1,5 +1,4 @@
 import { Context as HonoCtx } from 'hono';
-import type { HandlerInterface } from 'hono/types';
 import { BlazeError } from '../../errors/BlazeError';
 import type { BlazeContext } from '../../internal';
 import type { BlazeRouter } from '../../router';
@@ -48,7 +47,7 @@ export function getRestMiddlewares(service: Service, action: Action) {
 export function getRouteHandler(router: BlazeRouter, method: Method | null) {
   if (!method) return router.all;
 
-  return router[method.toLowerCase() as keyof BlazeRouter] as HandlerInterface;
+  return router[method.toLowerCase() as Lowercase<Exclude<Method, 'HEAD'>>];
 }
 
 export function getRestResponse(
@@ -65,12 +64,12 @@ export function getRestResponse(
   }
 
   if (isEmpty(headers)) {
-    return [options.result, status, undefined] as const;
+    return [options.result, status as StatusCode, undefined] as const;
   }
 
   const resHeaders = mapToObject(options.ctx.headers as never);
 
-  return [options.result, status, resHeaders] as const;
+  return [options.result, status as StatusCode, resHeaders] as const;
 }
 
 export function handleRestError(options: RestErrorHandlerOption) {
@@ -82,7 +81,7 @@ export function handleRestError(options: RestErrorHandlerOption) {
     status = err.status;
   }
 
-  return honoCtx.json(err as Error, status);
+  return honoCtx.json(err as Error, status as StatusCode);
 }
 
 export function handleRestResponse(options: RestResponseHandlerOption) {

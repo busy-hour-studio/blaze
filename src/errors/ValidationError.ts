@@ -1,11 +1,11 @@
 import type { ZodError } from 'zod';
 import type { BlazeContext } from '../internal/BlazeContext';
-import type { StatusCode } from '../types/rest';
+import type { GenericStatusCode } from '../types/rest';
 import { BlazeError } from './BlazeError';
 
 export class ValidationError extends BlazeError {
   public ctx: BlazeContext;
-  public status: StatusCode;
+  public status: GenericStatusCode;
   public errors: ZodError;
 
   constructor(ctx: BlazeContext, err: ZodError) {

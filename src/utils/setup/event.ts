@@ -27,7 +27,7 @@ export class BlazeServiceEvent {
   }
 
   public async eventHandler(body: RecordUnknown) {
-    const context = await BlazeContext.create({
+    const ctx = await BlazeContext.create({
       honoCtx: null,
       body,
       params: null,
@@ -41,6 +41,6 @@ export class BlazeServiceEvent {
       handler: this.event.handler,
     };
 
-    return eventHandler(options, context);
+    return eventHandler(options, ctx);
   }
 }

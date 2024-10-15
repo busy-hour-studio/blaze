@@ -85,7 +85,7 @@ export class BlazeServiceRest {
       let status: StatusCode = 500;
 
       if (error instanceof BlazeError) {
-        status = error.status;
+        status = error.status as StatusCode;
       }
 
       return honoCtx.json(error as Error, status);

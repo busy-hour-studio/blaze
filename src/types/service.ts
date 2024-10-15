@@ -51,7 +51,7 @@ export interface ImportServiceOption {
 export interface CreateServiceOption {
   sourcePath: string;
   servicePath: string;
-  blazeCtx: BlazeContext;
+  ctx: BlazeContext;
   app: BlazeRouter;
   middlewares: Middleware[];
 }

@@ -15,7 +15,7 @@ export async function initializeServices(options: LoadServiceOption) {
     throw Logger.throw("Service path doesn't exist");
   }
 
-  const blazeCtx = new BlazeContext({
+  const ctx = new BlazeContext({
     body: null,
     params: null,
     headers: null,
@@ -31,7 +31,7 @@ export async function initializeServices(options: LoadServiceOption) {
       const service = BlazeService.create({
         app,
         servicePath,
-        blazeCtx,
+        ctx,
         sourcePath,
         middlewares,
       });

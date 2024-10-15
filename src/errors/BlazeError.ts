@@ -1,14 +1,14 @@
 import type { BlazeErrorOption } from '../types/error';
 import type { Random } from '../types/helper';
-import type { StatusCode } from '../types/rest';
+import type { GenericStatusCode } from '../types/rest';
 
 export class BlazeError extends Error {
-  public status: StatusCode;
+  public status: GenericStatusCode;
   public errors: Random;
 
   constructor(err: BlazeErrorOption);
-  constructor(message: string, status?: StatusCode);
-  constructor(err: BlazeErrorOption | string, status: StatusCode = 500) {
+  constructor(message: string, status?: GenericStatusCode);
+  constructor(err: BlazeErrorOption | string, status: GenericStatusCode = 500) {
     if (typeof err === 'string') {
       super(err);
       this.status = status;
