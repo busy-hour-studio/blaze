@@ -1,7 +1,7 @@
 import { BlazeConfig } from '../../config';
 import type { Blaze } from '../../router';
 import type { BlazeTrpc, TrpcOption } from '../../types/trpc';
-import { ExternalModule } from '../constant';
+import { ExternalModule } from '../constant/config';
 import { TrpcConstructor } from './constructor';
 
 export function loadTrpc(app: Blaze): BlazeTrpc {

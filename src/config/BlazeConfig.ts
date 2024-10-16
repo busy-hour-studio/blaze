@@ -1,8 +1,21 @@
 import { z } from 'zod';
 import { Logger } from '../errors/Logger';
-import { DEPENDENCY_MODULE_MAP, DependencyModule } from '../types/config';
+import type { DependencyModule } from '../types/config';
 import { crossRequire } from '../utils/common';
-import { ExternalModule, PossibleRunTime } from '../utils/constant';
+import {
+  DependencyModuleMap,
+  ExternalModule,
+  PossibleRunTime,
+} from '../utils/constant/config';
+import {
+  isBun,
+  isDeno,
+  isEdgeLight,
+  isFastly,
+  isNetlify,
+  isNode,
+  isWorkerd,
+} from '../utils/constant/runtime';
 
 export class BlazeConfig {
   public readonly runTime: PossibleRunTime;
@@ -18,7 +31,7 @@ export class BlazeConfig {
       [ExternalModule.TrpcAdapter]: this.loadModule(ExternalModule.TrpcAdapter),
     };
 
-    if (this.runTime === PossibleRunTime.Bun) return;
+    if (this.runTime !== PossibleRunTime.NODE) return;
 
     this.modules[ExternalModule.NodeAdapter] = this.loadModule(
       ExternalModule.NodeAdapter
@@ -26,10 +39,15 @@ export class BlazeConfig {
   }
 
   private getRunTime() {
-    if (process.versions.bun) return PossibleRunTime.Bun;
-    if (process.versions.node) return PossibleRunTime.Node;
+    if (isNetlify) return PossibleRunTime.NETLIFY;
+    if (isEdgeLight) return PossibleRunTime.EDGE_LIGHT;
+    if (isWorkerd) return PossibleRunTime.WORKER_D;
+    if (isFastly) return PossibleRunTime.FASTLY;
+    if (isDeno) return PossibleRunTime.DENO;
+    if (isBun) return PossibleRunTime.BUN;
+    if (isNode) return PossibleRunTime.NODE;
 
-    return PossibleRunTime.Other;
+    return PossibleRunTime.OTHER;
   }
 
   private loadModule<T extends ExternalModule>(module: T) {
@@ -46,7 +64,7 @@ export class BlazeConfig {
     V extends U extends null ? never : U,
   >(module: T): V {
     if (!this.modules[module]) {
-      throw Logger.throw(`${DEPENDENCY_MODULE_MAP[module]} is not installed`);
+      throw Logger.throw(`${DependencyModuleMap[module]} is not installed`);
     }
 
     return this.modules[module] as V;
