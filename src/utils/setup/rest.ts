@@ -34,7 +34,8 @@ export class BlazeServiceRest {
 
     const { request, responses } = this.openAPIConfig;
 
-    const middlewares = [...options.middlewares, ...(action.middlewares ?? [])];
+    const serviceMiddlewares = options.middlewares;
+    const middlewares = action.middlewares ?? [];
 
     const tags: string[] = [];
 
@@ -55,6 +56,7 @@ export class BlazeServiceRest {
       request,
       responses,
       middlewares,
+      serviceMiddlewares,
       tags,
     });
   }
