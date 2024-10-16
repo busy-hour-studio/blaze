@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.3.3](https://github.com/Busy-Hour-Studio/blaze/compare/v4.3.2...v4.3.3) (2024-10-16)
+
+
+### Features
+
+* request object shorthand ([5afec3e](https://github.com/Busy-Hour-Studio/blaze/commit/5afec3ef8f0272ed4d3636071782a09418d0f08f))
+
+
+### Bug Fixes
+
+* auto load node server on non node environment ([87587ed](https://github.com/Busy-Hour-Studio/blaze/commit/87587ed8d7167c2062061ec78a1f000a7ba6586c))
+* middleware not assigned properly ([6f00f01](https://github.com/Busy-Hour-Studio/blaze/commit/6f00f015b3c622dff633531c05b930a417984441))
+
 ## [4.3.2](https://github.com/Busy-Hour-Studio/blaze/compare/v4.3.1...v4.3.2) (2024-10-14)
 
 
