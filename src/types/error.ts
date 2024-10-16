@@ -1,9 +1,9 @@
 import type { Random } from './helper';
-import { StatusCode } from './rest';
+import type { GenericStatusCode } from './rest';
 
 export interface BlazeErrorOption {
   errors: Random;
-  status: StatusCode;
+  status: GenericStatusCode;
   message: string;
   name?: string | null;
 }

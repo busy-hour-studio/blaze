@@ -7,7 +7,7 @@ import type {
   CreateContextOption,
 } from '../types/context';
 import type { RecordString, RecordUnknown } from '../types/helper';
-import type { ResponseType, StatusCode } from '../types/rest';
+import type { GenericStatusCode, ResponseType } from '../types/rest';
 import { getReqBody, getReqQuery } from '../utils/helper/context';
 import { validateAll } from '../utils/helper/validator';
 import { BlazeBroker as Broker } from './BlazeBroker';
@@ -26,9 +26,18 @@ export class BlazeContext<
   private $params: P | null;
   private $reqHeaders: H | null;
 
+  /**
+   * Set the typeof of the REST response such as `json`, `body`, `text`, or `html`.
+   */
   public response: ResponseType | null;
-  public status: StatusCode | null;
-  private $headers: Record<string, string | string[]> | null;
+  /**
+   * Set the status code of the REST response, such as `200`, `404`, `500`, etc.
+   */
+  public status: GenericStatusCode | null;
+  private $resHeaders: Record<string, string | string[]> | null;
+  /**
+   * Flag that indicates whether the context is from a REST request or not.
+   */
   public readonly isRest: boolean;
   public readonly broker: Broker;
 
@@ -49,7 +58,7 @@ export class BlazeContext<
     this.response = null;
     this.status = null;
     this.$meta = meta ? structuredClone(meta) : null;
-    this.$headers = null;
+    this.$resHeaders = null;
     this.isRest = !!honoCtx;
 
     this.broker = BlazeBroker;
@@ -79,9 +88,9 @@ export class BlazeContext<
   }
 
   public get headers() {
-    if (!this.$headers) this.$headers = {};
+    if (!this.$resHeaders) this.$resHeaders = {};
 
-    const headers = this.$headers;
+    const headers = this.$resHeaders;
 
     return {
       append(key: string, value: string) {
@@ -158,12 +167,35 @@ export class BlazeContext<
     return this.$body as B;
   }
 
+  /**
+   * @description Access the request information from the context such as `headers`, `query`, `params`, and `body`.
+   */
   public get request() {
     return {
       headers: this.reqHeaders,
       query: this.query,
       params: this.params,
       body: this.getBody.bind(this),
+    };
+  }
+
+  /**
+   * @description Shorthand for `this.request`
+   * @description Access the request information from the context such as `headers`, `query`, `params`, and `body`.
+   */
+  public get req() {
+    return this.request;
+  }
+
+  /**
+   * @description Access the response information from the context such as `headers`, `status`, and `response`.
+   * @description It exists for the developer's convenience on handling the response.
+   */
+  public get res() {
+    return {
+      headers: this.headers,
+      status: this.status,
+      response: this.response,
     };
   }
 

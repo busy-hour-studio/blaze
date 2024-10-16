@@ -61,7 +61,7 @@ export class Blaze {
    * @see {@link BlazeRouter.use}
    */
   public readonly use: BlazeRouter['use'];
-  private readonly blazeCtx: BlazeContext;
+  private readonly ctx: BlazeContext;
   private readonly adapter: DependencyModule[typeof ExternalModule.NodeAdapter];
 
   public readonly fetch: BlazeFetch;
@@ -72,7 +72,7 @@ export class Blaze {
     this.router = new BlazeRouter(options);
     this.doc = this.router.doc.bind(this.router);
     this.doc31 = this.router.doc31.bind(this.router);
-    this.blazeCtx = new BlazeContext({
+    this.ctx = new BlazeContext({
       body: null,
       params: null,
       headers: null,
@@ -80,6 +80,7 @@ export class Blaze {
       meta: null,
       query: null,
     });
+
     this.adapter = BlazeConfig.modules[ExternalModule.NodeAdapter];
     this.fetch = this.router.fetch.bind(this.router) as BlazeFetch;
     this.use = this.router.use.bind(this.router);
@@ -142,7 +143,7 @@ export class Blaze {
         const service = BlazeService.create({
           app: this.router,
           servicePath,
-          blazeCtx: this.blazeCtx,
+          ctx: this.ctx,
           sourcePath,
           middlewares: middlewares ?? [],
         });
@@ -172,7 +173,7 @@ export class Blaze {
     const services = options.services.map((serv) => {
       const service = new BlazeService({
         app: this.router,
-        blazeCtx: this.blazeCtx,
+        ctx: this.ctx,
         middlewares: options.middlewares ?? [],
         service: serv,
         servicePath: '',

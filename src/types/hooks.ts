@@ -106,16 +106,16 @@ export interface AfterHookHandlerOption<
 > {
   result: unknown;
   hooks: AcceptedAfterHook<R, M, H, P, Q, B>;
-  blazeCtx: BlazeContext<M, H, P, Q, B>;
+  ctx: BlazeContext<M, H, P, Q, B>;
 }
 
 export interface BeforeHookHandlerOption<
   M extends RecordUnknown = RecordUnknown,
-  B extends RecordUnknown = RecordUnknown,
-  P extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
 > {
   hooks: AcceptedBeforeHook<M, H, P, Q, B>;
-  blazeCtx: BlazeContext<M, H, P, Q, B>;
+  ctx: BlazeContext<M, H, P, Q, B>;
 }

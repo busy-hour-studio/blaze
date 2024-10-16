@@ -8,9 +8,13 @@ import type { Service } from './service';
 
 export type StatusCode = (typeof STATUS_CODE)[keyof typeof STATUS_CODE];
 
+export type GenericStatusCode =
+  | (typeof STATUS_CODE)[keyof typeof STATUS_CODE]
+  | (NonNullable<unknown> & number);
+
 export type Method = (typeof REST_METHOD)[keyof typeof REST_METHOD];
 
-export type ExposedMethod = Exclude<Method, 'USE'> | NonNullable<unknown>;
+export type ExposedMethod = Exclude<Method, 'USE'>;
 
 export type ResponseType = (typeof RESPONSE_TYPE)[keyof typeof RESPONSE_TYPE];
 

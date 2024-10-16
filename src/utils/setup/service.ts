@@ -29,16 +29,16 @@ export class BlazeService {
   public readonly middlewares: Middleware[];
   public router: BlazeRouter | null;
 
-  private readonly blazeCtx: BlazeContext;
+  private readonly ctx: BlazeContext;
   private readonly service: Service;
   private isStarted: boolean;
 
   constructor(options: ServiceConstructorOption) {
-    const { service, blazeCtx, servicePath, app, middlewares } = options;
+    const { service, ctx, servicePath, app, middlewares } = options;
 
     this.service = service;
     this.servicePath = servicePath;
-    this.blazeCtx = blazeCtx;
+    this.ctx = ctx;
     this.serviceName = getServiceName(service);
     this.restPath = getRestPath(service);
     this.mainRouter = app;
@@ -148,6 +148,7 @@ export class BlazeService {
 
     // Re-assign the action
     this.actions.forEach((action) => {
+      BlazeEvent.offAll(action.actionName);
       BlazeEvent.on(action.actionName, action.actionHandler);
     });
   }
@@ -156,7 +157,7 @@ export class BlazeService {
     if (this.isStarted) return;
 
     this.assignRestRoute();
-    this.service.onStarted?.(this.blazeCtx);
+    this.service.onStarted?.(this.ctx);
     this.isStarted = true;
   }
 
@@ -166,7 +167,7 @@ export class BlazeService {
 
     const service = new BlazeService({
       app: options.app,
-      blazeCtx: options.blazeCtx,
+      ctx: options.ctx,
       servicePath,
       service: serviceFile,
       middlewares: options.middlewares,
