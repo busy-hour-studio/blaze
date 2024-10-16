@@ -15,11 +15,12 @@ import type {
 import type { OpenAPIObjectConfig } from '@asteasolutions/zod-to-openapi/dist/v3.0/openapi-generator';
 import type { Env, Schema } from 'hono';
 import { Hono } from 'hono';
-import type { MergePath, MergeSchemaPath } from 'hono/types';
+import type { MergePath, MergeSchemaPath, MiddlewareHandler } from 'hono/types';
 import { BlazeConfig } from '../config';
 import { Logger } from '../errors/Logger';
 import { DependencyModule } from '../types/config';
 import type { Random } from '../types/helper';
+import type { Method } from '../types/rest';
 import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router';
 import { ExternalModule } from '../utils/constant/config';
 import {
@@ -51,6 +52,20 @@ export class BlazeRouter<
 
   public openapi(route: BlazeOpenAPIOption) {
     const newRoute = createOpenApiRouter(route);
+    const mws = route.serviceMiddlewares.reduce(
+      (acc, curr) => {
+        if (!acc[curr[0]]) acc[curr[0]] = new Set();
+
+        acc[curr[0]].add(curr[1]);
+
+        return acc;
+      },
+      {} as Record<Method, Set<MiddlewareHandler>>
+    );
+
+    Object.entries(mws).forEach(([method, value]) =>
+      this.on(method, route.path, ...value)
+    );
 
     this.on(route.method, route.path, ...route.middlewares, route.handler);
 

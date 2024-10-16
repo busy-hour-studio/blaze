@@ -12,6 +12,7 @@ export const REST_METHOD = {
   PUT: 'PUT',
   DELETE: 'DELETE',
   PATCH: 'PATCH',
+  OPTIONS: 'OPTIONS',
   HEAD: 'HEAD',
   USE: 'USE',
 } as const;

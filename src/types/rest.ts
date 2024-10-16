@@ -1,10 +1,10 @@
-import type { Context as HonoCtx, MiddlewareHandler } from 'hono';
+import type { Context as HonoCtx } from 'hono';
 import type { BlazeContext } from '../internal';
 import type { BlazeRouter } from '../router';
 import type { RESPONSE_TYPE, REST_METHOD } from '../utils/constant/rest';
 import type { STATUS_CODE } from '../utils/constant/rest/status-code';
 import type { Action } from './action';
-import type { Service } from './service';
+import type { Middleware, Service } from './service';
 
 export type StatusCode = (typeof STATUS_CODE)[keyof typeof STATUS_CODE];
 
@@ -31,7 +31,7 @@ export interface RestHandlerOption {
   service: Service;
   action: Omit<Action, 'name'>;
   router: BlazeRouter;
-  middlewares: MiddlewareHandler[];
+  middlewares: Middleware[];
 }
 
 export interface RestErrorHandlerOption {

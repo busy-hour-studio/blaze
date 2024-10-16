@@ -11,7 +11,6 @@ import type {
   ServiceConstructorOption,
 } from '../../types/service';
 import { getRestPath, getServiceName } from '../common';
-import { getRestMiddlewares } from '../helper/rest';
 import { loadService } from '../helper/service';
 import { BlazeServiceAction } from './action';
 import { BlazeServiceEvent } from './event';
@@ -67,13 +66,11 @@ export class BlazeService {
       });
     }
 
-    const middlewares = getRestMiddlewares(this.service, action);
-
     const restInstance = new BlazeServiceRest({
       action,
       router: this.router,
       service: this.service,
-      middlewares,
+      middlewares: this.middlewares,
     });
 
     this.rests.push(restInstance);
