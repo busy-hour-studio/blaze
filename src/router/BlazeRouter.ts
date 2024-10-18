@@ -22,6 +22,7 @@ import { Logger } from '../internal/logger/index';
 import type { Random } from '../types/common';
 import type { Method } from '../types/rest';
 import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router';
+import { isEmpty, isNil } from '../utils/common';
 import { ExternalModule } from '../utils/constant/config';
 import {
   assignOpenAPIRegistry,
@@ -67,13 +68,17 @@ export class BlazeRouter<
       this.on(method, route.path, ...value)
     );
 
-    this.on(
-      route.method,
-      route.path,
-      ...route.middlewares,
-      route.handler,
-      ...route.afterMiddlewares
-    );
+    const handlers: MiddlewareHandler[] = [route.handler];
+
+    if (!isNil(route.middlewares) && !isEmpty(route.middlewares)) {
+      handlers.unshift(...route.middlewares);
+    }
+
+    if (!isNil(route.afterMiddlewares) && !isEmpty(route.afterMiddlewares)) {
+      handlers.push(...route.afterMiddlewares);
+    }
+
+    this.on(route.method, route.path, ...handlers);
 
     if (!this.openAPIRegistry) return;
 
