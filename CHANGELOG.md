@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.4.0-1](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-0...v4.4.0-1) (2024-10-18)
+
+
+### Bug Fixes
+
+* blaze creator type definitions ([b536c92](https://github.com/Busy-Hour-Studio/blaze/commit/b536c92575a91a8af3da2a79294e85d6a2345d10))
+* handler type definitions ([05c4e90](https://github.com/Busy-Hour-Studio/blaze/commit/05c4e90b2f45d284ddcf862fd1eaf811afe61a99))
+* hono helper/middlewares types ([9d301d2](https://github.com/Busy-Hour-Studio/blaze/commit/9d301d208e4f6cd8adec7abfe457da1cb1cdc850))
+* validator type definitions ([3f34e18](https://github.com/Busy-Hour-Studio/blaze/commit/3f34e18fab36678ef047bffbc655da5658f01b20))
+
 ## [4.4.0-0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.3.3...v4.4.0-0) (2024-10-18)
 
 
