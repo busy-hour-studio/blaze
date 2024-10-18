@@ -30,6 +30,7 @@ export interface BlazeOpenAPIOption
   handler: MiddlewareHandler;
   middlewares: MiddlewareHandler[];
   serviceMiddlewares: Middleware[];
+  afterMiddlewares: MiddlewareHandler[];
 }
 
 export interface BlazeFetch<E extends Env = Env> {

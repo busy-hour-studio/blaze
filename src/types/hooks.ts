@@ -8,7 +8,7 @@ export interface BeforeHookHandler<
   Q extends RecordUnknown = RecordUnknown,
   B extends RecordUnknown = RecordUnknown,
 > {
-  (ctx: BlazeContext<M, H, P, Q, B>): Promise<void> | void;
+  (ctx: BlazeContext<M, H, P, Q, B>): Promise<void>;
 }
 
 export type AnyBeforeHookHandler = BeforeHookHandler<

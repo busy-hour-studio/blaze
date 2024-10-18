@@ -67,7 +67,13 @@ export class BlazeRouter<
       this.on(method, route.path, ...value)
     );
 
-    this.on(route.method, route.path, ...route.middlewares, route.handler);
+    this.on(
+      route.method,
+      route.path,
+      ...route.middlewares,
+      route.handler,
+      ...route.afterMiddlewares
+    );
 
     if (!this.openAPIRegistry) return;
 

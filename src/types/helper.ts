@@ -21,6 +21,18 @@ export interface ContextValidation<
   body?: B | null;
 }
 
+export interface ContextSetter<
+  H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
+  Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
+> {
+  headers(headers: H): void;
+  params(params: P): void;
+  query(query: Q): void;
+  body(body: B): void;
+}
+
 export interface DataValidatorOption<
   M extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
@@ -32,12 +44,7 @@ export interface DataValidatorOption<
   data: H | P | Q | B | NonNullable<unknown> | null;
   schema: ZodSchema;
   honoCtx: HonoContext | null;
-  setter: {
-    headers(headers: H): void;
-    params(params: P): void;
-    query(query: Q): void;
-    body(body: B): void;
-  };
+  setter: ContextSetter<H, P, Q, B>;
 }
 
 export interface AllDataValidatorOption<
