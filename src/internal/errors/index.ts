@@ -9,13 +9,12 @@ export class BlazeError<T = Random> extends Error {
   constructor(err: BlazeErrorOption);
   constructor(message: string, status?: GenericStatusCode);
   constructor(err: BlazeErrorOption | string, status: GenericStatusCode = 500) {
+    super(typeof err === 'string' ? err : err.message);
+
     if (typeof err === 'string') {
-      super(err);
       this.status = status;
       this.name = 'BlazeError';
     } else {
-      super(err.message);
-
       this.status = err.status;
       this.errors = err.errors;
       this.name = err.name ?? 'BlazeError';

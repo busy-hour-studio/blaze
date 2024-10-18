@@ -1,5 +1,5 @@
 import type { Service } from '../../types/service.ts';
-import { isNil, removeTrailingSlash } from '../../utils/common';
+import { isNil, removeTrailingSlash } from '../../utils/common.ts';
 
 export function getRestPath(service: Service) {
   const version = service.version ? `v${service.version}` : '';

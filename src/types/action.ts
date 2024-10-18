@@ -2,15 +2,15 @@ import type { ResponseConfig } from '@asteasolutions/zod-to-openapi';
 import type { ProcedureType } from '@trpc/server';
 import type { MiddlewareHandler } from 'hono';
 import type { ZodSchema } from 'zod';
-import type { BlazeContext } from '../internal';
-import { onRestErrorHandler } from './handler';
-import type { Random, RecordString, RecordUnknown } from './helper';
+import type { BlazeContext } from '../internal/context/index.ts';
+import type { Random, RecordString, RecordUnknown } from './common.ts';
+import { onRestErrorHandler } from './handler.ts';
 import type {
   AcceptedAfterHook,
   AcceptedBeforeHook,
   ActionHook,
-} from './hooks';
-import type { RestParam } from './rest';
+} from './hooks/index.ts';
+import type { RestParam } from './rest.ts';
 
 export interface ActionValidator<
   H extends ZodSchema = ZodSchema,

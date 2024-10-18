@@ -45,7 +45,8 @@ export class BlazeEventEmitter {
       return [];
     }
 
-    return Promise.all(
+    // eslint-disable-next-line no-return-await
+    return await Promise.all(
       [...(this.$emitter.get(eventName) ?? [])].map<U>(
         (listener) => listener(...values) as U
       )

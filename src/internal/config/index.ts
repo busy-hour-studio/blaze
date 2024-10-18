@@ -1,5 +1,4 @@
 import { z } from 'zod';
-import type { DependencyModule } from '../../types/config.ts';
 import { crossRequire } from '../../utils/common.ts';
 import {
   DependencyModuleMap,
@@ -16,6 +15,7 @@ import {
   isWorkerd,
 } from '../../utils/constant/config/runtime.ts';
 import { Logger } from '../logger/index.ts';
+import type { DependencyModule } from './types.ts';
 
 export class BlazeConfig {
   public readonly runTime: PossibleRunTime;

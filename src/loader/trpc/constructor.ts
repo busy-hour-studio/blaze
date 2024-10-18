@@ -1,10 +1,10 @@
-import type { BlazeServiceAction } from '../loader/action.ts';
-import type { Blaze } from '../router/Blaze.ts';
+import type { Blaze } from '../../router/Blaze.ts';
 import type {
   TrpcMutationCallRecord,
   TrpcQueryCallRecord,
-} from '../types/external.ts';
-import type { GroupTrpcAction, TrpcProcedure } from '../types/trpc.ts';
+} from '../../types/external.ts';
+import type { GroupTrpcAction, TrpcProcedure } from '../../types/trpc.ts';
+import type { BlazeServiceAction } from '../action.ts';
 import { getTrpcInput, trpcHandler } from './helper.ts';
 
 export class TrpcConstructor {
