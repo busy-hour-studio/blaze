@@ -1,9 +1,9 @@
 import { Context as HonoCtx } from 'hono';
-import { BlazeError } from '../../errors/BlazeError';
-import type { BlazeContext } from '../../internal';
-import type { BlazeRouter } from '../../router';
-import type { Action } from '../../types/action';
-import { Random } from '../../types/helper';
+import type { BlazeContext } from '../../internal/context/index.ts';
+import { BlazeError } from '../../internal/errors/index.ts';
+import type { BlazeRouter } from '../../router/index.ts';
+import type { Action } from '../../types/action.ts';
+import { Random } from '../../types/common.ts';
 import type {
   Method,
   RestErrorHandlerOption,
@@ -11,10 +11,10 @@ import type {
   RestResponseHandlerOption,
   RestRoute,
   StatusCode,
-} from '../../types/rest';
-import type { Service } from '../../types/service';
-import { isEmpty, isNil, mapToObject, resolvePromise } from '../common';
-import { REST_METHOD } from '../constant/rest';
+} from '../../types/rest.ts';
+import type { Service } from '../../types/service.ts';
+import { isEmpty, isNil, mapToObject, resolvePromise } from '../common.ts';
+import { RESPONSE_TYPE, REST_METHOD } from '../constant/rest/index.ts';
 
 export function extractRestPath(restRoute: RestRoute) {
   const restPath = restRoute.split(' ');
@@ -89,16 +89,17 @@ export function handleRestResponse(options: RestResponseHandlerOption) {
   const args = getRestResponse(options);
 
   switch (ctx.response) {
-    case 'text':
+    case RESPONSE_TYPE.TEXT:
       return honoCtx.text(...args);
 
-    case 'html':
+    case RESPONSE_TYPE.HTML:
       return honoCtx.html(...args);
 
-    case 'body':
+    case RESPONSE_TYPE.BODY:
       return honoCtx.body(...args);
 
-    case 'json':
+    case RESPONSE_TYPE.JSON:
+    case null:
     default:
       return honoCtx.json(...args);
   }

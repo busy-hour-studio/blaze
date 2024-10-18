@@ -1,15 +1,9 @@
 import type { ZodSchema } from 'zod';
-import { ValidationError } from '../../errors/ValidationError';
-import type {
-  AllDataValidatorOption,
-  ContextValidation,
-  DataValidatorOption,
-  RecordString,
-  RecordUnknown,
-} from '../../types/helper';
-import type { Method } from '../../types/rest';
-import { isEmpty } from '../common';
-import { getReqBody, getReqQuery } from './context';
+import { getReqBody, getReqQuery } from '../extractor/rest/index.ts';
+import { BlazeValidationError } from '../internal/errors/validation.ts';
+import type { RecordString, RecordUnknown } from '../types/common.ts';
+import type { Method } from '../types/rest.ts';
+import type { DataValidatorOption } from './types.ts';
 
 export function validateInput<T extends ZodSchema>(input: unknown, schema: T) {
   const result = schema.safeParseAsync(input);
@@ -39,7 +33,7 @@ export async function validateHeader<
     return;
   }
 
-  throw new ValidationError(ctx, result.error);
+  throw new BlazeValidationError(ctx, result.error);
 }
 
 export async function validateParams<
@@ -64,7 +58,7 @@ export async function validateParams<
     return;
   }
 
-  throw new ValidationError(ctx, result.error);
+  throw new BlazeValidationError(ctx, result.error);
 }
 
 export async function validateQuery<
@@ -89,7 +83,7 @@ export async function validateQuery<
     return;
   }
 
-  throw new ValidationError(ctx, result.error);
+  throw new BlazeValidationError(ctx, result.error);
 }
 
 export async function validateBody<
@@ -125,58 +119,5 @@ export async function validateBody<
     return;
   }
 
-  throw new ValidationError(ctx, result.error);
-}
-
-const validationMap = {
-  header: {
-    validator: validateHeader,
-    options: 'headers',
-    schema: 'header',
-  },
-  params: {
-    validator: validateParams,
-    options: 'params',
-    schema: 'params',
-  },
-  query: {
-    validator: validateQuery,
-    options: 'query',
-    schema: 'query',
-  },
-  body: {
-    validator: validateBody,
-    options: 'body',
-    schema: 'body',
-  },
-} as const;
-
-export async function validateAll<
-  M extends RecordUnknown,
-  H extends RecordString,
-  P extends RecordUnknown,
-  Q extends RecordUnknown,
-  B extends RecordUnknown,
->(options: AllDataValidatorOption<M, H, P, Q, B>) {
-  const { ctx, input, validator, honoCtx, setter } = options;
-
-  if (!validator || isEmpty(validator)) return;
-
-  await Promise.all(
-    Object.keys(validator).map((key) => {
-      const validation = validationMap[key as keyof ContextValidation];
-      const schema = validator[validation.schema];
-      const data = input[validation.options];
-
-      if (!validation || !schema) return;
-
-      return validation.validator({
-        ctx,
-        setter,
-        data,
-        honoCtx,
-        schema,
-      });
-    })
-  );
+  throw new BlazeValidationError(ctx, result.error);
 }

@@ -1,7 +1,10 @@
 import type { Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
-import type { RecordUnknown } from '../../types/helper';
-import { FORM_CONTENT_TYPE, REST_CONTENT_TYPE } from '../constant';
+import type { RecordUnknown } from '../../types/common.ts';
+import {
+  FORM_CONTENT_TYPE,
+  REST_CONTENT_TYPE,
+} from '../../utils/constant/rest/index.ts';
 
 export async function getReqBody(honoCtx: HonoCtx) {
   const contentType = honoCtx.req.header('Content-Type');

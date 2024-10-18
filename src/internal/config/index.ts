@@ -5,7 +5,7 @@ import {
   DependencyModuleMap,
   ExternalModule,
   PossibleRunTime,
-} from '../../utils/constant/config.ts';
+} from '../../utils/constant/config/index.ts';
 import {
   isBun,
   isDeno,
@@ -14,7 +14,7 @@ import {
   isNetlify,
   isNode,
   isWorkerd,
-} from '../../utils/constant/runtime.ts';
+} from '../../utils/constant/config/runtime.ts';
 import { Logger } from '../logger/index.ts';
 
 export class BlazeConfig {
