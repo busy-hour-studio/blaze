@@ -77,25 +77,34 @@ export async function handleRest<T>(options: {
   ctx: BlazeContext;
   honoCtx: HonoCtx;
   promise: Promise<T> | T;
-}) {
+}): Promise<{ resp: Response; ok: boolean }> {
   const { ctx, honoCtx, promise } = options;
   const [restResult, restError] = await resolvePromise(promise);
 
   if (restError) {
-    return handleRestError({
-      ctx,
-      err: restError,
-      honoCtx,
-    });
+    return {
+      resp: handleRestError({
+        ctx,
+        err: restError,
+        honoCtx,
+      }),
+      ok: false,
+    };
   }
 
   if (isNil(restResult)) {
-    return honoCtx.body(null, 204);
+    return {
+      resp: honoCtx.body(null, 204),
+      ok: true,
+    };
   }
 
-  return handleRestResponse({
-    ctx,
-    honoCtx,
-    result: restResult,
-  });
+  return {
+    resp: await handleRestResponse({
+      ctx,
+      honoCtx,
+      result: restResult,
+    }),
+    ok: true,
+  };
 }
