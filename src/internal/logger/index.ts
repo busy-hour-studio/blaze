@@ -1,4 +1,4 @@
-import { BlazeError } from './BlazeError';
+import { BlazeError } from '../errors/index.ts';
 
 export class Logger {
   public static info(...args: unknown[]) {

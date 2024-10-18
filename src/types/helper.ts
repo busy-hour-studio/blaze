@@ -1,13 +1,6 @@
 import type { Context as HonoContext } from 'hono';
 import type { ZodSchema } from 'zod';
-import type { BlazeContext } from '../internal';
-
-export type RecordUnknown = Record<string, unknown>;
-
-export type RecordString = Record<string, string>;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type Random = any;
+import type { BlazeContext } from '../internal/context/index.ts';
 
 export interface ContextValidation<
   H extends ZodSchema = ZodSchema,

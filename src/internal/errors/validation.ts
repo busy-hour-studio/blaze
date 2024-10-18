@@ -1,9 +1,9 @@
 import type { ZodError } from 'zod';
-import type { BlazeContext } from '../internal/BlazeContext';
-import type { GenericStatusCode } from '../types/rest';
-import { BlazeError } from './BlazeError';
+import type { GenericStatusCode } from '../../types/rest.ts';
+import type { BlazeContext } from '../context/index.ts';
+import { BlazeError } from './index.ts';
 
-export class ValidationError extends BlazeError {
+export class BlazeValidationError extends BlazeError<ZodError> {
   public ctx: BlazeContext;
   public status: GenericStatusCode;
   public errors: ZodError;

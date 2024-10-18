@@ -1,8 +1,8 @@
-import type { BlazeErrorOption } from '../types/error';
-import type { Random } from '../types/helper';
-import type { GenericStatusCode } from '../types/rest';
+import type { Random } from '../../types/common.ts';
+import type { GenericStatusCode } from '../../types/rest';
+import type { BlazeErrorOption } from './types.ts';
 
-export class BlazeError extends Error {
+export class BlazeError<T = Random> extends Error {
   public status: GenericStatusCode;
   public errors: Random;
 
@@ -22,12 +22,12 @@ export class BlazeError extends Error {
     }
   }
 
-  public toJSON(): Random {
+  public toJSON(): T {
     return {
       errors: this.errors,
       message: this.message,
       name: this.name,
       status: this.status,
-    };
+    } as T;
   }
 }

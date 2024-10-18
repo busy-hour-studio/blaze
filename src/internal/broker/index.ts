@@ -1,18 +1,18 @@
-/* eslint-disable @typescript-eslint/ban-ts-comment */
-/* eslint-disable import/no-cycle */
-import { BlazeEvent } from '.';
-import { BlazeError } from '../errors/BlazeError';
-import type { ActionCallRecord, EventCallRecord } from '../types/common';
-import type { EventName } from '../types/event';
-import type { Random } from '../types/helper';
-import { RESERVED_KEYWORD } from '../utils/constant';
+import type { Random } from '../../types/common.ts';
+import type {
+  ActionCallRecord,
+  EventCallRecord,
+} from '../../types/external.ts';
+import { RESERVED_KEYWORD } from '../../utils/constant/index.ts';
+import { BlazeError } from '../errors/index.ts';
+import { BlazeEvent } from '../event-emitter/instance.ts';
 
 export class BlazeBroker {
-  public hasListener(eventName: EventName) {
+  public hasListener(eventName: string) {
     return BlazeEvent.listenerCount(eventName) > 0;
   }
 
-  private validateEventName(eventName: EventName) {
+  private validateEventName(eventName: string) {
     if (this.hasListener(eventName)) return;
 
     throw new BlazeError({
@@ -34,69 +34,69 @@ export class BlazeBroker {
    */
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     U = ActionCallRecord[T],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     V = U['result'],
   >(actionName: T): Promise<V>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     U = ActionCallRecord[T],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     V = U['result'],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
   >(actionName: T, body: U['body']): Promise<V>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     U = ActionCallRecord[T],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     V = U['result'],
   >(
     actionName: T,
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     body: U['body'],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     params: U['params']
   ): Promise<V>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     U = ActionCallRecord[T],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     V = U['result'],
   >(
     actionName: T,
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     body: U['body'],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     params: U['params'],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     headers: U['headers']
   ): Promise<V>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     U = ActionCallRecord[T],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     V = U['result'],
   >(
     actionName: T,
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     body: U['body'],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     params: U['params'],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     headers: U['headers'],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     query: U['query']
   ): Promise<V>;
   public async call<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     U = ActionCallRecord[T],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     V = U['result'],
   >(actionName: T, ...values: Random[]): Promise<V> {
     this.validateEventName(actionName);
@@ -116,27 +116,27 @@ export class BlazeBroker {
    */
   public emit<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     U = ActionCallRecord[T],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
   >(actionName: T, body: U['body']): boolean;
   public emit<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     U = ActionCallRecord[T],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
   >(actionName: T, body: U['body'], params: U['params']): boolean;
   public emit<
     T extends keyof ActionCallRecord | (string & NonNullable<unknown>),
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     U = ActionCallRecord[T],
   >(
     actionName: T,
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     body: U['body'],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     params: U['params'],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     headers: U['headers']
   ): boolean;
   public emit<
@@ -155,9 +155,9 @@ export class BlazeBroker {
   >(eventName: T): boolean;
   public event<
     T extends keyof EventCallRecord | (string & NonNullable<unknown>),
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
     U = EventCallRecord[T],
-    // @ts-expect-error
+    // @ts-expect-error properties-not-defined
   >(eventName: T, body: U['body']): boolean;
   public event<
     T extends keyof EventCallRecord | (string & NonNullable<unknown>),

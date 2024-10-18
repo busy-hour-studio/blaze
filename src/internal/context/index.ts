@@ -1,20 +1,15 @@
 import type { Context as HonoCtx } from 'hono';
 import type { ZodSchema } from 'zod';
-// eslint-disable-next-line import/no-cycle
-import { BlazeBroker } from '.';
 import type {
   ContextConstructorOption,
   CreateContextOption,
-} from '../types/context';
-import type {
-  ContextSetter,
-  RecordString,
-  RecordUnknown,
-} from '../types/helper';
-import type { GenericStatusCode, ResponseType } from '../types/rest';
-import { getReqBody, getReqQuery } from '../utils/helper/context';
-import { validateAll } from '../utils/helper/validator';
-import { BlazeBroker as Broker } from './BlazeBroker';
+} from '../../types/context.ts';
+import type { RecordString, RecordUnknown } from '../../types/helper.ts';
+import type { GenericStatusCode } from '../../types/rest.ts';
+import { getReqBody, getReqQuery } from '../../utils/helper/context.ts';
+import { validateAll } from '../../utils/helper/validator.ts';
+import { BlazeBroker as Broker } from '../broker/index.ts';
+import { BlazeBroker } from '../broker/instance.ts';
 
 export class BlazeContext<
   M extends RecordUnknown = RecordUnknown,
@@ -212,7 +207,7 @@ export class BlazeContext<
     P extends RecordUnknown,
     Q extends RecordUnknown,
     B extends RecordUnknown,
-  >(ctx: BlazeContext<M, H, P, Q, B>): ContextSetter<H, P, Q, B> {
+  >(ctx: BlazeContext<M, H, P, Q, B>) {
     return {
       headers(headers: H) {
         ctx.$reqHeaders = headers;
