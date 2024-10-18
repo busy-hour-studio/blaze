@@ -7,7 +7,7 @@ import {
   REST_CONTENT_TYPE,
 } from '../../utils/constant/rest/index.ts';
 
-export async function getReqBody(honoCtx: HonoCtx) {
+export function getReqBody(honoCtx: HonoCtx) {
   const contentType = honoCtx.req.header('Content-Type');
 
   if (!contentType) return null;

@@ -22,7 +22,8 @@ interface ZodOpenApiFullMetadata<T = Random> {
 
 declare module 'zod' {
   interface ZodTypeDef {
-    // @ts-expect-error type-definitions-mismatch
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore type-definitions-mismatch
     openapi?: ZodOpenApiFullMetadata;
   }
 

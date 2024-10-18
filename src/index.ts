@@ -1,4 +1,4 @@
-import './types/validator';
+import './types/validator.ts';
 
 export type {
   Action,
@@ -10,15 +10,15 @@ export type {
   AnyAction,
   AnyValidator,
   OpenAPIBody,
-} from './types/action';
+} from './types/action.ts';
+export type { AnyEvent, Event, Events } from './types/event.ts';
 export type {
   ActionCallRecord,
   ActionEventCallRequest,
   EventCallRecord,
   TrpcMutationCallRecord,
   TrpcQueryCallRecord,
-} from './types/common';
-export type { AnyEvent, Event, Events } from './types/event';
+} from './types/external.ts';
 export type {
   AcceptedAfterHook,
   AcceptedBeforeHook,
@@ -30,13 +30,13 @@ export type {
   AnyBeforeHook,
   AnyBeforeHookHandler,
   BeforeHookHandler,
-} from './types/hooks';
-export type { Method, RestParam, RestRoute } from './types/rest';
-export type { Service } from './types/service';
+} from './types/hooks/index.ts';
+export type { Method, RestParam, RestRoute } from './types/rest.ts';
+export type { Service } from './types/service.ts';
 
-export { BlazeConfig } from './config';
-export { BlazeCreator } from './creator';
-export { BlazeError } from './errors/BlazeError';
-export { ValidationError } from './errors/ValidationError';
-export { Blaze, BlazeRouter, z } from './router';
-export { initializeServices } from './utils/setup';
+export { BlazeCreator } from './creator/index.ts';
+export { BlazeConfig } from './internal/config/instance.ts';
+export { BlazeError } from './internal/errors/index.ts';
+export { BlazeValidationError } from './internal/errors/validation.ts';
+export { initializeServices } from './loader/index.ts';
+export { Blaze, BlazeRouter, z } from './router/index.ts';

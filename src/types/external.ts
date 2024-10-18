@@ -1,3 +1,5 @@
+// deno-lint-ignore-file no-empty-interface
+
 export interface ActionEventCallRequest<Headers, Params, Query, Body, Result> {
   headers: Headers;
   params: Params;

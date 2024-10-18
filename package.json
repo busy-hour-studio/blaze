@@ -97,24 +97,19 @@
       "require": "./dist/cjs/internal/index.js"
     },
     "./internal/BlazeBroker": {
-      "types": "./dist/types/internal/BlazeBroker.d.ts",
-      "import": "./dist/esm/internal/BlazeBroker.js",
-      "require": "./dist/cjs/internal/BlazeBroker.js"
+      "types": "./dist/types/internal/broker/index.d.ts",
+      "import": "./dist/esm/internal/broker/index.js",
+      "require": "./dist/cjs/internal/broker/index.js"
     },
     "./internal/BlazeContext": {
-      "types": "./dist/types/internal/BlazeContext.d.ts",
-      "import": "./dist/esm/internal/BlazeContext.js",
-      "require": "./dist/cjs/internal/BlazeContext.js"
+      "types": "./dist/types/internal/context/index.d.ts",
+      "import": "./dist/esm/internal/context/index.js",
+      "require": "./dist/cjs/internal/context/index.js"
     },
     "./internal/BlazeEventEmitter": {
-      "types": "./dist/types/internal/BlazeEventEmitter.d.ts",
-      "import": "./dist/esm/internal/BlazeEventEmitter.js",
-      "require": "./dist/cjs/internal/BlazeEventEmitter.js"
-    },
-    "./types": {
-      "types": "./dist/types/types/index.d.ts",
-      "import": "./dist/esm/types/index.js",
-      "require": "./dist/cjs/types/index.js"
+      "types": "./dist/types/internal/event-emitter/index.d.ts",
+      "import": "./dist/esm/internal/event-emitter/index.js",
+      "require": "./dist/cjs/internal/event-emitter/index.js"
     },
     "./types/action": {
       "types": "./dist/types/types/action.d.ts",
@@ -126,35 +121,20 @@
       "import": "./dist/esm/types/common.js",
       "require": "./dist/cjs/types/common.js"
     },
-    "./types/context": {
-      "types": "./dist/types/types/context.d.ts",
-      "import": "./dist/esm/types/context.js",
-      "require": "./dist/cjs/types/context.js"
-    },
     "./types/creator": {
-      "types": "./dist/types/types/creator.d.ts",
-      "import": "./dist/esm/types/creator.js",
-      "require": "./dist/cjs/types/creator.js"
-    },
-    "./types/error": {
-      "types": "./dist/types/types/error.d.ts",
-      "import": "./dist/esm/types/error.js",
-      "require": "./dist/cjs/types/error.js"
+      "types": "./dist/types/types/creator/index.d.ts",
+      "import": "./dist/esm/types/creator/index.js",
+      "require": "./dist/cjs/types/creator/index.js"
     },
     "./types/event": {
       "types": "./dist/types/types/event.d.ts",
       "import": "./dist/esm/types/event.js",
       "require": "./dist/cjs/types/event.js"
     },
-    "./types/helper": {
-      "types": "./dist/types/types/helper.d.ts",
-      "import": "./dist/esm/types/helper.js",
-      "require": "./dist/cjs/types/helper.js"
-    },
     "./types/hooks": {
-      "types": "./dist/types/types/hooks.d.ts",
-      "import": "./dist/esm/types/hooks.js",
-      "require": "./dist/cjs/types/hooks.js"
+      "types": "./dist/types/types/hooks/index.d.ts",
+      "import": "./dist/esm/types/hooks/index.js",
+      "require": "./dist/cjs/types/hooks/index.js"
     },
     "./types/rest": {
       "types": "./dist/types/types/rest.d.ts",
@@ -211,10 +191,10 @@
       "import": "./dist/esm/middlewares/jsx-renderer.js",
       "require": "./dist/cjs/middlewares/jsx-renderer.js"
     },
-    "./utils/setup": {
-      "types": "./dist/types/utils/setup/index.d.ts",
-      "import": "./dist/esm/utils/setup/index.js",
-      "require": "./dist/cjs/utils/setup/index.js"
+    "./loader": {
+      "types": "./dist/types/loader/index.d.ts",
+      "import": "./dist/esm/loader/index.js",
+      "require": "./dist/cjs/loader/index.js"
     },
     "./trpc": {
       "types": "./dist/types/types/trpc.d.ts",

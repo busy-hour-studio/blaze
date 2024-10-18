@@ -1,7 +1,7 @@
 import type { Context as HonoCtx } from 'hono';
 import type { BlazeContext } from '../internal/context/index.ts';
 import { BlazeError } from '../internal/errors/index.ts';
-import type { BlazeRouter } from '../router/index.ts';
+import type { BlazeRouter } from '../router/BlazeRouter.ts';
 import type { Random } from '../types/common.ts';
 import type {
   Method,

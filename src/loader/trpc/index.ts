@@ -45,7 +45,7 @@ export function useTrpc(
     ).fetchRequestHandler({
       ...options,
       router: trpc.router,
-      createContext: async () => ({}),
+      async createContext() {},
       endpoint,
       req: ctx.req.raw,
     });

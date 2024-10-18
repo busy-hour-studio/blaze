@@ -73,6 +73,7 @@ function errorHandler(onError: ActionHandler) {
 export function bodyLimit(options: BodyLimitOptions) {
   const handler =
     options.onError ??
+    // deno-lint-ignore require-await
     (async () => {
       throw new BlazeError('Payload too large', 413);
     });
