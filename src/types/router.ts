@@ -5,9 +5,9 @@ import type {
 import type { Router } from 'hono/router';
 import type { Env, MiddlewareHandler, RouterRoute } from 'hono/types';
 import type { ZodSchema } from 'zod';
-import type { RecordUnknown } from './common.ts';
-import type { Method } from './rest.ts';
-import type { Middleware } from './service.ts';
+import type { RecordUnknown } from './common';
+import type { Method } from './rest';
+import type { Middleware } from './service';
 
 export interface CreateBlazeOption {
   router?: Router<[never, RouterRoute]>;

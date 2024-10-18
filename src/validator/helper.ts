@@ -1,9 +1,9 @@
 import type { ZodSchema } from 'zod';
-import { getReqBody, getReqQuery } from '../extractor/rest/index.ts';
-import { BlazeValidationError } from '../internal/errors/validation.ts';
-import type { RecordString, RecordUnknown } from '../types/common.ts';
-import type { Method } from '../types/rest.ts';
-import type { DataValidatorOption } from './types.ts';
+import { getReqBody, getReqQuery } from '../extractor/rest/index';
+import { BlazeValidationError } from '../internal/errors/validation';
+import type { RecordString, RecordUnknown } from '../types/common';
+import type { Method } from '../types/rest';
+import type { DataValidatorOption } from './types';
 
 export function validateInput<T extends ZodSchema>(input: unknown, schema: T) {
   const result = schema.safeParseAsync(input);

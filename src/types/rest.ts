@@ -1,13 +1,10 @@
 import type { Context as HonoCtx } from 'hono';
-import type { BlazeContext } from '../internal/context/index.ts';
-import type { BlazeRouter } from '../router/BlazeRouter.ts';
-import type {
-  RESPONSE_TYPE,
-  REST_METHOD,
-} from '../utils/constant/rest/index.ts';
-import type { STATUS_CODE } from '../utils/constant/rest/status-code.ts';
-import type { Action } from './action.ts';
-import type { Middleware, Service } from './service.ts';
+import type { BlazeContext } from '../internal/context/index';
+import type { BlazeRouter } from '../router/BlazeRouter';
+import type { RESPONSE_TYPE, REST_METHOD } from '../utils/constant/rest/index';
+import type { STATUS_CODE } from '../utils/constant/rest/status-code';
+import type { Action } from './action';
+import type { Middleware, Service } from './service';
 
 export type StatusCode = (typeof STATUS_CODE)[keyof typeof STATUS_CODE];
 

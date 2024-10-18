@@ -1,4 +1,4 @@
-export { BlazeBroker } from './broker/instance.ts';
-export { BlazeContext } from './context/index.ts';
-export { BlazeEvent } from './event-emitter/instance.ts';
-export { BlazeMap } from './map/index.ts';
+export { BlazeBroker } from './broker/instance';
+export { BlazeContext } from './context/index';
+export { BlazeEvent } from './event-emitter/instance';
+export { BlazeMap } from './map/index';

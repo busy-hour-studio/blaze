@@ -1,5 +1,5 @@
-import { BlazeMap } from '../map/index.ts';
-import type { BlazeEventEmitterOption, EmitterListener } from './types.ts';
+import { BlazeMap } from '../map/index';
+import type { BlazeEventEmitterOption, EmitterListener } from './types';
 
 export class BlazeEventEmitter {
   private $maxListeners: number;

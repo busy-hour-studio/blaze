@@ -1,11 +1,11 @@
 import type { Router } from 'hono/router';
 import type { MiddlewareHandler, RouterRoute } from 'hono/types';
-import type { BlazeContext } from '../internal/context/index.ts';
-import type { BlazeRouter } from '../router/BlazeRouter.ts';
-import type { Action, ActionHandler, Actions } from './action.ts';
-import type { Random } from './common.ts';
-import type { Event, EventActionHandler, Events } from './event.ts';
-import type { ExposedMethod } from './rest.ts';
+import type { BlazeContext } from '../internal/context/index';
+import type { BlazeRouter } from '../router/BlazeRouter';
+import type { Action, ActionHandler, Actions } from './action';
+import type { Random } from './common';
+import type { Event, EventActionHandler, Events } from './event';
+import type { ExposedMethod } from './rest';
 
 export type Middleware = [ExposedMethod, MiddlewareHandler];
 

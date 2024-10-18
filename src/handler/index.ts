@@ -1,6 +1,6 @@
-import type { BlazeContext } from '../internal/context/index.ts';
-import type { Action } from '../types/action.ts';
-import { afterActionHookHandler, beforeActionHookHandler } from './hooks.ts';
+import type { BlazeContext } from '../internal/context/index';
+import type { Action } from '../types/action';
+import { afterActionHookHandler, beforeActionHookHandler } from './hooks';
 
 // Reuseable action handler for Call/Emit/REST
 export async function eventHandler(

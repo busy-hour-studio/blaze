@@ -1,9 +1,9 @@
-import type { Random } from '../common.ts';
-import type { AcceptedAfterHook } from './after.ts';
-import type { AcceptedBeforeHook } from './before.ts';
+import type { Random } from '../common';
+import type { AcceptedAfterHook } from './after';
+import type { AcceptedBeforeHook } from './before';
 
-export * from './after.ts';
-export * from './before.ts';
+export * from './after';
+export * from './before';
 
 export interface ActionHook<
   AH extends AcceptedAfterHook<

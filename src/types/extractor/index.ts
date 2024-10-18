@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 
-import { AnyAction } from '../action.ts';
-import { RecordString, RecordUnknown } from '../common.ts';
-import { ActionEventCallRequest } from '../external.ts';
-import { Service } from '../service.ts';
-import { ExtractActionHandler, ProcedureExtractor } from './handler.ts';
-import { ExtractActionValidator, ExtractEventValidator } from './validator.ts';
+import { AnyAction } from '../action';
+import { RecordString, RecordUnknown } from '../common';
+import { ActionEventCallRequest } from '../external';
+import { Service } from '../service';
+import { ExtractActionHandler, ProcedureExtractor } from './handler';
+import { ExtractActionValidator, ExtractEventValidator } from './validator';
 
 export type ServiceNameExtractor<T extends Service> =
   NonNullable<T['version']> extends number

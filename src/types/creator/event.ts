@@ -1,6 +1,6 @@
 import type { ZodSchema } from 'zod';
-import type { RecordUnknown } from '../common.ts';
-import type { Event } from '../event.ts';
+import type { RecordUnknown } from '../common';
+import type { Event } from '../event';
 
 export interface BlazeEventCreator {
   /**

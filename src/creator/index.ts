@@ -2,12 +2,12 @@ import type {
   BlazeActionCreator,
   BlazeEventCreator,
   BlazeServiceCreator,
-} from '../types/creator/index.ts';
-import { createAction, createActionValidator } from './action.ts';
-import { createEvent, createEventValidator } from './event.ts';
-import { createAfterHook, createBeforeHook } from './hooks.ts';
-import { createActionOpenAPI } from './openapi.ts';
-import { createService } from './service.ts';
+} from '../types/creator/index';
+import { createAction, createActionValidator } from './action';
+import { createEvent, createEventValidator } from './event';
+import { createAfterHook, createBeforeHook } from './hooks';
+import { createActionOpenAPI } from './openapi';
+import { createService } from './service';
 
 const ActionCreator = createAction as BlazeActionCreator;
 ActionCreator.validator = createActionValidator;

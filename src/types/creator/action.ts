@@ -1,13 +1,13 @@
 import type { ProcedureType } from '@trpc/server';
 import type { ZodSchema } from 'zod';
-import type { Action, ActionOpenAPI, ActionValidator } from '../action.ts';
-import type { RecordString, RecordUnknown } from '../common.ts';
+import type { Action, ActionOpenAPI, ActionValidator } from '../action';
+import type { RecordString, RecordUnknown } from '../common';
 import type {
   AcceptedAfterHook,
   AcceptedBeforeHook,
   AfterHookHandler,
   BeforeHookHandler,
-} from '../hooks/index.ts';
+} from '../hooks/index';
 
 export interface BlazeActionCreator {
   /**

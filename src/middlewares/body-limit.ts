@@ -5,11 +5,11 @@
     Copyright (c) 2022 Yusuke Wada
 */
 import type { Context as HonoCtx, Next as HonoNext } from 'hono';
-import { handleRestError, handleRestResponse } from '../handler/rest.ts';
-import { BlazeContext } from '../internal/context/index.ts';
-import { BlazeError } from '../internal/errors/index.ts';
-import type { ActionHandler } from '../types/action.ts';
-import { resolvePromise } from '../utils/common.ts';
+import { handleRestError, handleRestResponse } from '../handler/rest';
+import { BlazeContext } from '../internal/context/index';
+import { BlazeError } from '../internal/errors/index';
+import type { ActionHandler } from '../types/action';
+import { resolvePromise } from '../utils/common';
 
 export interface BodyLimitOptions {
   maxSize: number;

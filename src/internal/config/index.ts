@@ -1,10 +1,10 @@
 import { z } from 'zod';
-import { crossRequire } from '../../utils/common.ts';
+import { crossRequire } from '../../utils/common';
 import {
   DependencyModuleMap,
   ExternalModule,
   PossibleRunTime,
-} from '../../utils/constant/config/index.ts';
+} from '../../utils/constant/config/index';
 import {
   isBun,
   isDeno,
@@ -13,9 +13,9 @@ import {
   isNetlify,
   isNode,
   isWorkerd,
-} from '../../utils/constant/config/runtime.ts';
-import { Logger } from '../logger/index.ts';
-import type { DependencyModule } from './types.ts';
+} from '../../utils/constant/config/runtime';
+import { Logger } from '../logger/index';
+import type { DependencyModule } from './types';
 
 export class BlazeConfig {
   public readonly runTime: PossibleRunTime;

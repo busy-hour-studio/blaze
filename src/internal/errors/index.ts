@@ -1,6 +1,6 @@
-import type { Random } from '../../types/common.ts';
+import type { Random } from '../../types/common';
 import type { GenericStatusCode } from '../../types/rest';
-import type { BlazeErrorOption } from './types.ts';
+import type { BlazeErrorOption } from './types';
 
 export class BlazeError<T = Random> extends Error {
   public status: GenericStatusCode;

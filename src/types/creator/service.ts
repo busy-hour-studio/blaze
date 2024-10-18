@@ -1,8 +1,8 @@
-import type { Actions } from '../action.ts';
-import type { Events } from '../event.ts';
-import type { Service } from '../service.ts';
-import type { BlazeActionCreator } from './action.ts';
-import type { BlazeEventCreator } from './event.ts';
+import type { Actions } from '../action';
+import type { Events } from '../event';
+import type { Service } from '../service';
+import type { BlazeActionCreator } from './action';
+import type { BlazeEventCreator } from './event';
 
 export interface BlazeServiceCreator {
   /**

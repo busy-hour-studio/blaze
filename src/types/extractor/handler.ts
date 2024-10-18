@@ -3,15 +3,15 @@ import type {
   BuildProcedure,
   ProcedureType,
 } from '@trpc/server';
-import type { Actions, AnyAction } from '../action.ts';
-import type { Random } from '../common.ts';
-import type { ActionEventCallRequest } from '../external.ts';
+import type { Actions, AnyAction } from '../action';
+import type { Random } from '../common';
+import type { ActionEventCallRequest } from '../external';
 import type {
   AnyActionHook,
   AnyAfterHook,
   AnyAfterHookHandler,
-} from '../hooks/index.ts';
-import type { Service } from '../service.ts';
+} from '../hooks/index';
+import type { Service } from '../service';
 
 export type ExtractActionHandler<
   S extends Service,
