@@ -1,8 +1,8 @@
 import fs from 'node:fs';
-import { Logger } from '../../errors/Logger';
-import { BlazeContext } from '../../internal';
-import type { LoadServiceOption } from '../../types/service';
-import { BlazeService } from './service';
+import { BlazeContext } from '../internal/context/index.ts';
+import { Logger } from '../internal/logger/index.ts';
+import type { LoadServiceOption } from '../types/service.ts';
+import { BlazeService } from './service.ts';
 
 /**
  * Load all the services from the given path

@@ -1,20 +1,20 @@
 import path from 'node:path';
-import { BlazeContext, BlazeEvent } from '../../internal';
-import { BlazeRouter } from '../../router/BlazeRouter';
-import type { Action } from '../../types/action';
-import type { EventActionHandler } from '../../types/event';
-import type { Method } from '../../types/rest';
+import { getRestPath, getServiceName } from '../extractor/service/index.ts';
+import { BlazeContext, BlazeEvent } from '../internal/index.ts';
+import { BlazeRouter } from '../router/BlazeRouter.ts';
+import type { Action } from '../types/action.ts';
+import type { EventActionHandler } from '../types/event.ts';
+import type { Method } from '../types/rest.ts';
 import type {
   CreateServiceOption,
   Middleware,
   Service,
   ServiceConstructorOption,
-} from '../../types/service';
-import { getRestPath, getServiceName } from '../common';
-import { loadService } from '../helper/service';
-import { BlazeServiceAction } from './action';
-import { BlazeServiceEvent } from './event';
-import { BlazeServiceRest } from './rest';
+} from '../types/service.ts';
+import { loadService } from '../utils/helper/service.ts';
+import { BlazeServiceAction } from './action.ts';
+import { BlazeServiceEvent } from './event.ts';
+import { BlazeServiceRest } from './rest.ts';
 
 export class BlazeService {
   public readonly servicePath: string;

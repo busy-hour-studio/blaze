@@ -1,16 +1,17 @@
 import type { Context as HonoCtx, Next } from 'hono';
-import { BlazeError } from '../../errors/BlazeError';
-import { Logger } from '../../errors/Logger';
-import { ValidationError } from '../../errors/ValidationError';
-import { BlazeContext } from '../../internal';
-import type { Action } from '../../types/action';
-import type { Method, RestHandlerOption, StatusCode } from '../../types/rest';
-import type { OpenAPIRequest } from '../../types/router';
-import type { Service } from '../../types/service';
-import { isEmpty, resolvePromise } from '../common';
-import { REST_METHOD } from '../constant/rest';
-import { eventHandler } from '../helper/handler';
-import { extractRestParams, handleRest } from '../helper/rest';
+import { extractRestParams } from '../extractor/rest/index.ts';
+import { eventHandler } from '../handler/index.ts';
+import { handleRest } from '../handler/rest.ts';
+import { BlazeContext } from '../internal/context/index.ts';
+import { BlazeError } from '../internal/errors/index.ts';
+import { BlazeValidationError } from '../internal/errors/validation.ts';
+import { Logger } from '../internal/logger/index.ts';
+import type { Action } from '../types/action.ts';
+import type { Method, RestHandlerOption, StatusCode } from '../types/rest.ts';
+import type { OpenAPIRequest } from '../types/router.ts';
+import type { Service } from '../types/service.ts';
+import { isEmpty, resolvePromise } from '../utils/common.ts';
+import { REST_METHOD } from '../utils/constant/rest/index.ts';
 
 export class BlazeServiceRest {
   public readonly path: string;
@@ -78,7 +79,7 @@ export class BlazeServiceRest {
     );
 
     if (error || !ctx) {
-      if (error instanceof ValidationError && this.action.onRestError) {
+      if (error instanceof BlazeValidationError && this.action.onRestError) {
         return handleRest({
           ctx: error.ctx,
           honoCtx,

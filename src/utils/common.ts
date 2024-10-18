@@ -3,7 +3,6 @@ import { createRequire } from 'node:module';
 import path from 'node:path';
 import { Logger } from '../internal/logger/index.ts';
 import type { Random } from '../types/common.ts';
-import type { Service } from '../types/service.ts';
 
 export function hasOwnProperty<
   Z extends NonNullable<unknown>,
@@ -39,23 +38,6 @@ export function isNil<T>(
 // eslint-disable-next-line @typescript-eslint/no-shadow
 export function removeTrailingSlash(path: string) {
   return path.replace(/^\/+/, '');
-}
-
-export function getRestPath(service: Service) {
-  const version = service.version ? `v${service.version}` : '';
-  const restPath =
-    typeof service.rest === 'string' ? service.rest : service.name;
-
-  return [version, restPath]
-    .map((val) => (typeof val === 'string' ? removeTrailingSlash(val) : null))
-    .filter(Boolean)
-    .join('/');
-}
-
-export function getServiceName(service: Service) {
-  const version = !isNil(service.version) ? `v${service.version}` : '';
-
-  return [version, service.name].filter(Boolean).join('.');
 }
 
 export async function resolvePromise<T>(

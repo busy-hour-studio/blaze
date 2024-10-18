@@ -9,7 +9,7 @@ import type {
 } from '@trpc/server';
 import type { FetchHandlerRequestOptions } from '@trpc/server/adapters/fetch';
 import type { MiddlewareHandler } from 'hono';
-import type { BlazeServiceAction } from '../utils/setup/action';
+import type { BlazeServiceAction } from '../utils/loader/action';
 import type { TrpcMutationCallRecord, TrpcQueryCallRecord } from './common';
 
 export type BlazeTrpcRouter = CreateRouterInner<

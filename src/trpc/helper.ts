@@ -1,7 +1,7 @@
 import { z } from 'zod';
-import type { ActionValidator } from '../../types/action';
-import { TrpcProcedure } from '../../types/trpc';
-import type { BlazeServiceAction } from '../setup/action';
+import type { BlazeServiceAction } from '../loader/action.ts';
+import type { ActionValidator } from '../types/action.ts';
+import type { TrpcProcedure } from '../types/trpc.ts';
 
 export function getValidator<
   H extends z.ZodSchema = z.ZodSchema,
