@@ -1,90 +1,109 @@
-import { ZodEffects, ZodObject, ZodRawShape } from 'zod';
-import { BlazeError } from '../../errors/BlazeError';
-import type { DataValidatorOption } from '../../types/helper';
+import type { ZodSchema } from 'zod';
+import { ValidationError } from '../../errors/ValidationError';
+import type {
+  AllDataValidatorOption,
+  ContextValidation,
+  DataValidatorOption,
+  RecordString,
+  RecordUnknown,
+} from '../../types/helper';
 import type { Method } from '../../types/rest';
+import { isEmpty } from '../common';
 import { getReqBody, getReqQuery } from './context';
 
-export function validateInput<
-  T extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
->(input: unknown, schema: T) {
-  if (schema instanceof ZodEffects) return schema.safeParse(input);
-
-  const result = schema.passthrough().safeParse(input);
+export function validateInput<T extends ZodSchema>(input: unknown, schema: T) {
+  const result = schema.safeParseAsync(input);
 
   return result;
 }
 
-export function validateHeader(options: DataValidatorOption) {
-  const { data, honoCtx, schema, validations, throwOnValidationError } =
-    options;
+export async function validateHeader<
+  M extends RecordUnknown,
+  H extends RecordString,
+  P extends RecordUnknown,
+  Q extends RecordUnknown,
+  B extends RecordUnknown,
+>(options: DataValidatorOption<M, H, P, Q, B>) {
+  const { ctx, honoCtx, schema, setter } = options;
+  // eslint-disable-next-line prefer-destructuring
+  let data = options.data;
 
-  if (!data.headers && honoCtx) {
-    data.headers = honoCtx.req.header();
+  if (!data && honoCtx) {
+    data = honoCtx.req.header();
   }
 
-  const result = validateInput(data.headers, schema);
+  const result = await validateInput(data, schema);
 
-  validations.header = result.success;
-
-  if (result.success) data.headers = result.data;
-  else if (!result.success && throwOnValidationError)
-    throw new BlazeError({
-      errors: result.error,
-      message: 'Invalid header',
-      status: 400,
-      name: 'Invalid header',
-    });
-}
-
-export function validateParams(options: DataValidatorOption) {
-  const { data, honoCtx, schema, validations, throwOnValidationError } =
-    options;
-
-  if (!data.params && honoCtx) {
-    data.params = honoCtx.req.param();
+  if (result.success) {
+    setter.headers(result.data);
+    return;
   }
 
-  const result = validateInput(data.params, schema);
-
-  validations.params = result.success;
-
-  if (result.success) data.params = result.data;
-  else if (!result.success && throwOnValidationError)
-    throw new BlazeError({
-      errors: result.error,
-      message: 'Invalid params',
-      status: 400,
-      name: 'Invalid params',
-    });
+  throw new ValidationError(ctx, result.error);
 }
 
-export function validateQuery(options: DataValidatorOption) {
-  const { data, honoCtx, schema, validations, throwOnValidationError } =
-    options;
+export async function validateParams<
+  M extends RecordUnknown,
+  H extends RecordString,
+  P extends RecordUnknown,
+  Q extends RecordUnknown,
+  B extends RecordUnknown,
+>(options: DataValidatorOption<M, H, P, Q, B>) {
+  const { ctx, honoCtx, schema, setter } = options;
+  // eslint-disable-next-line prefer-destructuring
+  let data = options.data;
 
-  if (!data.query && honoCtx) {
-    data.query = getReqQuery(honoCtx);
+  if (!data && honoCtx) {
+    data = honoCtx.req.param();
   }
 
-  const result = validateInput(data.query, schema);
+  const result = await validateInput(data, schema);
 
-  validations.query = result.success;
+  if (result.success) {
+    setter.params(result.data);
+    return;
+  }
 
-  if (result.success) data.query = result.data;
-  else if (!result.success && throwOnValidationError)
-    throw new BlazeError({
-      errors: result.error,
-      message: 'Invalid query',
-      status: 400,
-      name: 'Invalid query',
-    });
+  throw new ValidationError(ctx, result.error);
 }
 
-export async function validateBody(options: DataValidatorOption) {
-  const { data, honoCtx, schema, validations, throwOnValidationError } =
-    options;
+export async function validateQuery<
+  M extends RecordUnknown,
+  H extends RecordString,
+  P extends RecordUnknown,
+  Q extends RecordUnknown,
+  B extends RecordUnknown,
+>(options: DataValidatorOption<M, H, P, Q, B>) {
+  const { ctx, honoCtx, schema, setter } = options;
+  // eslint-disable-next-line prefer-destructuring
+  let data = options.data;
 
-  if (!data.body && honoCtx) {
+  if (!data && honoCtx) {
+    data = getReqQuery(honoCtx);
+  }
+
+  const result = await validateInput(data, schema);
+
+  if (result.success) {
+    setter.query(result.data);
+    return;
+  }
+
+  throw new ValidationError(ctx, result.error);
+}
+
+export async function validateBody<
+  M extends RecordUnknown,
+  H extends RecordString,
+  P extends RecordUnknown,
+  Q extends RecordUnknown,
+  B extends RecordUnknown,
+>(options: DataValidatorOption<M, H, P, Q, B>) {
+  const { ctx, honoCtx, schema, setter } = options;
+  // eslint-disable-next-line prefer-destructuring
+  let data = options.data;
+
+  if (!data && honoCtx) {
     const method = honoCtx.req.method.toUpperCase() as Method;
 
     switch (method) {
@@ -94,21 +113,70 @@ export async function validateBody(options: DataValidatorOption) {
         return;
 
       default:
-        data.body = await getReqBody(honoCtx);
+        data = await getReqBody(honoCtx);
         break;
     }
   }
 
-  const result = validateInput(data.body, schema);
+  const result = await validateInput(data, schema);
 
-  validations.body = result.success;
+  if (result.success) {
+    setter.body(result.data);
+    return;
+  }
 
-  if (result.success) data.body = result.data;
-  else if (!result.success && throwOnValidationError)
-    throw new BlazeError({
-      errors: result.error,
-      message: 'Invalid body',
-      status: 400,
-      name: 'Invalid body',
-    });
+  throw new ValidationError(ctx, result.error);
+}
+
+const validationMap = {
+  header: {
+    validator: validateHeader,
+    options: 'headers',
+    schema: 'header',
+  },
+  params: {
+    validator: validateParams,
+    options: 'params',
+    schema: 'params',
+  },
+  query: {
+    validator: validateQuery,
+    options: 'query',
+    schema: 'query',
+  },
+  body: {
+    validator: validateBody,
+    options: 'body',
+    schema: 'body',
+  },
+} as const;
+
+export async function validateAll<
+  M extends RecordUnknown,
+  H extends RecordString,
+  P extends RecordUnknown,
+  Q extends RecordUnknown,
+  B extends RecordUnknown,
+>(options: AllDataValidatorOption<M, H, P, Q, B>) {
+  const { ctx, input, validator, honoCtx, setter } = options;
+
+  if (!validator || isEmpty(validator)) return;
+
+  await Promise.all(
+    Object.keys(validator).map((key) => {
+      const validation = validationMap[key as keyof ContextValidation];
+      const schema = validator[validation.schema];
+      const data = input[validation.options];
+
+      if (!validation || !schema) return;
+
+      return validation.validator({
+        ctx,
+        setter,
+        data,
+        honoCtx,
+        schema,
+      });
+    })
+  );
 }

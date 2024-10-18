@@ -2,6 +2,106 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.4.0-0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.3.3...v4.4.0-0) (2024-10-18)
+
+
+### Features
+
+* rest after middlewares ([48f3042](https://github.com/Busy-Hour-Studio/blaze/commit/48f3042884db68da06982ab2d70142a2e1fac005))
+
+## [4.3.3](https://github.com/Busy-Hour-Studio/blaze/compare/v4.3.2...v4.3.3) (2024-10-16)
+
+
+### Features
+
+* request object shorthand ([5afec3e](https://github.com/Busy-Hour-Studio/blaze/commit/5afec3ef8f0272ed4d3636071782a09418d0f08f))
+
+
+### Bug Fixes
+
+* auto load node server on non node environment ([87587ed](https://github.com/Busy-Hour-Studio/blaze/commit/87587ed8d7167c2062061ec78a1f000a7ba6586c))
+* middleware not assigned properly ([6f00f01](https://github.com/Busy-Hour-Studio/blaze/commit/6f00f015b3c622dff633531c05b930a417984441))
+
+## [4.3.2](https://github.com/Busy-Hour-Studio/blaze/compare/v4.3.1...v4.3.2) (2024-10-14)
+
+
+### Bug Fixes
+
+* poor performance caused by unintentional header ([ce124f3](https://github.com/Busy-Hour-Studio/blaze/commit/ce124f3e896cccfdabd80161bf0242b224656e86))
+
+## [4.3.1](https://github.com/Busy-Hour-Studio/blaze/compare/v4.3.0...v4.3.1) (2024-10-14)
+
+
+### Bug Fixes
+
+* empty context data ([1661fd5](https://github.com/Busy-Hour-Studio/blaze/commit/1661fd5f8ad5ac10fb3ed8b5d6bbc6e6940997e0))
+
+## [4.3.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.2.0...v4.3.0) (2024-10-13)
+
+
+### Features
+
+* on rest error handler ([a496f00](https://github.com/Busy-Hour-Studio/blaze/commit/a496f00f87bbd9a7b76416f1bac51b6adbcfa066))
+
+## [4.2.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.1.0...v4.2.0) (2024-09-27)
+
+
+### Features
+
+* direct module import ([067132c](https://github.com/Busy-Hour-Studio/blaze/commit/067132cbbf75ccbe5eb6051b2afea685cd30029d))
+
+
+### Bug Fixes
+
+* redundant broker return types ([9cf93ab](https://github.com/Busy-Hour-Studio/blaze/commit/9cf93abd4cccc3cb809ce1c6bb5ecb67164f4e1d))
+
+## [4.1.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0...v4.1.0) (2024-09-24)
+
+
+### Features
+
+* direct service import ([c8d83e4](https://github.com/Busy-Hour-Studio/blaze/commit/c8d83e48823bf5cc202141e74de929d021444a35))
+
+
+### Bug Fixes
+
+* bun internal state error ([08e3b5c](https://github.com/Busy-Hour-Studio/blaze/commit/08e3b5c3b48f437ffb45be9f013465dc6c103ce4))
+
+## [4.0.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0-3...v4.0.0) (2024-09-22)
+
+
+### Features
+
+* built-in trpc supports ([d758704](https://github.com/Busy-Hour-Studio/blaze/commit/d758704db7c03be0d896b7501ba4782328ec1315))
+
+## [4.0.0-3](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0-2...v4.0.0-3) (2024-09-21)
+
+
+### Bug Fixes
+
+* remove action resolver ([61697e2](https://github.com/Busy-Hour-Studio/blaze/commit/61697e2153807101fa8cbe287e281e4fc258e999))
+
+## [4.0.0-2](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0-1...v4.0.0-2) (2024-09-18)
+
+
+### Features
+
+* **rc:** trpc actions supports ([97a71ea](https://github.com/Busy-Hour-Studio/blaze/commit/97a71eaed5ad45efbe4d1d87b4670fa0b84fd357))
+
+## [4.0.0-1](https://github.com/Busy-Hour-Studio/blaze/compare/v4.0.0-0...v4.0.0-1) (2024-09-16)
+
+
+### Bug Fixes
+
+* after hooks result turns to any ([4e8988d](https://github.com/Busy-Hour-Studio/blaze/commit/4e8988d6613e6830b7fb99e021b1d1950ec6fbc7))
+
+## [4.0.0-0](https://github.com/busy-hour-studio/blaze/compare/v3.4.0...v4.0.0-0) (2024-09-13)
+
+
+### Bug Fixes
+
+* reduce context creation overhead ([818bd68](https://github.com/busy-hour-studio/blaze/commit/818bd68ed9e8e79a451e4a60d5de16dcf8f6de28))
+
 ## [3.4.0](https://github.com/busy-hour-studio/blaze/compare/v3.3.7...v3.4.0) (2024-08-19)
 
 

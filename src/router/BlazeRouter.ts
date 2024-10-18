@@ -15,14 +15,14 @@ import type {
 import type { OpenAPIObjectConfig } from '@asteasolutions/zod-to-openapi/dist/v3.0/openapi-generator';
 import type { Env, Schema } from 'hono';
 import { Hono } from 'hono';
-import type { MergePath, MergeSchemaPath } from 'hono/types';
-import { BlazeDependency } from '../config';
-import { BlazeError } from '../errors/BlazeError';
+import type { MergePath, MergeSchemaPath, MiddlewareHandler } from 'hono/types';
+import { BlazeConfig } from '../config';
 import { Logger } from '../errors/Logger';
 import { DependencyModule } from '../types/config';
 import type { Random } from '../types/helper';
+import type { Method } from '../types/rest';
 import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router';
-import { ExternalModule } from '../utils/constant';
+import { ExternalModule } from '../utils/constant/config';
 import {
   assignOpenAPIRegistry,
   createOpenApiRouter,
@@ -35,12 +35,12 @@ export class BlazeRouter<
   BasePath extends string = '/',
 > extends Hono<E, S, BasePath> {
   public readonly openAPIRegistry: OpenAPIRegistry | null;
-  private zodApi: DependencyModule[ExternalModule.ZodApi];
+  private zodApi: DependencyModule[typeof ExternalModule.ZodApi];
 
-  constructor(options: CreateBlazeOption) {
+  constructor(options: Pick<CreateBlazeOption, 'router'> = {}) {
     super({ strict: false, router: options.router });
 
-    this.zodApi = BlazeDependency.modules[ExternalModule.ZodApi];
+    this.zodApi = BlazeConfig.modules[ExternalModule.ZodApi];
 
     if (!this.zodApi) {
       this.openAPIRegistry = null;
@@ -51,21 +51,29 @@ export class BlazeRouter<
   }
 
   public openapi(route: BlazeOpenAPIOption) {
-    const method = route.method === 'ALL' ? 'POST' : route.method;
-    const allMiddlewares = route.middlewares
-      .filter((middleware) => middleware[0] === 'ALL')
-      .map((middleware) => middleware[1]);
-    const methodMiddlewares = route.middlewares
-      .filter((middleware) => middleware[0] === method)
-      .map((middleware) => middleware[1]);
-
     const newRoute = createOpenApiRouter(route);
+    const mws = route.serviceMiddlewares.reduce(
+      (acc, curr) => {
+        if (!acc[curr[0]]) acc[curr[0]] = new Set();
 
-    if (allMiddlewares.length) {
-      this.use(...allMiddlewares);
-    }
+        acc[curr[0]].add(curr[1]);
 
-    this.on(route.method, route.path, ...methodMiddlewares, route.handler);
+        return acc;
+      },
+      {} as Record<Method, Set<MiddlewareHandler>>
+    );
+
+    Object.entries(mws).forEach(([method, value]) =>
+      this.on(method, route.path, ...value)
+    );
+
+    this.on(
+      route.method,
+      route.path,
+      ...route.middlewares,
+      route.handler,
+      ...route.afterMiddlewares
+    );
 
     if (!this.openAPIRegistry) return;
 
@@ -76,8 +84,7 @@ export class BlazeRouter<
     config: OpenAPIObjectConfig
   ): ReturnType<OpenApiGeneratorV3['generateDocument']> {
     if (!this.zodApi || !this.openAPIRegistry) {
-      Logger.error(`${ExternalModule.ZodApi} is not installed`);
-      throw new BlazeError(`${ExternalModule.ZodApi} is not installed`);
+      throw Logger.throw(`${ExternalModule.ZodApi} is not installed`);
     }
 
     const generator = new this.zodApi.OpenApiGeneratorV3(
@@ -92,8 +99,7 @@ export class BlazeRouter<
     config: OpenAPIObjectConfig
   ): ReturnType<OpenApiGeneratorV31['generateDocument']> {
     if (!this.zodApi || !this.openAPIRegistry) {
-      Logger.error(`${ExternalModule.ZodApi} is not installed`);
-      throw new BlazeError(`${ExternalModule.ZodApi} is not installed`);
+      throw Logger.throw(`${ExternalModule.ZodApi} is not installed`);
     }
 
     const generator = new this.zodApi.OpenApiGeneratorV31(
@@ -102,16 +108,6 @@ export class BlazeRouter<
     const document = generator.generateDocument(config);
 
     return document;
-  }
-
-  public off(method: string, path: string) {
-    const index = this.router.routes.findIndex(
-      (route) => route[0] === method && route[1] === path
-    );
-
-    if (index === -1) return;
-
-    this.router.routes.splice(index, 1);
   }
 
   public doc(path: string, config: OpenAPIObjectConfig) {

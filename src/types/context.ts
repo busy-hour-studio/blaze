@@ -1,12 +1,11 @@
 import type { Context as HonoCtx } from 'hono';
-import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
+import type { ZodSchema } from 'zod';
 import type { BlazeContext } from '../internal';
 import type {
   ContextValidation,
   Random,
   RecordString,
   RecordUnknown,
-  ValidationResult,
 } from './helper';
 
 export interface CreateContextOption<
@@ -15,18 +14,10 @@ export interface CreateContextOption<
   P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
   B extends RecordUnknown = RecordUnknown,
-  HV extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  PV extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  QV extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  BV extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  HV extends ZodSchema = ZodSchema,
+  PV extends ZodSchema = ZodSchema,
+  QV extends ZodSchema = ZodSchema,
+  BV extends ZodSchema = ZodSchema,
   V extends ContextValidation<HV, PV, QV, BV> = ContextValidation<
     HV,
     PV,
@@ -41,7 +32,6 @@ export interface CreateContextOption<
   query: Q | null;
   body: B | null;
   validator: V | null;
-  throwOnValidationError: boolean;
 }
 
 export interface ContextConstructorOption<
@@ -50,23 +40,13 @@ export interface ContextConstructorOption<
   P extends RecordUnknown,
   Q extends RecordUnknown,
   B extends RecordUnknown,
-  HV extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  PV extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  QV extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  BV extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  HV extends ZodSchema = ZodSchema,
+  PV extends ZodSchema = ZodSchema,
+  QV extends ZodSchema = ZodSchema,
+  BV extends ZodSchema = ZodSchema,
 > extends Omit<
     CreateContextOption<M, H, P, Q, B, HV, PV, QV, BV>,
-    'validator' | 'throwOnValidationError'
-  > {
-  validations: ValidationResult | null;
-}
+    'validator'
+  > {}
 
 export type AnyContext = BlazeContext<Random, Random, Random, Random, Random>;

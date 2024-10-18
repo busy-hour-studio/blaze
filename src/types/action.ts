@@ -1,27 +1,22 @@
 import type { ResponseConfig } from '@asteasolutions/zod-to-openapi';
-import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
+import type { ProcedureType } from '@trpc/server';
+import type { MiddlewareHandler } from 'hono';
+import type { ZodSchema } from 'zod';
 import type { BlazeContext } from '../internal';
+import { onRestErrorHandler } from './handler';
 import type { Random, RecordString, RecordUnknown } from './helper';
 import type {
   AcceptedAfterHook,
   AcceptedBeforeHook,
   ActionHook,
 } from './hooks';
-import type { Middleware, RestParam } from './rest';
+import type { RestParam } from './rest';
 
 export interface ActionValidator<
-  H extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  P extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  Q extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  B extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  H extends ZodSchema = ZodSchema,
+  P extends ZodSchema = ZodSchema,
+  Q extends ZodSchema = ZodSchema,
+  B extends ZodSchema = ZodSchema,
 > {
   header?: H | null;
   params?: P | null;
@@ -58,18 +53,10 @@ export interface Action<
   R = unknown | void,
   HR = unknown | void,
   M extends RecordUnknown = RecordUnknown,
-  H extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  P extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  Q extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  B extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  H extends ZodSchema = ZodSchema,
+  P extends ZodSchema = ZodSchema,
+  Q extends ZodSchema = ZodSchema,
+  B extends ZodSchema = ZodSchema,
   AH extends AcceptedAfterHook<
     HR,
     M,
@@ -98,9 +85,17 @@ export interface Action<
     Q['_output'],
     B['_output']
   >,
+  TRPC extends ProcedureType = ProcedureType,
 > {
   openapi?: ActionOpenAPI | null;
-  middlewares?: Middleware[] | null;
+  /**
+   * Define a middleware that need to be executed before action handlers
+   */
+  middlewares?: MiddlewareHandler[] | null;
+  /**
+   * Define a middleware that need to be executed after all the middlewares + action handlers
+   */
+  afterMiddlewares?: MiddlewareHandler[] | null;
   validator?: ActionValidator<H, P, Q, B> | null;
   handler: ActionHandler<
     R,
@@ -113,7 +108,14 @@ export interface Action<
   meta?: M | null;
   rest?: RestParam | null;
   hooks?: ActionHook<AH, BH> | null;
-  throwOnValidationError?: boolean | null;
+  onRestError?: onRestErrorHandler<
+    M,
+    H['_output'],
+    P['_output'],
+    Q['_output'],
+    B['_output']
+  > | null;
+  trpc?: TRPC | null;
 }
 
 export type ActionCallResult<U> =
@@ -121,6 +123,7 @@ export type ActionCallResult<U> =
   | { ok: true; result: U };
 
 export type AnyAction = Action<
+  Random,
   Random,
   Random,
   Random,

@@ -2,7 +2,7 @@ import { BlazeCreator } from '../../../src';
 
 const list = BlazeCreator.action({
   rest: 'GET /',
-  handler(ctx) {
+  async handler(ctx) {
     ctx.response = 'text';
 
     return '';

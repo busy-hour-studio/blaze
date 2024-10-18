@@ -1,10 +1,8 @@
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import { BlazeError } from '../errors/BlazeError';
-import { BlazeContext } from '../internal';
-import type { ActionCallResult } from '../types/action';
-import type { CreateContextOption } from '../types/context';
+import { Logger } from '../errors/Logger';
+// eslint-disable-next-line import/no-cycle
 import type { Random } from '../types/helper';
 import type { Service } from '../types/service';
 
@@ -61,7 +59,11 @@ export function getServiceName(service: Service) {
   return [version, service.name].filter(Boolean).join('.');
 }
 
-export async function resolvePromise<T>(promise: Promise<T> | T) {
+export async function resolvePromise<T>(
+  promise: Promise<T> | T
+): Promise<
+  readonly [result: T, error: null] | readonly [result: null, error: unknown]
+> {
   try {
     const res = await promise;
 
@@ -71,24 +73,16 @@ export async function resolvePromise<T>(promise: Promise<T> | T) {
   }
 }
 
-export async function createContext(
-  options: CreateContextOption
-): Promise<ActionCallResult<BlazeContext>> {
-  const [blazeCtx, blazeErr] = await resolvePromise(
-    BlazeContext.create(options)
-  );
-
-  if (!blazeCtx || blazeErr) {
-    return {
-      error: blazeErr as Error,
-      ok: false,
-    };
+export function isEmpty(value: Random): boolean {
+  if (Array.isArray(value)) {
+    return value.length === 0;
   }
 
-  return {
-    result: blazeCtx,
-    ok: true,
-  };
+  if (value && typeof value === 'object') {
+    return Object.keys(value).length === 0;
+  }
+
+  return false;
 }
 
 export function isOnCjs() {
@@ -101,7 +95,7 @@ export function loadFile<T = Random>(id: string): Promise<T> {
   }
 
   if (!fs.existsSync(id)) {
-    throw new BlazeError(`${id} doesn't exist`);
+    throw Logger.throw(`${id} doesn't exist`);
   }
 
   if (fs.statSync(id).isDirectory()) {
@@ -111,7 +105,7 @@ export function loadFile<T = Random>(id: string): Promise<T> {
     );
 
     if (!index) {
-      throw new BlazeError(
+      throw Logger.throw(
         `No index file found in directory ${id} (expected to find index.[jt]s or index.[jt]x or index.[cm][jt]s)`
       );
     }

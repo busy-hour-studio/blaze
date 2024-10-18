@@ -1,10 +1,13 @@
 import type { Router } from 'hono/router';
-import type { RouterRoute } from 'hono/types';
+import type { MiddlewareHandler, RouterRoute } from 'hono/types';
 import type { BlazeContext } from '../internal';
 import type { BlazeRouter } from '../router';
 import type { Action, ActionHandler, Actions } from './action';
 import type { Event, EventActionHandler, Events } from './event';
-import type { Middleware } from './rest';
+import type { Random } from './helper';
+import type { ExposedMethod } from './rest';
+
+export type Middleware = [ExposedMethod, MiddlewareHandler];
 
 export interface Service<
   N extends string = string,
@@ -25,6 +28,8 @@ export interface Service<
   router?: Router<[never, RouterRoute]>;
 }
 
+export type AnyService = Service<Random, Random, Actions, Events>;
+
 export interface LoadServiceOption {
   app: BlazeRouter;
   path: string;
@@ -37,10 +42,16 @@ export interface LoadServicesOption {
   middlewares?: Middleware[] | null;
 }
 
+export interface ImportServiceOption {
+  services: Service[];
+  autoStart?: boolean | null;
+  middlewares?: Middleware[] | null;
+}
+
 export interface CreateServiceOption {
   sourcePath: string;
   servicePath: string;
-  blazeCtx: BlazeContext;
+  ctx: BlazeContext;
   app: BlazeRouter;
   middlewares: Middleware[];
 }

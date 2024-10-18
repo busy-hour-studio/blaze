@@ -1,57 +1,40 @@
-import type { ActionCallResult } from '../../types/action';
+import type { RecordString, RecordUnknown } from '../../types/helper';
 import type {
   AfterHookHandlerOption,
   BeforeHookHandlerOption,
 } from '../../types/hooks';
-import { resolvePromise, toArray } from '../common';
+import { toArray } from '../common';
 
-export async function beforeActionHookHandler(
-  options: BeforeHookHandlerOption
-): Promise<ActionCallResult<unknown>> {
+export async function beforeActionHookHandler<
+  M extends RecordUnknown = RecordUnknown,
+  H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
+  Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
+>(options: BeforeHookHandlerOption<M, H, P, Q, B>): Promise<void> {
   const hooks = toArray(options.hooks);
 
   for (const hook of hooks) {
-    const [, hookErr] = await resolvePromise(hook(options.blazeCtx));
-
-    if (hookErr) {
-      return {
-        error: hookErr as Error,
-        ok: false,
-      };
-    }
+    await hook(options.ctx);
   }
-
-  return {
-    ok: true,
-    result: null,
-  };
 }
 
-export async function afterActionHookHandler(
-  options: AfterHookHandlerOption
-): Promise<ActionCallResult<unknown>> {
+export async function afterActionHookHandler<
+  R = unknown | void,
+  M extends RecordUnknown = RecordUnknown,
+  H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
+  Q extends RecordUnknown = RecordUnknown,
+>(options: AfterHookHandlerOption<R, M, H, P, Q, B>): Promise<unknown> {
   const hooks = toArray(options.hooks);
 
   // eslint-disable-next-line prefer-destructuring
   let result = options.result;
 
   for (const hook of hooks) {
-    const [hookRes, hookErr] = await resolvePromise(
-      hook(options.blazeCtx, result as never)
-    );
-
-    if (hookErr) {
-      return {
-        error: hookErr as Error,
-        ok: false,
-      };
-    }
-
-    result = hookRes;
+    result = await hook(options.ctx, result);
   }
 
-  return {
-    ok: true,
-    result,
-  };
+  return result;
 }

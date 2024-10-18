@@ -1,4 +1,5 @@
-import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
+import type { ProcedureType } from '@trpc/server';
+import type { ZodSchema } from 'zod';
 import type { Action, ActionOpenAPI, Actions, ActionValidator } from './action';
 import type { Event, Events } from './event';
 import type { RecordString, RecordUnknown } from './helper';
@@ -27,10 +28,10 @@ export interface BlazeActionCreator {
     R,
     HR,
     M extends RecordUnknown,
-    H extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-    P extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-    Q extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-    B extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    H extends ZodSchema,
+    P extends ZodSchema,
+    Q extends ZodSchema,
+    B extends ZodSchema,
     AH extends AcceptedAfterHook<
       HR,
       M,
@@ -46,9 +47,10 @@ export interface BlazeActionCreator {
       Q['_output'],
       B['_output']
     >,
+    TRPC extends ProcedureType,
   >(
-    action: Action<R, HR, M, H, P, Q, B, AH, BH>
-  ): Action<R, HR, M, H, P, Q, B, AH, BH>;
+    action: Action<R, HR, M, H, P, Q, B, AH, BH, TRPC>
+  ): Action<R, HR, M, H, P, Q, B, AH, BH, TRPC>;
   /**
    * Create a reuseable validator for actions body, params and headers.
    * @example
@@ -61,10 +63,10 @@ export interface BlazeActionCreator {
    * ```
    */
   validator<
-    H extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-    P extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-    Q extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-    B extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
+    H extends ZodSchema,
+    P extends ZodSchema,
+    Q extends ZodSchema,
+    B extends ZodSchema,
   >(
     validator: ActionValidator<H, P, Q, B>
   ): ActionValidator<H, P, Q, B>;
@@ -149,10 +151,7 @@ export interface BlazeEventCreator {
    *  })
    * ```
    */
-  <
-    M extends RecordUnknown,
-    P extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-  >(
+  <M extends RecordUnknown, P extends ZodSchema>(
     event: Event<M, P>
   ): Event<M, P>;
   /**
@@ -165,11 +164,7 @@ export interface BlazeEventCreator {
    *  })
    * ```
    */
-  validator<
-    Params extends ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>,
-  >(
-    validator: Params
-  ): Params;
+  validator<Params extends ZodSchema>(validator: Params): Params;
 }
 
 export interface BlazeServiceCreator {

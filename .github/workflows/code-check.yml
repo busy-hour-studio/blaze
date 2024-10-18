@@ -47,5 +47,12 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
+      - name: Build sources
+        run: pnpm build
+
+      - name: Install examples dependencies
+        working-directory: example
+        run: pnpm install
+
       - name: Perform type checking
         run: pnpm check-types

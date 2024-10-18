@@ -1,7 +1,7 @@
 import fs from 'node:fs';
-import { AddressInfo } from 'node:net';
-import { BlazeDependency } from '../config';
-import { BlazeError } from '../errors/BlazeError';
+import type { AddressInfo } from 'node:net';
+import { BlazeConfig } from '../config';
+import { Logger } from '../errors/Logger';
 import { BlazeContext } from '../internal';
 import { DependencyModule } from '../types/config';
 import type {
@@ -9,18 +9,15 @@ import type {
   CreateBlazeOption,
   ServeConfig,
 } from '../types/router';
-import { LoadServicesOption } from '../types/service';
-import { isNil } from '../utils/common';
-import { ExternalModule, PossibleRunTime } from '../utils/constant';
+import type { ImportServiceOption, LoadServicesOption } from '../types/service';
+import { isNil, toArray } from '../utils/common';
+import { ExternalModule, PossibleRunTime } from '../utils/constant/config';
 import { BlazeService } from '../utils/setup/service';
+import { useTrpc, type UseTrpc } from '../utils/trpc';
 import { BlazeRouter } from './BlazeRouter';
 
 export class Blaze {
-  /**
-   * List of all the loaded services
-   * @see {@link BlazeService}
-   */
-  public readonly services: BlazeService[];
+  private readonly $services: Map<BlazeService['serviceName'], BlazeService>;
   public readonly router: BlazeRouter;
   /**
    * Shorthand for `app.router.doc`.
@@ -64,28 +61,30 @@ export class Blaze {
    * @see {@link BlazeRouter.use}
    */
   public readonly use: BlazeRouter['use'];
-  private readonly blazeCtx: BlazeContext;
-  private readonly adapter: DependencyModule[ExternalModule.NodeAdapter];
+  private readonly ctx: BlazeContext;
+  private readonly adapter: DependencyModule[typeof ExternalModule.NodeAdapter];
 
   public readonly fetch: BlazeFetch;
+  public readonly trpc: UseTrpc;
 
   constructor(options: CreateBlazeOption = {}) {
-    this.services = [];
+    this.$services = new Map();
     this.router = new BlazeRouter(options);
     this.doc = this.router.doc.bind(this.router);
     this.doc31 = this.router.doc31.bind(this.router);
-    this.blazeCtx = new BlazeContext({
+    this.ctx = new BlazeContext({
       body: null,
       params: null,
       headers: null,
       honoCtx: null,
       meta: null,
       query: null,
-      validations: null,
     });
-    this.adapter = BlazeDependency.modules[ExternalModule.NodeAdapter];
+
+    this.adapter = BlazeConfig.modules[ExternalModule.NodeAdapter];
     this.fetch = this.router.fetch.bind(this.router) as BlazeFetch;
     this.use = this.router.use.bind(this.router);
+    this.trpc = useTrpc.bind(this);
 
     if (!options.path) return;
 
@@ -105,11 +104,21 @@ export class Blaze {
    * passing `autoStart: true` on app creation (`new Blaze({ autoStart: true })`) will also start all the services
    */
   public start() {
-    this.services.forEach((service) => service.onStarted());
+    this.$services.forEach((service) => service.onStarted());
+  }
+
+  private addServices(service: BlazeService | BlazeService[]) {
+    const services = toArray(service);
+
+    services.forEach((serv) => {
+      if (this.$services.has(serv.serviceName)) return;
+
+      this.$services.set(serv.serviceName, serv);
+    });
   }
 
   /**
-   * `load` load all the services from the given path
+   * `load` all the services from the given path
    * @example
    * ```ts
    *  app.load({
@@ -124,7 +133,7 @@ export class Blaze {
 
     // Load all the services
     if (!fs.existsSync(sourcePath)) {
-      throw new BlazeError("Service path doesn't exist");
+      throw Logger.throw("Service path doesn't exist");
     }
 
     const serviceFiles = fs.readdirSync(sourcePath);
@@ -134,7 +143,7 @@ export class Blaze {
         const service = BlazeService.create({
           app: this.router,
           servicePath,
-          blazeCtx: this.blazeCtx,
+          ctx: this.ctx,
           sourcePath,
           middlewares: middlewares ?? [],
         });
@@ -143,11 +152,49 @@ export class Blaze {
       })
     );
 
-    this.services.push(...services);
+    this.addServices(services);
 
     if (!autoStart) return;
 
     this.start();
+  }
+
+  /**
+   * Same as `load` but requires an array of services instead of a path. Recommended if you want to bundle those services with Bun
+   * @example
+   * ```ts
+   * app.import({
+   *  services: [userService, authService, ...],
+   *  autoStart: true
+   * })
+   * ```
+   */
+  public import(options: ImportServiceOption) {
+    const services = options.services.map((serv) => {
+      const service = new BlazeService({
+        app: this.router,
+        ctx: this.ctx,
+        middlewares: options.middlewares ?? [],
+        service: serv,
+        servicePath: '',
+      });
+
+      return service;
+    });
+
+    this.addServices(services);
+
+    if (!options.autoStart) return;
+
+    this.start();
+  }
+
+  /**
+   * List of all the loaded services
+   * @see {@link BlazeService}
+   */
+  public get services() {
+    return [...this.$services.values()];
   }
 
   private getServeConfig(
@@ -186,7 +233,7 @@ export class Blaze {
     const args = this.getServeConfig(port, listener);
 
     if (!isNil(port)) {
-      if (BlazeDependency.runTime === PossibleRunTime.Node && this.adapter) {
+      if (BlazeConfig.runTime === PossibleRunTime.NODE && this.adapter) {
         this.adapter.serve(...args);
       }
 
@@ -197,7 +244,7 @@ export class Blaze {
       return args;
     }
 
-    if (BlazeDependency.runTime === PossibleRunTime.Node && this.adapter) {
+    if (BlazeConfig.runTime === PossibleRunTime.NODE && this.adapter) {
       this.adapter.serve(...args);
     }
 

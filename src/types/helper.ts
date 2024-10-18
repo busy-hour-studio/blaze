@@ -1,5 +1,6 @@
 import type { Context as HonoContext } from 'hono';
-import type { ZodEffects, ZodObject, ZodRawShape } from 'zod';
+import type { ZodSchema } from 'zod';
+import type { BlazeContext } from '../internal';
 
 export type RecordUnknown = Record<string, unknown>;
 
@@ -9,18 +10,10 @@ export type RecordString = Record<string, string>;
 export type Random = any;
 
 export interface ContextValidation<
-  H extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  P extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  Q extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
-  B extends
-    | ZodObject<ZodRawShape>
-    | ZodEffects<ZodObject<ZodRawShape>> = ZodObject<ZodRawShape>,
+  H extends ZodSchema = ZodSchema,
+  P extends ZodSchema = ZodSchema,
+  Q extends ZodSchema = ZodSchema,
+  B extends ZodSchema = ZodSchema,
 > {
   header?: H | null;
   params?: P | null;
@@ -28,34 +21,52 @@ export interface ContextValidation<
   body?: B | null;
 }
 
-export interface ValidationResult {
-  header: boolean;
-  params: boolean;
-  query: boolean;
-  body: boolean;
-}
-
-export interface ContextData<
+export interface ContextSetter<
   H extends RecordString = RecordString,
   P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
   B extends RecordUnknown = RecordUnknown,
 > {
-  headers: H | null;
-  params: P | null;
-  query: Q | null;
-  body: B | null;
+  headers(headers: H): void;
+  params(params: P): void;
+  query(query: Q): void;
+  body(body: B): void;
 }
 
 export interface DataValidatorOption<
+  M extends RecordUnknown = RecordUnknown,
   H extends RecordString = RecordString,
   P extends RecordUnknown = RecordUnknown,
   Q extends RecordUnknown = RecordUnknown,
   B extends RecordUnknown = RecordUnknown,
 > {
-  data: ContextData<H, P, Q, B>;
-  schema: ZodObject<ZodRawShape> | ZodEffects<ZodObject<ZodRawShape>>;
+  ctx: BlazeContext<M, H, P, Q, B>;
+  data: H | P | Q | B | NonNullable<unknown> | null;
+  schema: ZodSchema;
   honoCtx: HonoContext | null;
-  throwOnValidationError: boolean;
-  validations: ValidationResult;
+  setter: ContextSetter<H, P, Q, B>;
+}
+
+export interface AllDataValidatorOption<
+  M extends RecordUnknown = RecordUnknown,
+  H extends RecordString = RecordString,
+  P extends RecordUnknown = RecordUnknown,
+  Q extends RecordUnknown = RecordUnknown,
+  B extends RecordUnknown = RecordUnknown,
+> {
+  ctx: BlazeContext<M, H, P, Q, B>;
+  input: {
+    headers: H | null;
+    params: P | null;
+    query: Q | null;
+    body: B | null;
+  };
+  validator: ContextValidation | null;
+  honoCtx: HonoContext | null;
+  setter: {
+    headers(headers: H): void;
+    params(params: P): void;
+    query(query: Q): void;
+    body(body: B): void;
+  };
 }

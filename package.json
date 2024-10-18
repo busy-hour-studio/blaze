@@ -4,7 +4,7 @@
   "types": "dist/types/index.d.ts",
   "module": "dist/esm/index.js",
   "type": "module",
-  "version": "3.4.0",
+  "version": "4.4.0-0",
   "license": "MIT",
   "scripts": {
     "start": "cross-env NODE_ENV=production node dist/index.js",
@@ -27,6 +27,7 @@
     "@commitlint/cli": "^17.8.1",
     "@commitlint/config-conventional": "^17.8.1",
     "@hono/node-server": "^1.8.1",
+    "@trpc/server": "^10.45.2",
     "@types/glob": "^8.1.0",
     "@types/node": "^20.11.19",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
@@ -51,8 +52,15 @@
     "typescript": "^5.3.3"
   },
   "dependencies": {
-    "hono": "^4.4.9",
-    "zod": "^3.22.4"
+    "hono": ">=4.6.1",
+    "zod": ">=3.23.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Busy-Hour-Studio/blaze.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Busy-Hour-Studio/blaze/issues"
   },
   "author": "Muhammad Firdaus Sati (https://github.com/krsbx)",
   "keywords": [
@@ -202,6 +210,21 @@
       "types": "./dist/types/middlewares/jsx-renderer.d.ts",
       "import": "./dist/esm/middlewares/jsx-renderer.js",
       "require": "./dist/cjs/middlewares/jsx-renderer.js"
+    },
+    "./utils/setup": {
+      "types": "./dist/types/utils/setup/index.d.ts",
+      "import": "./dist/esm/utils/setup/index.js",
+      "require": "./dist/cjs/utils/setup/index.js"
+    },
+    "./trpc": {
+      "types": "./dist/types/types/trpc.d.ts",
+      "import": "./dist/esm/types/trpc.js",
+      "require": "./dist/cjs/types/trpc.js"
+    },
+    "./constant": {
+      "types": "./dist/types/utils/constant/index.d.ts",
+      "import": "./dist/esm/utils/constant/index.js",
+      "require": "./dist/cjs/utils/constant/index.js"
     }
   }
 }

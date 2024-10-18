@@ -1,6 +1,13 @@
+/* eslint-disable no-var */
+/* eslint-disable vars-on-top */
+// deno-lint-ignore-file
+
 declare global {
-  // eslint-disable-next-line vars-on-top, no-var
-  // declare var IS_CJS: boolean;
+  var Bun: unknown | null | undefined;
+  var fastly: unknown | null | undefined;
+  var Netlify: unknown | null | undefined;
+  var EdgeRuntime: unknown | null | undefined;
+  var Deno: unknown | null | undefined;
 }
 
 export {};

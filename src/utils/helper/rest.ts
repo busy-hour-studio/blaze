@@ -1,14 +1,20 @@
-import type { StatusCode } from 'hono/utils/http-status';
+import { Context as HonoCtx } from 'hono';
 import { BlazeError } from '../../errors/BlazeError';
+import type { BlazeContext } from '../../internal';
 import type { BlazeRouter } from '../../router';
+import type { Action } from '../../types/action';
+import { Random } from '../../types/helper';
 import type {
   Method,
   RestErrorHandlerOption,
   RestParam,
   RestResponseHandlerOption,
   RestRoute,
+  StatusCode,
 } from '../../types/rest';
-import { mapToObject } from '../common';
+import type { Service } from '../../types/service';
+import { isEmpty, isNil, mapToObject, resolvePromise } from '../common';
+import { REST_METHOD } from '../constant/rest';
 
 export function extractRestPath(restRoute: RestRoute) {
   const restPath = restRoute.split(' ');
@@ -26,33 +32,44 @@ export function extractRestParams(params: RestParam) {
   return [params.method ?? null, params.path] as const;
 }
 
+export function getRestMiddlewares(service: Service, action: Action) {
+  if (!service.middlewares || !action.rest) return [];
+
+  const [method] = extractRestParams(action.rest);
+
+  const middlewares = service.middlewares.filter(
+    ([m]) => m === method || m === REST_METHOD.ALL
+  );
+
+  return middlewares.map(([, middleware]) => middleware);
+}
+
 export function getRouteHandler(router: BlazeRouter, method: Method | null) {
   if (!method) return router.all;
 
-  return router[method.toLowerCase() as Lowercase<Method>];
+  return router[method.toLowerCase() as Lowercase<Exclude<Method, 'HEAD'>>];
 }
 
 export function getRestResponse(
   options: Omit<RestResponseHandlerOption, 'honoCtx'>
 ): readonly [
-  never,
+  Random,
   StatusCode | undefined,
   Record<string, string | string[]> | undefined,
 ] {
-  const result = options.result as never;
   const { status, headers } = options.ctx;
 
   if (!status) {
-    return [result, undefined, undefined] as const;
+    return [options.result, undefined, undefined] as const;
   }
 
-  if (headers.size === 0) {
-    return [result, status, undefined] as const;
+  if (isEmpty(headers)) {
+    return [options.result, status as StatusCode, undefined] as const;
   }
 
-  const resHeaders = mapToObject(options.ctx.headers);
+  const resHeaders = mapToObject(options.ctx.headers as never);
 
-  return [result, status, resHeaders] as const;
+  return [options.result, status as StatusCode, resHeaders] as const;
 }
 
 export function handleRestError(options: RestErrorHandlerOption) {
@@ -61,10 +78,10 @@ export function handleRestError(options: RestErrorHandlerOption) {
   let status = ctx.status ?? 500;
 
   if (err instanceof BlazeError) {
-    status = err.status as StatusCode;
+    status = err.status;
   }
 
-  return honoCtx.json(err as Error, status);
+  return honoCtx.json(err as Error, status as StatusCode);
 }
 
 export function handleRestResponse(options: RestResponseHandlerOption) {
@@ -85,4 +102,31 @@ export function handleRestResponse(options: RestResponseHandlerOption) {
     default:
       return honoCtx.json(...args);
   }
+}
+
+export async function handleRest<T>(options: {
+  ctx: BlazeContext;
+  honoCtx: HonoCtx;
+  promise: Promise<T> | T;
+}) {
+  const { ctx, honoCtx, promise } = options;
+  const [restResult, restError] = await resolvePromise(promise);
+
+  if (restError) {
+    return handleRestError({
+      ctx,
+      err: restError,
+      honoCtx,
+    });
+  }
+
+  if (isNil(restResult)) {
+    return honoCtx.body(null, 204);
+  }
+
+  return handleRestResponse({
+    ctx,
+    honoCtx,
+    result: restResult,
+  });
 }

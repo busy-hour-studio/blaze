@@ -1,4 +1,4 @@
-import { BlazeCreator, BlazeError } from '../../../../src';
+import { BlazeCreator, BlazeError } from '@busy-hour/blaze';
 import { validateUserHeader } from '../hooks/users.validate.header';
 import { validateUserParam } from '../hooks/users.validate.params';
 import { USER_DB } from '../utils/constants';
@@ -29,6 +29,7 @@ export const onFindUser = BlazeCreator.action({
   rest: 'GET /:email',
   openapi: getUserOpenApi,
   validator: getUserValidator,
+  trpc: 'query',
   hooks: {
     // Do validation manually
     //   We re-use the validations from other files

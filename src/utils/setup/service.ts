@@ -3,9 +3,10 @@ import { BlazeContext, BlazeEvent } from '../../internal';
 import { BlazeRouter } from '../../router/BlazeRouter';
 import type { Action } from '../../types/action';
 import type { EventActionHandler } from '../../types/event';
-import type { Method, Middleware } from '../../types/rest';
+import type { Method } from '../../types/rest';
 import type {
   CreateServiceOption,
+  Middleware,
   Service,
   ServiceConstructorOption,
 } from '../../types/service';
@@ -27,16 +28,16 @@ export class BlazeService {
   public readonly middlewares: Middleware[];
   public router: BlazeRouter | null;
 
-  private readonly blazeCtx: BlazeContext;
+  private readonly ctx: BlazeContext;
   private readonly service: Service;
   private isStarted: boolean;
 
   constructor(options: ServiceConstructorOption) {
-    const { service, blazeCtx, servicePath, app, middlewares } = options;
+    const { service, ctx, servicePath, app, middlewares } = options;
 
     this.service = service;
     this.servicePath = servicePath;
-    this.blazeCtx = blazeCtx;
+    this.ctx = ctx;
     this.serviceName = getServiceName(service);
     this.restPath = getRestPath(service);
     this.mainRouter = app;
@@ -125,14 +126,6 @@ export class BlazeService {
     // Trigger the on stopped listener
     this.service.onStopped?.(this.handlers);
 
-    // Remove all the rest
-    this.rests.forEach((rest) => {
-      const method: Method = rest.method ?? 'ALL';
-
-      // this.router?.off?.(method, rest.path);
-      this.mainRouter?.off?.(method, rest.path);
-    });
-
     // Remove all the action
     this.actions.forEach((action) => {
       BlazeEvent.off(action.actionName, action.actionHandler);
@@ -152,6 +145,7 @@ export class BlazeService {
 
     // Re-assign the action
     this.actions.forEach((action) => {
+      BlazeEvent.offAll(action.actionName);
       BlazeEvent.on(action.actionName, action.actionHandler);
     });
   }
@@ -160,7 +154,7 @@ export class BlazeService {
     if (this.isStarted) return;
 
     this.assignRestRoute();
-    this.service.onStarted?.(this.blazeCtx);
+    this.service.onStarted?.(this.ctx);
     this.isStarted = true;
   }
 
@@ -170,7 +164,7 @@ export class BlazeService {
 
     const service = new BlazeService({
       app: options.app,
-      blazeCtx: options.blazeCtx,
+      ctx: options.ctx,
       servicePath,
       service: serviceFile,
       middlewares: options.middlewares,
