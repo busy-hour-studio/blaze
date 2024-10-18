@@ -1,4 +1,4 @@
-import type { Context as HonoCtx } from 'hono';
+import type { Context as HonoCtx, Next } from 'hono';
 import { BlazeError } from '../../errors/BlazeError';
 import { Logger } from '../../errors/Logger';
 import { ValidationError } from '../../errors/ValidationError';
@@ -7,7 +7,7 @@ import type { Action } from '../../types/action';
 import type { Method, RestHandlerOption, StatusCode } from '../../types/rest';
 import type { OpenAPIRequest } from '../../types/router';
 import type { Service } from '../../types/service';
-import { resolvePromise } from '../common';
+import { isEmpty, resolvePromise } from '../common';
 import { REST_METHOD } from '../constant/rest';
 import { eventHandler } from '../helper/handler';
 import { extractRestParams, handleRest } from '../helper/rest';
@@ -35,6 +35,7 @@ export class BlazeServiceRest {
     const { request, responses } = this.openAPIConfig;
 
     const serviceMiddlewares = options.middlewares;
+    const afterMiddlewares = action.afterMiddlewares ?? [];
     const middlewares = action.middlewares ?? [];
 
     const tags: string[] = [];
@@ -57,11 +58,12 @@ export class BlazeServiceRest {
       responses,
       middlewares,
       serviceMiddlewares,
+      afterMiddlewares,
       tags,
     });
   }
 
-  public async restHandler(honoCtx: HonoCtx) {
+  public async restHandler(honoCtx: HonoCtx, next: Next) {
     const [ctx, error] = await resolvePromise(
       BlazeContext.create({
         honoCtx,
@@ -93,11 +95,20 @@ export class BlazeServiceRest {
       return honoCtx.json(error as Error, status);
     }
 
-    return handleRest({
+    const rest = await handleRest({
       ctx,
       honoCtx,
       promise: eventHandler(this.action, ctx),
     });
+
+    if (
+      !this.action.afterMiddlewares ||
+      isEmpty(this.action.afterMiddlewares)
+    ) {
+      return rest;
+    }
+
+    return next();
   }
 
   private get openAPIConfig() {

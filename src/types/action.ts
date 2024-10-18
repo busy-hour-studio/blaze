@@ -88,7 +88,14 @@ export interface Action<
   TRPC extends ProcedureType = ProcedureType,
 > {
   openapi?: ActionOpenAPI | null;
+  /**
+   * Define a middleware that need to be executed before action handlers
+   */
   middlewares?: MiddlewareHandler[] | null;
+  /**
+   * Define a middleware that need to be executed after all the middlewares + action handlers
+   */
+  afterMiddlewares?: MiddlewareHandler[] | null;
   validator?: ActionValidator<H, P, Q, B> | null;
   handler: ActionHandler<
     R,

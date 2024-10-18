@@ -6,7 +6,11 @@ import type {
   ContextConstructorOption,
   CreateContextOption,
 } from '../types/context';
-import type { RecordString, RecordUnknown } from '../types/helper';
+import type {
+  ContextSetter,
+  RecordString,
+  RecordUnknown,
+} from '../types/helper';
 import type { GenericStatusCode, ResponseType } from '../types/rest';
 import { getReqBody, getReqQuery } from '../utils/helper/context';
 import { validateAll } from '../utils/helper/validator';
@@ -176,6 +180,9 @@ export class BlazeContext<
       query: this.query,
       params: this.params,
       body: this.getBody.bind(this),
+      url: this.$honoCtx?.req?.url ?? null,
+      method: this.$honoCtx?.req?.method ?? null,
+      path: this.$honoCtx?.req?.path ?? null,
     };
   }
 
@@ -205,7 +212,7 @@ export class BlazeContext<
     P extends RecordUnknown,
     Q extends RecordUnknown,
     B extends RecordUnknown,
-  >(ctx: BlazeContext<M, H, P, Q, B>) {
+  >(ctx: BlazeContext<M, H, P, Q, B>): ContextSetter<H, P, Q, B> {
     return {
       headers(headers: H) {
         ctx.$reqHeaders = headers;
