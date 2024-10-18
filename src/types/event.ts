@@ -1,7 +1,7 @@
 import type { ZodSchema } from 'zod';
-import type { BlazeContext } from '../internal/context/index.ts';
-import type { ActionHandler } from './action.ts';
-import type { Random, RecordString, RecordUnknown } from './common.ts';
+import type { BlazeContext } from '../internal/context/index';
+import type { ActionHandler } from './action';
+import type { Random, RecordString, RecordUnknown } from './common';
 
 export interface EventActionHandler {
   name: string;

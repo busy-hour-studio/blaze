@@ -1,4 +1,4 @@
-import type { Random } from '../../types/common.ts';
+import type { Random } from '../../types/common';
 
 export interface EmitterListener {
   (...args: Random[]): Promise<Random> | Random;

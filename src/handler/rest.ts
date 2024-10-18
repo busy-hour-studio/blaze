@@ -1,21 +1,16 @@
 import type { Context as HonoCtx } from 'hono';
-import type { BlazeContext } from '../internal/context/index.ts';
-import { BlazeError } from '../internal/errors/index.ts';
-import type { BlazeRouter } from '../router/BlazeRouter.ts';
-import type { Random } from '../types/common.ts';
+import type { BlazeContext } from '../internal/context/index';
+import { BlazeError } from '../internal/errors/index';
+import type { BlazeRouter } from '../router/BlazeRouter';
+import type { Random } from '../types/common';
 import type {
   Method,
   RestErrorHandlerOption,
   RestResponseHandlerOption,
   StatusCode,
-} from '../types/rest.ts';
-import {
-  isEmpty,
-  isNil,
-  mapToObject,
-  resolvePromise,
-} from '../utils/common.ts';
-import { RESPONSE_TYPE } from '../utils/constant/rest/index.ts';
+} from '../types/rest';
+import { isEmpty, isNil, mapToObject, resolvePromise } from '../utils/common';
+import { RESPONSE_TYPE } from '../utils/constant/rest/index';
 
 export function getRouteHandler(router: BlazeRouter, method: Method | null) {
   if (!method) return router.all;

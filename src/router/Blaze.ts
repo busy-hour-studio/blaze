@@ -1,26 +1,23 @@
 import fs from 'node:fs';
 import type { AddressInfo } from 'node:net';
-import { BlazeConfig } from '../internal/config/instance.ts';
-import { DependencyModule } from '../internal/config/types.ts';
-import { BlazeContext } from '../internal/context/index.ts';
-import { Logger } from '../internal/logger/index.ts';
-import { BlazeService } from '../loader/service.ts';
-import { useTrpc, type UseTrpc } from '../loader/trpc/index.ts';
+import { BlazeConfig } from '../internal/config/instance';
+import { DependencyModule } from '../internal/config/types';
+import { BlazeContext } from '../internal/context/index';
+import { Logger } from '../internal/logger/index';
+import { BlazeService } from '../loader/service';
+import { useTrpc, type UseTrpc } from '../loader/trpc/index';
 import type {
   BlazeFetch,
   CreateBlazeOption,
   ServeConfig,
-} from '../types/router.ts';
-import type {
-  ImportServiceOption,
-  LoadServicesOption,
-} from '../types/service.ts';
-import { isNil, toArray } from '../utils/common.ts';
+} from '../types/router';
+import type { ImportServiceOption, LoadServicesOption } from '../types/service';
+import { isNil, toArray } from '../utils/common';
 import {
   ExternalModule,
   PossibleRunTime,
-} from '../utils/constant/config/index.ts';
-import { BlazeRouter } from './BlazeRouter.ts';
+} from '../utils/constant/config/index';
+import { BlazeRouter } from './BlazeRouter';
 
 export class Blaze {
   private readonly $services: Map<BlazeService['serviceName'], BlazeService>;

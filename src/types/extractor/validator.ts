@@ -1,8 +1,8 @@
 import type { z } from 'zod';
-import type { Actions, AnyAction, AnyValidator } from '../action.ts';
-import type { RecordString, RecordUnknown } from '../common.ts';
-import { AnyEvent, Events } from '../event.ts';
-import type { Service } from '../service.ts';
+import type { Actions, AnyAction, AnyValidator } from '../action';
+import type { RecordString, RecordUnknown } from '../common';
+import { AnyEvent, Events } from '../event';
+import type { Service } from '../service';
 
 export type ExtractActionValidator<
   S extends Service,

@@ -1,5 +1,5 @@
-import { Service } from '../../types/service.ts';
-import { hasOwnProperty, loadFile } from '../common.ts';
+import { Service } from '../../types/service';
+import { hasOwnProperty, loadFile } from '../common';
 
 export async function loadService(filePath: string) {
   const file:

@@ -1,9 +1,9 @@
-import { eventHandler } from '../handler/index.ts';
-import { BlazeContext } from '../internal/context/index.ts';
-import { BlazeEvent } from '../internal/event-emitter/instance.ts';
-import type { Action } from '../types/action.ts';
-import type { Random } from '../types/common.ts';
-import type { CreateActionOption } from '../types/service.ts';
+import { eventHandler } from '../handler/index';
+import { BlazeContext } from '../internal/context/index';
+import { BlazeEvent } from '../internal/event-emitter/instance';
+import type { Action } from '../types/action';
+import type { Random } from '../types/common';
+import type { CreateActionOption } from '../types/service';
 
 export class BlazeServiceAction {
   public readonly serviceName: string;

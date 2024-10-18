@@ -1,17 +1,17 @@
 import type { Context as HonoCtx, Next } from 'hono';
-import { extractRestParams } from '../extractor/rest/index.ts';
-import { eventHandler } from '../handler/index.ts';
-import { handleRest } from '../handler/rest.ts';
-import { BlazeContext } from '../internal/context/index.ts';
-import { BlazeError } from '../internal/errors/index.ts';
-import { BlazeValidationError } from '../internal/errors/validation.ts';
-import { Logger } from '../internal/logger/index.ts';
-import type { Action } from '../types/action.ts';
-import type { Method, RestHandlerOption, StatusCode } from '../types/rest.ts';
-import type { OpenAPIRequest } from '../types/router.ts';
-import type { Service } from '../types/service.ts';
-import { isEmpty, resolvePromise } from '../utils/common.ts';
-import { REST_METHOD } from '../utils/constant/rest/index.ts';
+import { extractRestParams } from '../extractor/rest/index';
+import { eventHandler } from '../handler/index';
+import { handleRest } from '../handler/rest';
+import { BlazeContext } from '../internal/context/index';
+import { BlazeError } from '../internal/errors/index';
+import { BlazeValidationError } from '../internal/errors/validation';
+import { Logger } from '../internal/logger/index';
+import type { Action } from '../types/action';
+import type { Method, RestHandlerOption, StatusCode } from '../types/rest';
+import type { OpenAPIRequest } from '../types/router';
+import type { Service } from '../types/service';
+import { isEmpty, resolvePromise } from '../utils/common';
+import { REST_METHOD } from '../utils/constant/rest/index';
 
 export class BlazeServiceRest {
   public readonly path: string;

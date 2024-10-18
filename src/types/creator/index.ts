@@ -1,3 +1,3 @@
-export * from './action.ts';
-export * from './event.ts';
-export * from './service.ts';
+export * from './action';
+export * from './event';
+export * from './service';

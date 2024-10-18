@@ -1,6 +1,6 @@
 import type { Context as HonoCtx } from 'hono';
 import type { ZodSchema } from 'zod';
-import type { RecordString, RecordUnknown } from '../../types/common.ts';
+import type { RecordString, RecordUnknown } from '../../types/common';
 
 export interface ContextValidator<
   H extends ZodSchema = ZodSchema,

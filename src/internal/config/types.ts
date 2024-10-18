@@ -2,7 +2,7 @@ import type ZodApi from '@asteasolutions/zod-to-openapi';
 import type NodeServer from '@hono/node-server';
 import type Trpc from '@trpc/server';
 import type TrpcAdapter from '@trpc/server/adapters/fetch';
-import type { ExternalModule } from '../../utils/constant/config/index.ts';
+import type { ExternalModule } from '../../utils/constant/config/index';
 
 export interface DependencyModule {
   [ExternalModule.NodeAdapter]: typeof NodeServer | null;

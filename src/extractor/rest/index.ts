@@ -1,11 +1,11 @@
 import type { Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
-import type { RecordUnknown } from '../../types/common.ts';
-import type { Method, RestParam, RestRoute } from '../../types/rest.ts';
+import type { RecordUnknown } from '../../types/common';
+import type { Method, RestParam, RestRoute } from '../../types/rest';
 import {
   FORM_CONTENT_TYPE,
   REST_CONTENT_TYPE,
-} from '../../utils/constant/rest/index.ts';
+} from '../../utils/constant/rest/index';
 
 export function getReqBody(honoCtx: HonoCtx) {
   const contentType = honoCtx.req.header('Content-Type');

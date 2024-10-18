@@ -1,11 +1,8 @@
-import type { Random } from '../../types/common.ts';
-import type {
-  ActionCallRecord,
-  EventCallRecord,
-} from '../../types/external.ts';
-import { RESERVED_KEYWORD } from '../../utils/constant/index.ts';
-import { BlazeError } from '../errors/index.ts';
-import { BlazeEvent } from '../event-emitter/instance.ts';
+import type { Random } from '../../types/common';
+import type { ActionCallRecord, EventCallRecord } from '../../types/external';
+import { RESERVED_KEYWORD } from '../../utils/constant/index';
+import { BlazeError } from '../errors/index';
+import { BlazeEvent } from '../event-emitter/instance';
 
 export class BlazeBroker {
   public hasListener(eventName: string) {

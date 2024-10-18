@@ -1,16 +1,16 @@
 import type { Context as HonoCtx } from 'hono';
 import type { ZodSchema } from 'zod';
-import { getReqBody, getReqQuery } from '../../extractor/rest/index.ts';
-import type { RecordString, RecordUnknown } from '../../types/common.ts';
-import type { GenericStatusCode, ResponseType } from '../../types/rest.ts';
-import { validateAll } from '../../validator/index.ts';
-import { BlazeBroker as Broker } from '../broker/index.ts';
-import { BlazeBroker } from '../broker/instance.ts';
+import { getReqBody, getReqQuery } from '../../extractor/rest/index';
+import type { RecordString, RecordUnknown } from '../../types/common';
+import type { GenericStatusCode, ResponseType } from '../../types/rest';
+import { validateAll } from '../../validator/index';
+import { BlazeBroker as Broker } from '../broker/index';
+import { BlazeBroker } from '../broker/instance';
 import type {
   ContextConstructorOption,
   ContextSetter,
   CreateContextOption,
-} from './types.ts';
+} from './types';
 
 export class BlazeContext<
   M extends RecordUnknown = RecordUnknown,

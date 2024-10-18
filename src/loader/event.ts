@@ -1,11 +1,11 @@
-import { eventHandler } from '../handler/index.ts';
-import { BlazeContext } from '../internal/context/index.ts';
-import type { ContextValidator } from '../internal/context/types.ts';
-import { BlazeEvent } from '../internal/event-emitter/instance.ts';
-import type { RecordUnknown } from '../types/common.ts';
-import type { Event } from '../types/event.ts';
-import type { CreateEventOption } from '../types/service.ts';
-import { RESERVED_KEYWORD } from '../utils/constant/index.ts';
+import { eventHandler } from '../handler/index';
+import { BlazeContext } from '../internal/context/index';
+import type { ContextValidator } from '../internal/context/types';
+import { BlazeEvent } from '../internal/event-emitter/instance';
+import type { RecordUnknown } from '../types/common';
+import type { Event } from '../types/event';
+import type { CreateEventOption } from '../types/service';
+import { RESERVED_KEYWORD } from '../utils/constant/index';
 
 export class BlazeServiceEvent {
   public readonly serviceName: string;

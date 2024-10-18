@@ -1,4 +1,4 @@
-import type { Random } from '../../types/common.ts';
+import type { Random } from '../../types/common';
 import type { GenericStatusCode } from '../../types/rest';
 
 export interface BlazeErrorOption {

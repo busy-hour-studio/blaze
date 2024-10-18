@@ -1,5 +1,5 @@
-import type { BlazeContext } from '../internal/context/index.ts';
-import type { Random, RecordString, RecordUnknown } from './common.ts';
+import type { BlazeContext } from '../internal/context/index';
+import type { Random, RecordString, RecordUnknown } from './common';
 
 export interface onRestErrorHandler<
   M extends RecordUnknown,
