@@ -205,6 +205,11 @@
       "types": "./dist/types/utils/constant/index.d.ts",
       "import": "./dist/esm/utils/constant/index.js",
       "require": "./dist/cjs/utils/constant/index.js"
+    },
+    "./types-extractor": {
+      "types": "./dist/types/types/extractor/index.d.ts",
+      "import": "./dist/esm/types/extractor/index.js",
+      "require": "./dist/cjs/types/extractor/index.js"
     }
   }
 }
