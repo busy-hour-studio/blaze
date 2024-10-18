@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.4.0-4](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-3...v4.4.0-4) (2024-10-18)
+
+
+### Bug Fixes
+
+* routes not detected with showRoutes ([716c636](https://github.com/Busy-Hour-Studio/blaze/commit/716c636be10ee501cc22ff75bb447a0beabe3f58))
+
 ## [4.4.0-3](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-2...v4.4.0-3) (2024-10-18)
 
 
