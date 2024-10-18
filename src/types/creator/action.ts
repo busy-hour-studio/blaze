@@ -1,15 +1,13 @@
 import type { ProcedureType } from '@trpc/server';
 import type { ZodSchema } from 'zod';
-import type { Action, ActionOpenAPI, Actions, ActionValidator } from './action';
-import type { Event, Events } from './event';
-import type { RecordString, RecordUnknown } from './helper';
+import type { Action, ActionOpenAPI, ActionValidator } from '../action.ts';
+import type { RecordString, RecordUnknown } from '../common.ts';
 import type {
   AcceptedAfterHook,
   AcceptedBeforeHook,
   AfterHookHandler,
   BeforeHookHandler,
-} from './hooks';
-import type { Service } from './service';
+} from '../hooks/index.ts';
 
 export interface BlazeActionCreator {
   /**
@@ -135,61 +133,4 @@ export interface BlazeActionCreator {
       hook: BeforeHookHandler<M, H, P, Q, B>
     ): BeforeHookHandler<M, H, P, Q, B>;
   };
-}
-
-export interface BlazeEventCreator {
-  /**
-   * Create a reusable event for services.
-   * @example
-   * ```ts
-   *  const event = BlazeCreator.event({
-   *    async handler(ctx) {
-   *      const user = await ctx.request.body()
-   *
-   *      Logger.info('User Created:', user)
-   *    }
-   *  })
-   * ```
-   */
-  <M extends RecordUnknown, P extends ZodSchema>(
-    event: Event<M, P>
-  ): Event<M, P>;
-  /**
-   * Create a reuseable validator for events parameters.
-   * @example
-   * ```ts
-   *  const validator = BlazeCreator.event.validator({
-   *    name: z.string(),
-   *    age: z.number(),
-   *  })
-   * ```
-   */
-  validator<Params extends ZodSchema>(validator: Params): Params;
-}
-
-export interface BlazeServiceCreator {
-  /**
-   * Create a new service with the given name, actions, events, and etc.
-   * @example
-   * ```ts
-   *  const service = BlazeCreator.service({
-   *    name: 'user',
-   *    actions: {
-   *      find,
-   *      create,
-   *    },
-   *  })
-   * ```
-   */
-  <
-    N extends string,
-    V extends number,
-    A extends Actions,
-    E extends Events,
-    S extends Service<N, V, A, E>,
-  >(
-    service: S
-  ): Readonly<S>;
-  action: BlazeActionCreator;
-  event: BlazeEventCreator;
 }
