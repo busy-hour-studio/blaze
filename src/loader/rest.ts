@@ -82,11 +82,13 @@ export class BlazeServiceRest {
 
     if (error || !ctx) {
       if (error instanceof BlazeValidationError && this.action.onRestError) {
-        return handleRest({
+        const rest = await handleRest({
           ctx: error.ctx,
           honoCtx,
           promise: this.action.onRestError(error.ctx, error.errors),
         });
+
+        return rest.resp;
       }
 
       let status: StatusCode = 500;
@@ -106,9 +108,10 @@ export class BlazeServiceRest {
 
     if (
       !this.action.afterMiddlewares ||
-      isEmpty(this.action.afterMiddlewares)
+      isEmpty(this.action.afterMiddlewares) ||
+      !rest.ok
     ) {
-      return rest;
+      return rest.resp;
     }
 
     // eslint-disable-next-line no-return-await
