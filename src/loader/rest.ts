@@ -64,7 +64,9 @@ export class BlazeServiceRest {
     });
   }
 
-  public async restHandler(honoCtx: HonoCtx, next: Next) {
+  public async restHandler(...args: [honoCtx: HonoCtx, next: Next]) {
+    const [honoCtx, next] = args;
+
     const [ctx, error] = await resolvePromise(
       BlazeContext.create({
         honoCtx,
@@ -109,7 +111,8 @@ export class BlazeServiceRest {
       return rest;
     }
 
-    return next();
+    // eslint-disable-next-line no-return-await
+    return await next();
   }
 
   private get openAPIConfig() {
