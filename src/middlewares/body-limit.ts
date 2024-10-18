@@ -4,12 +4,12 @@
     MIT License
     Copyright (c) 2022 Yusuke Wada
 */
-import type { Context as HonoContext, Next as HonoNext } from 'hono';
-import { BlazeError } from '../errors/BlazeError';
-import { BlazeContext } from '../internal';
-import type { ActionHandler } from '../types/action';
-import { resolvePromise } from '../utils/common';
-import { handleRestError, handleRestResponse } from '../utils/helper/rest';
+import type { Context as HonoCtx, Next as HonoNext } from 'hono';
+import { handleRestError, handleRestResponse } from '../handler/rest.ts';
+import { BlazeContext } from '../internal/context/index.ts';
+import { BlazeError } from '../internal/errors/index.ts';
+import type { ActionHandler } from '../types/action.ts';
+import { resolvePromise } from '../utils/common.ts';
 
 export interface BodyLimitOptions {
   maxSize: number;
@@ -18,7 +18,7 @@ export interface BodyLimitOptions {
 
 function errorHandler(onError: ActionHandler) {
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  return async function errorHandler(honoCtx: HonoContext) {
+  return async function errorHandler(honoCtx: HonoCtx) {
     const ctx = new BlazeContext({
       body: null,
       honoCtx,
@@ -73,13 +73,14 @@ function errorHandler(onError: ActionHandler) {
 export function bodyLimit(options: BodyLimitOptions) {
   const handler =
     options.onError ??
+    // deno-lint-ignore require-await
     (async () => {
       throw new BlazeError('Payload too large', 413);
     });
   const onError = errorHandler(handler);
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  return async function bodyLimit(honoCtx: HonoContext, next: HonoNext) {
+  return async function bodyLimit(honoCtx: HonoCtx, next: HonoNext) {
     if (!honoCtx.req.raw.body) {
       return next();
     }

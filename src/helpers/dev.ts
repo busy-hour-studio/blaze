@@ -6,8 +6,8 @@ import {
   inspectRoutes as honoInspectRoutes,
   showRoutes as honoShowRoutes,
 } from 'hono/dev';
-import type { Blaze } from '../router';
-import type { Random } from '../types/helper';
+import type { Blaze } from '../router/index.ts';
+import type { Random } from '../types/common.ts';
 
 export interface RouteData {
   path: string;

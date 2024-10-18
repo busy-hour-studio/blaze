@@ -1,6 +1,6 @@
 import type { ZodSchema } from 'zod';
-import type { Event } from '../types/event';
-import type { RecordUnknown } from '../types/helper';
+import type { RecordUnknown } from '../types/common.ts';
+import type { Event } from '../types/event.ts';
 
 export function createEventValidator<Params extends ZodSchema>(
   validator: Params

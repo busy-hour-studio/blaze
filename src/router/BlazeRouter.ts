@@ -16,12 +16,12 @@ import type { OpenAPIObjectConfig } from '@asteasolutions/zod-to-openapi/dist/v3
 import type { Env, Schema } from 'hono';
 import { Hono } from 'hono';
 import type { MergePath, MergeSchemaPath, MiddlewareHandler } from 'hono/types';
-import { BlazeConfig } from '../config';
-import { Logger } from '../errors/Logger';
-import { DependencyModule } from '../types/config';
-import type { Random } from '../types/helper';
-import type { Method } from '../types/rest';
-import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router';
+import { BlazeConfig } from '../internal/config/instance.ts';
+import { DependencyModule } from '../internal/config/types.ts';
+import { Logger } from '../internal/logger/index.ts';
+import type { Random } from '../types/common.ts';
+import type { Method } from '../types/rest.ts';
+import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router.ts';
 import { ExternalModule } from '../utils/constant/config';
 import {
   assignOpenAPIRegistry,

@@ -1,6 +1,6 @@
-import { Actions } from '../types/action';
-import { Events } from '../types/event';
-import type { Service } from '../types/service';
+import type { Actions } from '../types/action.ts';
+import type { Events } from '../types/event.ts';
+import type { Service } from '../types/service.ts';
 
 export function createService<
   N extends string,

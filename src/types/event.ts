@@ -1,18 +1,12 @@
 import type { ZodSchema } from 'zod';
-import type { BlazeContext } from '../internal';
-import type { ActionHandler } from './action';
-import type { Random, RecordString, RecordUnknown } from './helper';
+import type { BlazeContext } from '../internal/context/index.ts';
+import type { ActionHandler } from './action.ts';
+import type { Random, RecordString, RecordUnknown } from './common.ts';
 
 export interface EventActionHandler {
   name: string;
   handler(...values: unknown[]): ReturnType<ActionHandler>;
 }
-
-export interface EventListener {
-  (...values: Random[]): Promise<void | unknown> | void | unknown;
-}
-
-export type EventName = string;
 
 export interface EventHandler<
   M extends RecordUnknown = RecordUnknown,
