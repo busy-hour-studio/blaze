@@ -1,10 +1,9 @@
 import fs from 'node:fs';
 import { createRequire } from 'node:module';
 import path from 'node:path';
-import { Logger } from '../errors/Logger';
-// eslint-disable-next-line import/no-cycle
-import type { Random } from '../types/helper';
-import type { Service } from '../types/service';
+import { Logger } from '../internal/logger/index.ts';
+import type { Random } from '../types/common.ts';
+import type { Service } from '../types/service.ts';
 
 export function hasOwnProperty<
   Z extends NonNullable<unknown>,
