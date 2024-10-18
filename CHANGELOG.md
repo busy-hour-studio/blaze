@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.4.0-2](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-1...v4.4.0-2) (2024-10-18)
+
+
+### Features
+
+* type definitions extractor ([6e406e2](https://github.com/Busy-Hour-Studio/blaze/commit/6e406e260af5c9db890ffd43ab0178b693b4ac8a))
+
 ## [4.4.0-1](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-0...v4.4.0-1) (2024-10-18)
 
 
