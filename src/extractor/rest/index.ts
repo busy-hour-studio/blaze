@@ -1,6 +1,7 @@
 import type { Context as HonoCtx } from 'hono';
 import qs from 'node:querystring';
 import type { RecordUnknown } from '../../types/common.ts';
+import type { Method, RestParam, RestRoute } from '../../types/rest.ts';
 import {
   FORM_CONTENT_TYPE,
   REST_CONTENT_TYPE,
@@ -44,4 +45,20 @@ export function getReqQuery<T extends RecordUnknown = RecordUnknown>(
   const url = new URL(honoCtx.req.url).searchParams;
 
   return qs.parse(url.toString()) as T;
+}
+
+export function extractRestPath(restRoute: RestRoute) {
+  const restPath = restRoute.split(' ');
+
+  if (restPath.length === 1) {
+    return [null, restPath[0]] as const;
+  }
+
+  return [restPath[0] as Method, restPath[1]] as const;
+}
+
+export function extractRestParams(params: RestParam) {
+  if (typeof params === 'string') return extractRestPath(params);
+
+  return [params.method ?? null, params.path] as const;
 }

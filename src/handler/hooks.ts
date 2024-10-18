@@ -1,9 +1,9 @@
-import type { RecordString, RecordUnknown } from '../../types/common.ts';
+import type { RecordString, RecordUnknown } from '../types/common.ts';
 import type {
   AfterHookHandlerOption,
   BeforeHookHandlerOption,
-} from '../../types/hooks/index.ts';
-import { toArray } from '../common.ts';
+} from '../types/hooks/index.ts';
+import { toArray } from '../utils/common.ts';
 
 export async function beforeActionHookHandler<
   M extends RecordUnknown = RecordUnknown,

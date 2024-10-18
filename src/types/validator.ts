@@ -1,5 +1,5 @@
 import type { z } from 'zod';
-import type { Random, RecordUnknown } from './helper';
+import type { Random, RecordUnknown } from './common.ts';
 
 type ExampleValue<T> = T extends Date ? string : T;
 
