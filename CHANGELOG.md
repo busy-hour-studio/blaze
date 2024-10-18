@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.4.0-5](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-4...v4.4.0-5) (2024-10-18)
+
+
+### Bug Fixes
+
+* actions error not triggered on rest ([e53f381](https://github.com/Busy-Hour-Studio/blaze/commit/e53f3819b3acb13f8dd25629e30732a01a36a6e0))
+
 ## [4.4.0-4](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-3...v4.4.0-4) (2024-10-18)
 
 
