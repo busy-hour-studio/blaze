@@ -9,7 +9,7 @@ import type {
   RestResponseHandlerOption,
   StatusCode,
 } from '../types/rest';
-import { isEmpty, isNil, mapToObject, resolvePromise } from '../utils/common';
+import { isEmpty, isNil, mapToObject } from '../utils/common';
 import { RESPONSE_TYPE } from '../utils/constant/rest/index';
 
 export function getRouteHandler(router: BlazeRouter, method: Method | null) {
@@ -67,7 +67,6 @@ export function handleRestResponse(options: RestResponseHandlerOption) {
       return honoCtx.body(...args);
 
     case RESPONSE_TYPE.JSON:
-    case null:
     default:
       return honoCtx.json(...args);
   }
@@ -79,32 +78,22 @@ export async function handleRest<T>(options: {
   promise: Promise<T> | T;
 }): Promise<{ resp: Response; ok: boolean }> {
   const { ctx, honoCtx, promise } = options;
-  const [restResult, restError] = await resolvePromise(promise);
 
-  if (restError) {
+  try {
+    const result = await promise;
+
+    if (isNil(result)) {
+      return { resp: honoCtx.body(null, 204), ok: true };
+    }
+
     return {
-      resp: handleRestError({
-        ctx,
-        err: restError,
-        honoCtx,
-      }),
+      resp: await handleRestResponse({ ctx, honoCtx, result }),
+      ok: true,
+    };
+  } catch (err) {
+    return {
+      resp: handleRestError({ ctx, err, honoCtx }),
       ok: false,
     };
   }
-
-  if (isNil(restResult)) {
-    return {
-      resp: honoCtx.body(null, 204),
-      ok: true,
-    };
-  }
-
-  return {
-    resp: await handleRestResponse({
-      ctx,
-      honoCtx,
-      result: restResult,
-    }),
-    ok: true,
-  };
 }
