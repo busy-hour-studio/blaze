@@ -5,11 +5,10 @@
     Copyright (c) 2022 Yusuke Wada
 */
 import type { Context as HonoCtx, Next as HonoNext } from 'hono';
-import { handleRestError, handleRestResponse } from '../handler/rest';
+import { handleRest } from '../handler/rest';
 import { BlazeContext } from '../internal/context/index';
 import { BlazeError } from '../internal/errors/index';
 import type { ActionHandler } from '../types/action';
-import { resolvePromise } from '../utils/common';
 
 export interface BodyLimitOptions {
   maxSize: number;
@@ -28,21 +27,13 @@ function errorHandler(onError: ActionHandler) {
       query: null,
     });
 
-    const [result, err] = await resolvePromise(onError(ctx));
-
-    if (err) {
-      return handleRestError({
-        honoCtx,
-        ctx,
-        err,
-      });
-    }
-
-    return handleRestResponse({
-      honoCtx,
-      result,
+    const rest = await handleRest({
       ctx,
+      honoCtx,
+      promise: onError(ctx),
     });
+
+    return rest.resp;
   };
 }
 

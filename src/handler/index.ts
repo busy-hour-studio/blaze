@@ -7,7 +7,11 @@ export async function eventHandler(
   action: Action,
   ctx: BlazeContext
 ): Promise<unknown> {
-  if (action?.hooks?.before) {
+  if (!action.hooks) {
+    return action.handler(ctx);
+  }
+
+  if (action.hooks.before) {
     await beforeActionHookHandler({
       ctx,
       hooks: action.hooks.before,
@@ -16,7 +20,7 @@ export async function eventHandler(
 
   const result = await action.handler(ctx);
 
-  if (action?.hooks?.after) {
+  if (action.hooks.after) {
     const afterHooksRes = await afterActionHookHandler({
       ctx,
       hooks: action.hooks.after,

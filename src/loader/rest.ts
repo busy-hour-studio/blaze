@@ -10,7 +10,7 @@ import type { Action } from '../types/action';
 import type { Method, RestHandlerOption, StatusCode } from '../types/rest';
 import type { OpenAPIRequest } from '../types/router';
 import type { Service } from '../types/service';
-import { isEmpty, resolvePromise } from '../utils/common';
+import { isEmpty } from '../utils/common';
 import { REST_METHOD } from '../utils/constant/rest/index';
 
 export class BlazeServiceRest {
@@ -67,8 +67,8 @@ export class BlazeServiceRest {
   public async restHandler(...args: [honoCtx: HonoCtx, next: Next]) {
     const [honoCtx, next] = args;
 
-    const [ctx, error] = await resolvePromise(
-      BlazeContext.create({
+    try {
+      const ctx = await BlazeContext.create({
         honoCtx,
         // NULL => automatically use honoCtx value instead
         body: null,
@@ -77,45 +77,38 @@ export class BlazeServiceRest {
         query: null,
         validator: this.action.validator ?? null,
         meta: this.action.meta ?? null,
-      })
-    );
+      });
 
-    if (error || !ctx) {
-      if (error instanceof BlazeValidationError && this.action.onRestError) {
+      const rest = await handleRest({
+        ctx,
+        honoCtx,
+        promise: eventHandler(this.action, ctx),
+      });
+
+      if (
+        !this.action.afterMiddlewares ||
+        isEmpty(this.action.afterMiddlewares) ||
+        !rest.ok
+      ) {
+        return rest.resp;
+      }
+
+      return next();
+    } catch (err) {
+      if (err instanceof BlazeValidationError && this.action.onRestError) {
         const rest = await handleRest({
-          ctx: error.ctx,
+          ctx: err.ctx,
           honoCtx,
-          promise: this.action.onRestError(error.ctx, error.errors),
+          promise: this.action.onRestError(err.ctx, err.errors),
         });
 
         return rest.resp;
       }
 
-      let status: StatusCode = 500;
+      const status = err instanceof BlazeError ? err.status : 500;
 
-      if (error instanceof BlazeError) {
-        status = error.status as StatusCode;
-      }
-
-      return honoCtx.json(error as Error, status);
+      return honoCtx.json(err as Error, status as StatusCode);
     }
-
-    const rest = await handleRest({
-      ctx,
-      honoCtx,
-      promise: eventHandler(this.action, ctx),
-    });
-
-    if (
-      !this.action.afterMiddlewares ||
-      isEmpty(this.action.afterMiddlewares) ||
-      !rest.ok
-    ) {
-      return rest.resp;
-    }
-
-    // eslint-disable-next-line no-return-await
-    return await next();
   }
 
   private get openAPIConfig() {

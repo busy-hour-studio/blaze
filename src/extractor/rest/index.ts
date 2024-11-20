@@ -7,44 +7,35 @@ import {
   REST_CONTENT_TYPE,
 } from '../../utils/constant/rest/index';
 
-export function getReqBody(honoCtx: HonoCtx) {
+export async function getReqBody(honoCtx: HonoCtx) {
   const contentType = honoCtx.req.header('Content-Type');
-
   if (!contentType) return null;
 
-  const isFormLike = FORM_CONTENT_TYPE.some((type) =>
-    contentType.startsWith(type)
-  );
-  const isJson = contentType.startsWith(REST_CONTENT_TYPE.JSON);
-  const isText = contentType.startsWith(REST_CONTENT_TYPE.TEXT);
-  const isBlob = contentType.startsWith(REST_CONTENT_TYPE.BODY);
-
-  switch (true) {
-    case isFormLike:
-      return honoCtx.req.parseBody({
-        all: true,
-      });
-
-    case isJson:
-      return honoCtx.req.json();
-
-    case isText:
-      return honoCtx.req.text();
-
-    case isBlob:
-      return honoCtx.req.blob();
-
-    default:
-      return null;
+  if (FORM_CONTENT_TYPE.some((type) => contentType.startsWith(type))) {
+    return honoCtx.req.parseBody({ all: true });
   }
+
+  if (contentType.startsWith(REST_CONTENT_TYPE.JSON)) {
+    return honoCtx.req.json();
+  }
+
+  if (contentType.startsWith(REST_CONTENT_TYPE.TEXT)) {
+    return honoCtx.req.text();
+  }
+
+  if (contentType.startsWith(REST_CONTENT_TYPE.BODY)) {
+    return honoCtx.req.blob();
+  }
+
+  return null;
 }
 
 export function getReqQuery<T extends RecordUnknown = RecordUnknown>(
   honoCtx: HonoCtx
 ) {
-  const url = new URL(honoCtx.req.url).searchParams;
+  const searchParams = new URLSearchParams(honoCtx.req.url.split('?')[1] || '');
 
-  return qs.parse(url.toString()) as T;
+  return qs.parse(searchParams.toString()) as T;
 }
 
 export function extractRestPath(restRoute: RestRoute) {
