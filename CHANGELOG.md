@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.4.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-5...v4.4.0) (2024-11-20)
+
 ## [4.4.0-5](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-4...v4.4.0-5) (2024-10-18)
 
 
