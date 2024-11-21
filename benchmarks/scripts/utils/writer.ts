@@ -1,4 +1,5 @@
 import autocannon from 'autocannon';
+import dayjs from 'dayjs';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import prettier from 'prettier';
@@ -79,12 +80,13 @@ export async function writeToMarkdown(
   results: autocannon.Result[],
   runtime: 'node' | 'bun'
 ) {
+  const date = dayjs().format('MMMM D, YYYY hh:mm:ss A Z');
   const markdown = constructMarkdown(results);
   const content = [
     '# Autocannon Benchmarks',
     '',
     `**Runtime**: ${runtime}`,
-    `**Date**: ${new Date().toISOString()}`,
+    `**Date**: ${date}`,
     `**CPU**: ${(await system.cpu()).brand}`,
     `**RAM**: ${((await system.mem()).total / 1024 / 1024).toFixed(2)} MB`,
     `**Connections**: ${BENCHMARK.CONNECTIONS}`,
