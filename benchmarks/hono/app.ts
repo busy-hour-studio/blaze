@@ -1,4 +1,5 @@
 import { Hono } from 'hono';
+import { PORT_ALLOCATION } from '../config';
 
 const app = new Hono();
 
@@ -8,9 +9,9 @@ app.post('/user', (c) => c.text(''));
 
 const config = {
   fetch: app.fetch as never,
-  port: 3000,
+  port: PORT_ALLOCATION.HONO,
 };
 
-console.log('Hono server listening on port 3000');
+console.log(`Hono server listening on port ${PORT_ALLOCATION.HONO}`);
 
 export default config;
