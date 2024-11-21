@@ -8,6 +8,7 @@ An event driven framework for 🔥 Hono.js
 - <a href="#about">What is this?</a>
 - <a href="#getting-started">Getting Started</a>
 - <a href="#contributing">Contributing</a>
+- <a href="#benchmarks">Benchmarks</a>
 - <a href="#contributors">Contributors</a>
 
 <h2 id="about">What is this?</h2>
@@ -22,7 +23,13 @@ To get started to use `blaze` on your project, you can start by installing it to
 pnpm i @busy-hour/blaze
 ```
 
-Once you install `blaze` in your project, you can start using it by following the complete instruction how to start using blaze on your project on our [wiki](https://github.com/Busy-Hour-Studio/blaze/wiki) .
+Once you install `blaze` in your project, you can start using it by following the complete instruction how to start using blaze on your project on our [wiki](https://github.com/Busy-Hour-Studio/blaze/wiki).
+
+
+<h2 id="benchmarks">Benchmarks</h2>
+
+Benchmarks are available on our [benchmarks](./benchmarks/benchmarks) page. You can also run your own benchmarks by following the instruction on our [wiki](https://github.com/Busy-Hour-Studio/blaze/wiki/Benchmarks).
+
 
 <h2 id="#contributing">Contributing</h2>
 
