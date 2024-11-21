@@ -1,10 +1,10 @@
 import type { Router } from 'hono/router';
 import type { MiddlewareHandler, RouterRoute } from 'hono/types';
-import type { BlazeContext } from '../internal';
-import type { BlazeRouter } from '../router';
+import type { BlazeContext } from '../internal/context/index';
+import type { BlazeRouter } from '../router/BlazeRouter';
 import type { Action, ActionHandler, Actions } from './action';
+import type { Random } from './common';
 import type { Event, EventActionHandler, Events } from './event';
-import type { Random } from './helper';
 import type { ExposedMethod } from './rest';
 
 export type Middleware = [ExposedMethod, MiddlewareHandler];

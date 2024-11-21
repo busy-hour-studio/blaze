@@ -11,14 +11,14 @@ export type {
   AnyValidator,
   OpenAPIBody,
 } from './types/action';
+export type { AnyEvent, Event, Events } from './types/event';
 export type {
   ActionCallRecord,
   ActionEventCallRequest,
   EventCallRecord,
   TrpcMutationCallRecord,
   TrpcQueryCallRecord,
-} from './types/common';
-export type { AnyEvent, Event, Events } from './types/event';
+} from './types/external';
 export type {
   AcceptedAfterHook,
   AcceptedBeforeHook,
@@ -30,13 +30,13 @@ export type {
   AnyBeforeHook,
   AnyBeforeHookHandler,
   BeforeHookHandler,
-} from './types/hooks';
+} from './types/hooks/index';
 export type { Method, RestParam, RestRoute } from './types/rest';
 export type { Service } from './types/service';
 
-export { BlazeConfig } from './config';
-export { BlazeCreator } from './creator';
-export { BlazeError } from './errors/BlazeError';
-export { ValidationError } from './errors/ValidationError';
-export { Blaze, BlazeRouter, z } from './router';
-export { initializeServices } from './utils/setup';
+export { BlazeCreator } from './creator/index';
+export { BlazeConfig } from './internal/config/instance';
+export { BlazeError } from './internal/errors/index';
+export { BlazeValidationError } from './internal/errors/validation';
+export { initializeServices } from './loader/index';
+export { Blaze, BlazeRouter, z } from './router/index';

@@ -16,12 +16,13 @@ import type { OpenAPIObjectConfig } from '@asteasolutions/zod-to-openapi/dist/v3
 import type { Env, Schema } from 'hono';
 import { Hono } from 'hono';
 import type { MergePath, MergeSchemaPath, MiddlewareHandler } from 'hono/types';
-import { BlazeConfig } from '../config';
-import { Logger } from '../errors/Logger';
-import { DependencyModule } from '../types/config';
-import type { Random } from '../types/helper';
+import { BlazeConfig } from '../internal/config/instance';
+import { DependencyModule } from '../internal/config/types';
+import { Logger } from '../internal/logger/index';
+import type { Random } from '../types/common';
 import type { Method } from '../types/rest';
 import type { BlazeOpenAPIOption, CreateBlazeOption } from '../types/router';
+import { isEmpty, isNil } from '../utils/common';
 import { ExternalModule } from '../utils/constant/config';
 import {
   assignOpenAPIRegistry,
@@ -67,13 +68,17 @@ export class BlazeRouter<
       this.on(method, route.path, ...value)
     );
 
-    this.on(
-      route.method,
-      route.path,
-      ...route.middlewares,
-      route.handler,
-      ...route.afterMiddlewares
-    );
+    const handlers: MiddlewareHandler[] = [route.handler];
+
+    if (!isNil(route.middlewares) && !isEmpty(route.middlewares)) {
+      handlers.unshift(...route.middlewares);
+    }
+
+    if (!isNil(route.afterMiddlewares) && !isEmpty(route.afterMiddlewares)) {
+      handlers.push(...route.afterMiddlewares);
+    }
+
+    this.on(route.method, route.path, ...handlers);
 
     if (!this.openAPIRegistry) return;
 

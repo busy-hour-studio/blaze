@@ -4,10 +4,10 @@ import type {
 } from '@asteasolutions/zod-to-openapi/dist/openapi-registry';
 import type { Env, Schema } from 'hono';
 import { mergePath } from 'hono/utils/url';
-import { Logger } from '../../errors/Logger';
-import type { BlazeRouter } from '../../router';
+import { Logger } from '../../internal/logger/index';
+import type { BlazeRouter } from '../../router/BlazeRouter';
 import type { BlazeOpenAPIOption } from '../../types/router';
-import { REST_METHOD } from '../constant/rest';
+import { REST_METHOD } from '../constant/rest/index';
 
 export function assignOpenAPIRegistry<
   E extends Env = Env,

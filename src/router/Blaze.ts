@@ -1,9 +1,11 @@
 import fs from 'node:fs';
 import type { AddressInfo } from 'node:net';
-import { BlazeConfig } from '../config';
-import { Logger } from '../errors/Logger';
-import { BlazeContext } from '../internal';
-import { DependencyModule } from '../types/config';
+import { BlazeConfig } from '../internal/config/instance';
+import { DependencyModule } from '../internal/config/types';
+import { BlazeContext } from '../internal/context/index';
+import { Logger } from '../internal/logger/index';
+import { BlazeService } from '../loader/service';
+import { useTrpc, type UseTrpc } from '../loader/trpc/index';
 import type {
   BlazeFetch,
   CreateBlazeOption,
@@ -11,9 +13,10 @@ import type {
 } from '../types/router';
 import type { ImportServiceOption, LoadServicesOption } from '../types/service';
 import { isNil, toArray } from '../utils/common';
-import { ExternalModule, PossibleRunTime } from '../utils/constant/config';
-import { BlazeService } from '../utils/setup/service';
-import { useTrpc, type UseTrpc } from '../utils/trpc';
+import {
+  ExternalModule,
+  PossibleRunTime,
+} from '../utils/constant/config/index';
 import { BlazeRouter } from './BlazeRouter';
 
 export class Blaze {

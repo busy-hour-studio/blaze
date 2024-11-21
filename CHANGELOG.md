@@ -2,6 +2,46 @@
 
 All notable changes to this project will be documented in this file. See [commit-and-tag-version](https://github.com/absolute-version/commit-and-tag-version) for commit guidelines.
 
+## [4.4.0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-5...v4.4.0) (2024-11-20)
+
+## [4.4.0-5](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-4...v4.4.0-5) (2024-10-18)
+
+
+### Bug Fixes
+
+* actions error not triggered on rest ([e53f381](https://github.com/Busy-Hour-Studio/blaze/commit/e53f3819b3acb13f8dd25629e30732a01a36a6e0))
+
+## [4.4.0-4](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-3...v4.4.0-4) (2024-10-18)
+
+
+### Bug Fixes
+
+* routes not detected with showRoutes ([716c636](https://github.com/Busy-Hour-Studio/blaze/commit/716c636be10ee501cc22ff75bb447a0beabe3f58))
+
+## [4.4.0-3](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-2...v4.4.0-3) (2024-10-18)
+
+
+### Bug Fixes
+
+* ts extensions on build ([525bc76](https://github.com/Busy-Hour-Studio/blaze/commit/525bc76065df5b240110e98d74ad68c7f194fc31))
+
+## [4.4.0-2](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-1...v4.4.0-2) (2024-10-18)
+
+
+### Features
+
+* type definitions extractor ([6e406e2](https://github.com/Busy-Hour-Studio/blaze/commit/6e406e260af5c9db890ffd43ab0178b693b4ac8a))
+
+## [4.4.0-1](https://github.com/Busy-Hour-Studio/blaze/compare/v4.4.0-0...v4.4.0-1) (2024-10-18)
+
+
+### Bug Fixes
+
+* blaze creator type definitions ([b536c92](https://github.com/Busy-Hour-Studio/blaze/commit/b536c92575a91a8af3da2a79294e85d6a2345d10))
+* handler type definitions ([05c4e90](https://github.com/Busy-Hour-Studio/blaze/commit/05c4e90b2f45d284ddcf862fd1eaf811afe61a99))
+* hono helper/middlewares types ([9d301d2](https://github.com/Busy-Hour-Studio/blaze/commit/9d301d208e4f6cd8adec7abfe457da1cb1cdc850))
+* validator type definitions ([3f34e18](https://github.com/Busy-Hour-Studio/blaze/commit/3f34e18fab36678ef047bffbc655da5658f01b20))
+
 ## [4.4.0-0](https://github.com/Busy-Hour-Studio/blaze/compare/v4.3.3...v4.4.0-0) (2024-10-18)
 
 

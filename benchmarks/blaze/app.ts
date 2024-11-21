@@ -1,6 +1,7 @@
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { Blaze } from '../../src';
+import { PORT_ALLOCATION } from '../config';
 
 const app = new Blaze({});
 
@@ -14,8 +15,8 @@ app.load({
   autoStart: true,
 });
 
-console.log('Blaze server listening on port 3000');
+console.log(`Blaze server listening on port ${PORT_ALLOCATION.BLAZE}`);
 
-const serve = app.serve(3000);
+const serve = app.serve(PORT_ALLOCATION.BLAZE);
 
 export default serve;

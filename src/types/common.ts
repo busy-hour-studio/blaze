@@ -1,35 +1,7 @@
-export interface ActionEventCallRequest<Headers, Params, Query, Body, Result> {
-  headers: Headers;
-  params: Params;
-  body: Body;
-  result: Result;
-  query: Query;
-}
+// deno-lint-ignore-file no-explicit-any
+export type RecordUnknown = Record<string, unknown>;
 
-export interface ActionCallRecord {
-  // Extend the interface with other modules
-  // [key: string]: ActionEventCallRequest<
-  //   RecordString,
-  //   RecordUnknown,
-  //   Random,
-  //   never
-  // >;
-}
+export type RecordString = Record<string, string>;
 
-export interface EventCallRecord {
-  // Extend the interface with other modules
-  // [key: string]: ActionEventCallRequest<
-  //   RecordString,
-  //   RecordUnknown,
-  //   Random,
-  //   never
-  // >;
-}
-
-export interface TrpcQueryCallRecord {
-  // Extend the interface with other modules
-}
-
-export interface TrpcMutationCallRecord {
-  // Extend the interface with other modules
-}
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export type Random = any;

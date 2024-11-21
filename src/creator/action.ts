@@ -1,6 +1,6 @@
 import type { ZodSchema } from 'zod';
 import type { Action, ActionValidator } from '../types/action';
-import type { RecordUnknown } from '../types/helper';
+import type { RecordUnknown } from '../types/common';
 
 export function createActionValidator<
   H extends ZodSchema,

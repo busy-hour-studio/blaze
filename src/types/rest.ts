@@ -1,7 +1,7 @@
 import type { Context as HonoCtx } from 'hono';
-import type { BlazeContext } from '../internal';
-import type { BlazeRouter } from '../router';
-import type { RESPONSE_TYPE, REST_METHOD } from '../utils/constant/rest';
+import type { BlazeContext } from '../internal/context/index';
+import type { BlazeRouter } from '../router/BlazeRouter';
+import type { RESPONSE_TYPE, REST_METHOD } from '../utils/constant/rest/index';
 import type { STATUS_CODE } from '../utils/constant/rest/status-code';
 import type { Action } from './action';
 import type { Middleware, Service } from './service';

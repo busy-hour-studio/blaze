@@ -1,5 +1,5 @@
-import { Actions } from '../types/action';
-import { Events } from '../types/event';
+import type { Actions } from '../types/action';
+import type { Events } from '../types/event';
 import type { Service } from '../types/service';
 
 export function createService<

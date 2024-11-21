@@ -1,5 +1,5 @@
-import type { RecordString, RecordUnknown } from '../types/helper';
-import type { AfterHookHandler, BeforeHookHandler } from '../types/hooks';
+import type { RecordString, RecordUnknown } from '../types/common';
+import type { AfterHookHandler, BeforeHookHandler } from '../types/hooks/index';
 
 export function createAfterHook<
   R,

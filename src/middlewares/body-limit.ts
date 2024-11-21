@@ -4,12 +4,11 @@
     MIT License
     Copyright (c) 2022 Yusuke Wada
 */
-import type { Context as HonoContext, Next as HonoNext } from 'hono';
-import { BlazeError } from '../errors/BlazeError';
-import { BlazeContext } from '../internal';
+import type { Context as HonoCtx, Next as HonoNext } from 'hono';
+import { handleRest } from '../handler/rest';
+import { BlazeContext } from '../internal/context/index';
+import { BlazeError } from '../internal/errors/index';
 import type { ActionHandler } from '../types/action';
-import { resolvePromise } from '../utils/common';
-import { handleRestError, handleRestResponse } from '../utils/helper/rest';
 
 export interface BodyLimitOptions {
   maxSize: number;
@@ -18,7 +17,7 @@ export interface BodyLimitOptions {
 
 function errorHandler(onError: ActionHandler) {
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  return async function errorHandler(honoCtx: HonoContext) {
+  return async function errorHandler(honoCtx: HonoCtx) {
     const ctx = new BlazeContext({
       body: null,
       honoCtx,
@@ -28,21 +27,13 @@ function errorHandler(onError: ActionHandler) {
       query: null,
     });
 
-    const [result, err] = await resolvePromise(onError(ctx));
-
-    if (err) {
-      return handleRestError({
-        honoCtx,
-        ctx,
-        err,
-      });
-    }
-
-    return handleRestResponse({
-      honoCtx,
-      result,
+    const rest = await handleRest({
       ctx,
+      honoCtx,
+      promise: onError(ctx),
     });
+
+    return rest.resp;
   };
 }
 
@@ -73,13 +64,14 @@ function errorHandler(onError: ActionHandler) {
 export function bodyLimit(options: BodyLimitOptions) {
   const handler =
     options.onError ??
+    // deno-lint-ignore require-await
     (async () => {
       throw new BlazeError('Payload too large', 413);
     });
   const onError = errorHandler(handler);
 
   // eslint-disable-next-line @typescript-eslint/no-shadow
-  return async function bodyLimit(honoCtx: HonoContext, next: HonoNext) {
+  return async function bodyLimit(honoCtx: HonoCtx, next: HonoNext) {
     if (!honoCtx.req.raw.body) {
       return next();
     }

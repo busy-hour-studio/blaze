@@ -5,7 +5,7 @@
     Copyright (c) 2022 Yusuke Wada
 */
 import type { Context as HonoCtx, Next as HonoNext } from 'hono';
-import { BlazeContext } from '../internal';
+import { BlazeContext } from '../internal/context/index';
 import { ExposedMethod } from '../types/rest';
 
 export interface CORSOptions {

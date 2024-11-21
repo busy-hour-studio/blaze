@@ -1,17 +1,26 @@
 {
   "type": "module",
   "scripts": {
-    "bench:bun": "./bench.bun.sh",
-    "bench:node": "./bench.node.sh"
+    "bench:write": "run-s 'bench:*:write'",
+    "bench:bun:write": "npx tsx ./scripts/bench.bun.ts",
+    "bench:node:write": "npx tsx ./scripts/bench.node.ts",
+    "bench:bun": "./scripts/bench.bun.sh",
+    "bench:node": "./scripts/bench.node.sh"
   },
   "dependencies": {
-    "@hono/node-server": "*",
+    "@hono/node-server": "^1.13.7",
     "@types/express": "^4.17.21",
-    "@types/node": "^20.11.22",
-    "bun": "^1.1.27",
-    "express": "^4.20.0",
-    "hono": ">=4.6.1",
-    "tsx": "^4.19.1",
-    "zod": ">=3.23.8"
+    "@types/node": "^20.17.6",
+    "bun": "^1.1.36",
+    "express": "^4.21.1",
+    "hono": "^4.6.11",
+    "tsx": "^4.19.2",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/autocannon": "^7.12.5",
+    "autocannon": "^8.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.3.3"
   }
 }
