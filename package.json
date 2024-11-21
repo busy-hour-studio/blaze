@@ -75,6 +75,10 @@
     "src/**/*.{ts,tsx}": [
       "eslint --fix",
       "prettier --write"
+    ],
+    "benchmarks/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
     ]
   },
   "files": [
