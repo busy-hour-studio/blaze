@@ -1,4 +1,5 @@
 import autocannon from 'autocannon';
+import kill from 'tree-kill-promise';
 import { BENCHMARK, FRAMEWORK_PORTS } from '../../config';
 import { loadFramework } from './loader';
 
@@ -22,7 +23,8 @@ export async function benchmarks(runtime: 'node' | 'bun') {
       const childProcess = loadFramework(framework.toLowerCase(), runtime);
 
       const result = await benchmark(framework, port);
-      childProcess.kill('SIGINT');
+
+      if (childProcess.pid) kill(childProcess.pid, 'SIGKILL');
 
       return result;
     })

@@ -9,16 +9,14 @@ import { BENCHMARK } from '../../config';
 export function constructResult(result: autocannon.Result) {
   return {
     framework: result.title || '',
+    total: result.requests.total,
     rps: result.requests.total / result.duration,
-    request: {
-      p50: result.requests.p50,
-      p75: result.requests.p75,
-      p99: result.requests.p99,
-    },
     latency: {
       p50: result.latency.p50,
       p75: result.latency.p75,
+      p90: result.latency.p90,
       p99: result.latency.p99,
+      avg: result.latency.average,
       min: result.latency.min,
       max: result.latency.max,
     },
@@ -29,13 +27,13 @@ export function constructMarkdown(results: autocannon.Result[]) {
   const constructedResults = results.map(constructResult);
   const headers = [
     'Framework',
+    'Total Requests',
     'RPS (req/sec)',
-    'P50 RPS (req/sec)',
-    'P75 RPS (req/sec)',
-    'P99 RPS (req/sec)',
     'P50 Latency (ms)',
     'P75 Latency (ms)',
+    'P90 Latency (ms)',
     'P99 Latency (ms)',
+    'Avg Latency (ms)',
     'Min Latency (ms)',
     'Max Latency (ms)',
   ];
@@ -45,13 +43,13 @@ export function constructMarkdown(results: autocannon.Result[]) {
   const rows = constructedResults.map((result) =>
     [
       result.framework,
+      result.total.toFixed(2),
       result.rps.toFixed(2),
-      result.request.p50.toFixed(2),
-      result.request.p75.toFixed(2),
-      result.request.p99.toFixed(2),
       `${result.latency.p50} ms`,
       `${result.latency.p75} ms`,
+      `${result.latency.p90} ms`,
       `${result.latency.p99} ms`,
+      `${result.latency.avg} ms`,
       `${result.latency.min} ms`,
       `${result.latency.max} ms`,
     ].join(' | ')
