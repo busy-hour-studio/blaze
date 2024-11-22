@@ -4,14 +4,15 @@ import { __dirname } from '../../config';
 
 export function loadFramework(framework: string, runtime: 'node' | 'bun') {
   const frameworkPath = path.join(__dirname, framework);
+  const runner = runtime === 'node' ? 'tsx' : 'bun';
+  const file = runtime === 'node' ? 'index.ts' : 'app.ts';
+  const args = ['npx', runner, file].join(' ');
 
-  if (runtime === 'node') {
-    return exec('npx tsx index.ts', {
-      cwd: frameworkPath,
-    });
-  }
-
-  return exec('npx bun app.ts', {
+  const childProcess = exec(args, {
     cwd: frameworkPath,
   });
+
+  childProcess.unref();
+
+  return childProcess;
 }

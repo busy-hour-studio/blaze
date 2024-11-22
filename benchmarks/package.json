@@ -2,7 +2,7 @@
   "type": "module",
   "scripts": {
     "bench:write": "run-s 'bench:*:write'",
-    "bench:bun:write": "npx tsx ./scripts/bench.bun.ts",
+    "bench:bun:write": "npx bun ./scripts/bench.bun.ts",
     "bench:node:write": "npx tsx ./scripts/bench.node.ts",
     "bench:bun": "./scripts/bench.bun.sh",
     "bench:node": "./scripts/bench.node.sh"
@@ -15,6 +15,7 @@
     "dayjs": "^1.11.13",
     "express": "^4.21.1",
     "hono": "^4.6.11",
+    "tree-kill-promise": "^3.0.14",
     "tsx": "^4.19.2",
     "zod": "^3.23.8"
   },

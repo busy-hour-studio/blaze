@@ -29,6 +29,9 @@ importers:
       hono:
         specifier: ^4.6.11
         version: 4.6.11
+      tree-kill-promise:
+        specifier: ^3.0.14
+        version: 3.0.14
       tsx:
         specifier: ^4.19.2
         version: 4.19.2
@@ -1030,6 +1033,14 @@ packages:
   toidentifier@1.0.1:
     resolution: {integrity: sha512-o5sSPKEkg/DIQNmH43V0/uerLrpzVedkUh8tGNvaeXpfpuwjKenlSox/2O/BTlZUtEe+JG7s5YhEz608PlAHRA==}
     engines: {node: '>=0.6'}
+
+  tree-kill-promise@3.0.14:
+    resolution: {integrity: sha512-HMWDVJq3oby7uxA2AKVThX5fKkF7GPT3FhjNb75tG/6P4tQBtIhElaSucFHFMlBV5f3e+KPqIlHsJVZjueKX/A==}
+    engines: {node: '>=14'}
+
+  tree-kill@1.2.2:
+    resolution: {integrity: sha512-L0Orpi8qGpRG//Nd+H90vFB+3iHnue1zSSGmNOOCh1GLJ7rUKVwV2HvijphGQS2UmhUZewS9VgvxYIdgr+fG1A==}
+    hasBin: true
 
   tsx@4.19.2:
     resolution: {integrity: sha512-pOUl6Vo2LUq/bSa8S5q7b91cgNSjctn9ugq/+Mvow99qW6x/UZYwzxy/3NmqoT66eHYfCVvFvACC58UBPFf28g==}
@@ -2140,6 +2151,12 @@ snapshots:
   timestring@6.0.0: {}
 
   toidentifier@1.0.1: {}
+
+  tree-kill-promise@3.0.14:
+    dependencies:
+      tree-kill: 1.2.2
+
+  tree-kill@1.2.2: {}
 
   tsx@4.19.2:
     dependencies:
