@@ -18,7 +18,7 @@ export interface DataValidatorOption<
   data: H | P | Q | B | NonNullable<unknown> | null;
   schema: ZodSchema;
   honoCtx: HonoCtx | null;
-  setter: ContextSetter<H, P, Q, B>;
+  setter: ContextSetter<M, H, P, Q, B>;
 }
 
 export interface AllDataValidatorOption<
@@ -29,13 +29,6 @@ export interface AllDataValidatorOption<
   B extends RecordUnknown = RecordUnknown,
 > {
   ctx: BlazeContext<M, H, P, Q, B>;
-  input: {
-    headers: H | null;
-    params: P | null;
-    query: Q | null;
-    body: B | null;
-  };
   validator: ContextValidator | null;
-  honoCtx: HonoCtx | null;
-  setter: ContextSetter<H, P, Q, B>;
+  setter: ContextSetter<M, H, P, Q, B>;
 }
