@@ -8,6 +8,7 @@ import { BlazeBroker as Broker } from '../broker/index';
 import { BlazeBroker } from '../broker/instance';
 import type {
   ContextConstructorOption,
+  ContextRequest,
   ContextSetter,
   CreateContextOption,
 } from './types';
@@ -170,8 +171,9 @@ export class BlazeContext<
   /**
    * @description Access the request information from the context such as `headers`, `query`, `params`, and `body`.
    */
-  public get request() {
+  public get request(): ContextRequest<H, P, Q, B> {
     return {
+      header: this.reqHeaders,
       headers: this.reqHeaders,
       query: this.query,
       params: this.params,
@@ -208,8 +210,14 @@ export class BlazeContext<
     P extends RecordUnknown,
     Q extends RecordUnknown,
     B extends RecordUnknown,
-  >(ctx: BlazeContext<M, H, P, Q, B>): ContextSetter<H, P, Q, B> {
+  >(ctx: BlazeContext<M, H, P, Q, B>): ContextSetter<M, H, P, Q, B> {
     return {
+      meta(meta: M) {
+        ctx.$meta = meta;
+      },
+      header(headers) {
+        ctx.$reqHeaders = headers;
+      },
       headers(headers: H) {
         ctx.$reqHeaders = headers;
       },
@@ -238,17 +246,13 @@ export class BlazeContext<
   >(
     options: CreateContextOption<M, H, P, Q, B, HV, PV, QV, BV>
   ): Promise<BlazeContext<M, H, P, Q, B>> {
-    const { honoCtx, validator: $validator } = options;
-
     const ctx = new BlazeContext<M, H, P, Q, B>(options);
 
     const setter = BlazeContext.setter(ctx);
 
     await validateAll({
       ctx,
-      input: options,
-      validator: $validator,
-      honoCtx,
+      validator: options.validator,
       setter,
     });
 

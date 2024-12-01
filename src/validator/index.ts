@@ -1,7 +1,9 @@
-import type { ContextValidator } from '../internal/context/types';
+import { z, type ZodRawShape } from 'zod';
+import type { ContextRequest, ContextSetter } from '../internal/context/types';
+import { BlazeValidationError } from '../internal/errors/validation';
 import type { RecordString, RecordUnknown } from '../types/common';
 import { isEmpty } from '../utils/common';
-import { validationMap } from './constant';
+import { validateInput } from './helper';
 import type { AllDataValidatorOption } from './types';
 
 export async function validateAll<
@@ -11,25 +13,29 @@ export async function validateAll<
   Q extends RecordUnknown,
   B extends RecordUnknown,
 >(options: AllDataValidatorOption<M, H, P, Q, B>) {
-  const { ctx, input, validator, honoCtx, setter } = options;
+  const { ctx, validator, setter } = options;
 
   if (!validator || isEmpty(validator)) return;
 
-  await Promise.all(
-    Object.keys(validator).map((key) => {
-      const validation = validationMap[key as keyof ContextValidator];
-      const schema = validator[validation.schema];
-      const data = input[validation.options];
+  const keys = Object.keys(validator) as Array<keyof ContextSetter>;
+  const schema = z.object(validator as ZodRawShape);
+  const input: Record<string, unknown> = {};
 
-      if (!validation || !schema) return;
+  for (const key of keys) {
+    const value = ctx.request[key as keyof ContextRequest];
 
-      return validation.validator({
-        ctx,
-        setter,
-        data,
-        honoCtx,
-        schema,
-      });
-    })
-  );
+    input[key] = value instanceof Function ? await value() : value;
+  }
+
+  const result = await validateInput(input, schema);
+
+  if (!result.success) {
+    throw new BlazeValidationError(ctx, result.error);
+  }
+
+  for (const key of keys) {
+    const value = result.data[key as keyof ContextSetter];
+
+    setter[key](value);
+  }
 }
